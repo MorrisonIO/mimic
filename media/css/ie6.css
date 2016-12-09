@@ -1,0 +1,27 @@
+/* IE6 renders the width of #org_menu as the width of the containing div #login (45%) so cannot set the background colour nicely for status alert. Set the colour of the first select menu item instead. */
+div#org_menu { padding: 0; }
+div#org_menu.no_current_org { background: none; }
+div#org_menu.no_current_org option#menudesc {
+    background: #d53333;
+    color: #fff;
+}
+
+/* Can't have transparent PNGs as background images */
+#facebox .b, #facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
+    background: #444;
+}
+.alert_w p {
+    background: url(../img/exclamation.gif) no-repeat center left; 
+}
+
+/* Message box fixes */
+.static_msgbox {
+    margin: 0;
+    padding: 8px 15px;
+}
+.static_msgbox p {
+    padding: 0px 7px 0px 30px;
+    line-height: 18px;
+    background: url(../img/information.png) no-repeat middle left;
+}
+

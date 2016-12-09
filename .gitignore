@@ -1,0 +1,11 @@
+*.pyc
+*.swp
+.DS_Store
+dev.db
+settings_local.py
+media/logos/*
+media/previews/*
+media/products/*
+media/uploads/*
+media/downloads/*
+media/admin

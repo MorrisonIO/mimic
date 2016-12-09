@@ -1,0 +1,220 @@
+/*
+    File:   print.css
+    Title:  Print CSS for mimicprint2.com 
+    Author: Dieter Limeback <dieter.limeback@mimicprint.com>
+*/   
+/* {{{ Defaults */
+body {
+    margin: 0;
+}
+
+/* page elements not to print */
+#header, #footer, #actions, #sidebar, #screen, #buttons, .success, .topsuccess, .noprint, .breadcrumbs, input#print {
+	display: none;
+}
+
+p, h1, h2, h3, h4, td, th, tr, table { 
+    color: #000; 
+    font-family: Times, serif;
+    border: 0;
+}
+/* }}} */
+/* {{{ Docket */
+#docket h2 {
+    font-size: 24px;
+    text-align: left;
+    position: relative;
+    padding: 0 0 5px 0;
+}
+
+#docket .docketinfo, 
+#docket .jobinfo {
+	border: 1px solid #000;
+	margin: 0 0 20px 0;
+    width: 99%;
+    padding: 0;
+    float: left;
+    width: 100%;
+    clear: both;
+}	
+
+#docket h3 {
+	padding: 3px 10px;
+	margin: 0;
+	font-size: 14px;
+	background: #000;
+	color: #fff;
+}
+
+#docket span.label {
+	width: 180px;
+	float: left;
+    clear: both;
+}
+
+#docket p {
+	margin: 0;
+	padding: 10px 20px;
+    font-size: 14px;
+}
+#docket div.order_info {
+    float: left;
+}
+#docket div.appr_req {
+    float: right;
+    width: 250px;
+    margin: 20px;
+    border: 1px solid black;
+}
+#docket div.appr_req h4 {
+    color: #fff;
+    background: #000;
+    border: 0;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+}
+#docket div.appr_req p {
+    padding: 10px;
+    line-height: 16px;
+}
+
+#docket .instr {
+	border: 1px solid #aaa;
+	margin: 10px 20px;
+    padding: 0;
+}
+
+#docket h4 {
+	font-size: 11px;
+	font-weight: normal;
+    text-transform: uppercase;
+	margin: 0;
+    background: #ddd;
+	padding: 3px 10px;
+/*    font-family: 'Lucida Sans Unicode', 'Lucida Grande', verdana, arial, sans-serif;*/
+    border-bottom: 1px solid #aaa;
+}
+
+#docket hr {
+	display: block;
+	height: 1px;
+	color: #fff;
+	background-color: #fff;
+	border: none;
+	page-break-after: always;
+}	
+/* }}} */
+/*{{{ Label, Packing Slip, Comm Inv */
+h1.logo {
+    font-family: sans-serif;
+    font-weight: normal;
+    font-size: 24px;
+    margin: 5px 0 0 0;
+}
+
+p.logo {
+    font-family: sans-serif;
+    font-size: 12px;
+    margin: 0;
+    padding: 0 0 3px 0;
+    border-bottom: 1px solid #000;
+}
+p.check { /* used on the label page; it prints in the weird smaller label and gets removed and placed on the docket as a check */
+    padding-bottom: 10px;
+}
+h2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 20px;
+    text-align: right;
+}
+h2.create {
+    font-size: 24px; 
+}
+#label {
+    border: 1px solid #000;
+    width: 65%;
+    margin: 30px 0 0 0;
+    font-size: 24px;
+    font-family: Times, serif;
+}
+#label p {
+    margin: 15px;
+    line-height: 24px;
+}
+#label p.box {
+    margin: 15px;
+}
+#label h3 {
+    margin: 0 0 20px 0;
+    padding: 5px 15px;
+    background: #000;
+    color: #fff;
+    font-size: 24px;
+}
+#items h3, 
+#received h3 {
+    margin: 0;
+    padding: 5px 15px;
+    background: #ccc;
+    font-size: 16px;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+}
+
+p.disclaimer,
+p.dateinfo {
+    font-size: 16px;
+    margin: 20px 0;
+    text-align: right;
+}
+p.disclaimer {
+    text-align: left;
+}
+table.packingslip {
+	width: 100%;
+    margin: 20px 0 0 0;
+    clear: both;
+    font-family: Times, serif;
+}		
+
+
+table.packingslip td {
+	padding: 5px 15px;
+    border: 1px solid #000;
+    font-size: 16px;
+    line-height: 16px;
+}	
+table.packingslip td.head {
+    background: #ccc;
+    font-weight: bold;
+}
+
+#received {
+    border: 1px solid #000;
+    padding: 0 0 10px 0;
+    margin: 20px 0 30px 0;
+    font-size: 16px;
+    min-height: 90px;
+}
+#received p.receiver {
+    float: left;
+    width: 350px;
+    margin: 40px 40px 15px 15px;
+    border-bottom: 1px dotted #000;
+}
+    
+#received p.recdate {
+    float: right;
+    width: 250px;
+    margin: 40px 15px 15px 0;
+    border-bottom: 1px dotted #000;
+}
+
+#items {
+    margin: 0;
+    font-size: 16px;
+}
+/*}}}*/

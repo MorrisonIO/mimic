@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+    <title>Mimic Print & Media Services: {% block title %}{% endblock %}</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Corporate printing and related services in Markham, Canada.">
+    <meta name="keywords" content="mimic print media services manual document colour corporate business cards letterhead variable data">
+    <meta name="author" content="webmaster@mimicprint.com">
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.3.2.min.js"></script>
+    <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/reset.css" media="all" type="text/css">
+    <link rel="stylesheet" href="{{ MEDIA_URL}}css/public/screen_public.css" media="all" type="text/css">
+    {% block custom_head %}{% endblock %}
+</head>
+
+<body id="{% block body_id %}{% endblock %}">
+<div id="container">
+    <a name="top"></a>
+    <div id="top_links">
+        <p class="skip"><a href="#main_content" title="Click to skip directly to content">Jump to content</a></p>
+        <p class="client_login">
+        {% if user.is_authenticated %}
+            Welcome, <b>{{ user.get_full_name }}</b>{% if request.session.current_org %} ({{ request.session.current_org }}){% endif %}. 
+            <a href="/accounts/password_change/" title="Change your password">Change password</a> | 
+            {% if user.is_superuser or user.is_staff %}
+            <a href="/admin/" title="Enter the admin system">Admin</a> |
+            {% endif %}
+            <a href="/accounts/logout/" title="End your current session">Logout</a>
+        {% else %}
+            <a href="/accounts/login/" title="Enter our Online Ordering System">Client Login</a> &#187;
+        {% endif %}</p>
+    </div><!--top_links-->
+
+    <div id="header">
+        <h1><img src="{{ MEDIA_URL}}img/public/logo.gif" alt="Mimic"></h1>
+    </div><!--header-->
+
+    <div id="nav">
+        <ul>
+            <li><a href="/" title="Mimic home page" id="n-home">Home</a></li>
+            <li><a href="/services/" title="About our services" id="n-services">Services</a></li>
+            <li><a href="/aboutus/" title="Recent events" id="n-news">About Us</a></li>
+            <li class="last"><a href="/contact/" title="How to contact us" id="n-contact">Contact</a></li>
+        </ul>
+        <hr>
+    </div><!--nav-->
+
+    <div id="banner">
+        {% block banner_img %}{% endblock %}
+    </div><!--banner-->
+
+    <div id="main_content">
+        <h2>{% block page_title %}{% endblock %}</h2>
+        {% block content %}{% endblock %}
+    </div><!--main_content-->
+
+    <div id="sidebar">
+        <div id="login_box">
+            <h3><img src="{{ MEDIA_URL }}img/public/client_login.gif" alt="Client Login"></h3>
+            <form method="post" action="/accounts/login/">
+                <p><label for="id_username">Username</label>
+                <input type="text" name="username" class="textfield vTextField required" id="id_username"></p>
+                <p><label for="id_password">Password</label>
+                <input type="password" name="password" class="textfield vPasswordField required" id="id_password"></p>
+                <p class="submit"><input type="hidden" name="next" value="/oos/setorg/"><input type="submit" value="Login"></p>
+            </form>
+            <p class="lost_password"><a href="/accounts/password_reset/" title="Click here to reset your password">Lost your password?</a></p>
+        </div><!--login_box"-->
+        <div id="upload_box">
+            <p>Click here to <a href="{% url upload_file %}" title="Send us a file">upload a file</a>.</p>
+        </div>
+    </div><!--sidebar-->
+
+    <div id="footer">
+        <hr>
+        <p>
+        <a href="#top">Top</a> |
+        <a href="/" title="Mimic home page">Home</a> | 
+        <a href="/services/" title="About us">About Us</a> | 
+        <a href="/services/" title="About our services">Services</a> | 
+        <a href="/contact/" title="How to contact us">Contact</a></p>
+        <p>&copy; 2013 Mimic Print &amp; Media Services Inc.<br> 
+    </div><!--footer-->
+</div><!--container-->
+</body>
+</html>

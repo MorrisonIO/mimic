@@ -1,0 +1,5 @@
+This is a message from the Mimic Ordering System. The user "{{ user }}"
+just tried to login but was UNABLE TO DO SO because a UserProfile has
+not been created for this user. All users must have at least one
+UserProfile, to associate them with an Organization. Please enter the
+admin section and create one as soon as possible.

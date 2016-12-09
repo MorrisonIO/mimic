@@ -1,0 +1,18 @@
+<p>Logged in as <strong>{{ user.get_full_name }}</strong>{% if current_org %} from <strong>{{ current_org }}</strong>{% endif %} | {% if user.is_staff %}<a href="/admin/">Admin</a> | {% endif %}<a href="{% url logout %}">Logout</a><br>
+
+<a href="#" id="show_orgmenu">{% ifnotequal orgs.count 1 %}{% if current_org %}Switch{% else %}Select{% endif %} org</a> | {% endifnotequal %}<a href="{% url profile %}">Your account</a> {# | <a href="#">Help</a> #}| <a href="{% url upload_file %}" title="Send us a file">File upload</a> | <a href="{% url contact_form %}" rel="dialog">Feedback</a></p>
+
+{% ifnotequal orgs.count 1 %}
+<div id="org_menu">
+    <form action="{% url setorg %}" method="post" id="setorg">
+        <fieldset>
+            <select name="org_id" id="org_list">
+                <option value="" id="menudesc">-- Select an organization --</option>
+                {% for org in orgs %}
+                    <option value="{{ org.id }}"{% ifequal org current_org %} selected="selected"{% endifequal %}>{{ org }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+    </form>
+</div> 
+{% endifnotequal %}

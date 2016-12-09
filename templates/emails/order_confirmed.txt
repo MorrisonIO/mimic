@@ -1,0 +1,42 @@
+
+The following order has been placed successfully via the Mimic Print &
+Media Services Online Ordering System.
+
+------------------------------------------------------------------------
+ORDER NAME 
+{{ order.name }}
+
+DUE DATE
+{{ order.due_date|date:"l, F j, Y" }}
+
+ORDERED BY
+{{ order.placed_by.get_full_name }}
+{{ user_profile.org }}
+Business: {{ user_profile.bus_phone }}
+Cell:     {{ user_profile.cell_phone }}
+Home:     {{ user_profile.home_phone }}
+Email:    {{ user.email }}
+
+ITEMS
+{% for item in line_items %}{% include "orders/line_item.txt" %}{% endfor %}
+SHIP TO
+{% with order.ship_to as address %}{% include "addresses/address_snippet.txt" %}{% endwith %}
+
+ADDITIONAL INFO
+Comments: {% if order.additional_info %}{{ order.additional_info }}{% else %}None.{% endif %}
+P.O. Number: {% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}
+------------------------------------------------------------------------
+
+Thank you for placing this order with us. If there are any
+concerns a representative will contact you; otherwise your order will be
+processed based on your due date.
+
+If you have any questions regarding your order or the Online Ordering 
+System, please don't hesitate to contact us. 
+
+Thank you,
+--
+Mimic Print & Media Services
+Tel: 905.415.2772
+Fax: 905.415.2005
+Web: http://{{ site.domain }}/

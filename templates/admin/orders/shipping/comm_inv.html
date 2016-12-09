@@ -1,0 +1,228 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+<script type="text/javascript" src="../../../../../jsi18n/"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/core.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/calendar.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/CollapsedFieldsets.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<link rel="stylesheet" media="print" type="text/css" href="{{ MEDIA_URL }}css/print.css" />
+<script type="text/javascript">
+    $(function () {
+        $("#ItemsTable .item-row").each(function (index, elem) {
+            var id = $(elem).attr("id").replace("item_", ""),
+                qty = $("#qty_"+id).val(),
+                price = $("#price_"+id).val(),
+                totalVal = qty * price;
+            if (!isNan(totalVal)) {
+                $("#value_"+id).val(totalVal);
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo;
+        <a href="/admin/orders/order/">Orders</a> &rsaquo;
+        <a href="/admin/orders/order/{{ order.id }}/">{{ order }}</a> &rsaquo;
+        Commercial Invoice
+    </div>
+{% endblock %}
+
+{% block content %}<div id="comm_inv">
+    {% if printable %}
+        <h2 class="create">Commercial Invoice</h2>
+        <p class="noprint"><input type="submit" name="print" value="Print commercial invoice" onClick="javascript:window.print()" /> (make 3 copies) or use your back button to re-edit.</p>
+        <h1 class="logo">mimic print &amp; media services</h1>
+        <p class="logo">20 steelcase rd w unit 13 markham on l3r1b2 canada<br />
+tel: 905.415.2772 fax: 905.415.2005 www.mimicprint.com</p>
+
+        <p class="dateinfo">
+        <b>Date:</b> {{ date }}<br>
+        <b>Page:</b> 1<br>
+        <b>Invoice #</b>: {{ order }}</p>
+
+        <table class="packingslip" cellspacing="0">
+            <tr>
+                <td class="head">Exporter</td>
+                <td class="head">Ship To</td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <p>
+                    Mimic Print &amp; Media Services Inc.<br />
+                    13 - 20 Steelcase Rd. W.<br />
+                    Markham, ON L3R1B2<br />
+                    Canada<br />
+                    Tel: 905.415.2772<br />
+                    Tax ID: xxxxxxx TODO xxxxxxx
+                    </p>
+                    <p>Parties to transaction:<br />
+                    <input type="checkbox" {% ifequal request.POST.parties "related" %}checked="checked"{% endifequal %} /> Related&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" {% ifequal request.POST.parties "nonrelated" %}checked="checked"{% endifequal %} /> Non-related
+                    </p>
+                </td>
+                <td valign="top">
+                    {% with ship_to as address %}
+                        {% include "addresses/address_snippet_shipping.html" %}
+                    {% endwith %}
+                </td>
+            </tr>
+        </table>
+
+        <table class="packingslip" cellspacing="0">
+            <tr>
+                <td class="head">Tax ID</td>
+                <td class="head">PO Number</td>
+                <td class="head">Shipping Instr</td>
+                <td class="head">Order #</td>
+                <td class="head">Reference # / Reason for Shipping</td>
+            </tr>
+            <tr>
+                <td>{{ request.POST.tax_id}}</td>
+                <td>{{ request.POST.po_number}}</td>
+                <td>{{ request.POST.courier }}</td>
+                <td>{{ order }}</td>
+                <td>{{ request.POST.reason }}</td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <p>If there is a designated broker for this shipment, please provide contact information.</p>
+                    <p>
+                    Broker name: ____________________ Tel.: ______________ Contact Name: _______________________<br />
+                    <input type="checkbox" {% ifequal request.POST.duties "exporter" %}checked="checked" {% endifequal %}/> <label for="id_duties_exporter">Exporter</label>&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" {% ifequal request.POST.duties "consignee" %}checked="checked" {% endifequal %} /> <label for="id_duties_consignee">Consignee</label>&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" {% ifequal request.POST.duties "other" %}checked="checked" {% endifequal %} /> <label for="id_duties_other">Other</label>&nbsp;&nbsp;&nbsp;&nbsp;If other, please specify: ___________________________________
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table class="packingslip" cellspacing="0">
+            <tr>
+                <td class="head">Item</td>
+                <td class="head">Description</td>
+                <td class="head">Qty</td>
+                <td class="head">C/O</td>
+                <td class="head">HS&nbsp;#</td>
+                <td class="head">Value&nbsp;(CDN)</td>
+            </tr>
+            {% for item in item_dict.items %}
+                {% for field in item %}
+                    {% if field.name %}
+                    <tr>
+                        <td valign="top">{{ field.name }}</td>
+                        <td valign="top">{{ field.desc }}</td>
+                        <td valign="top">{{ field.qty }}</td>
+                        <td valign="top">Canada</td>
+                        <td valign="top">{{ field.hs_num }}</td>
+                        <td valign="top">${{ field.value }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            <tr>
+                <td colspan="5">&nbsp;</td>
+                <td><b>Total:</b> ${{ total|floatformat:2 }}</td>
+            </tr>
+        </table>
+        <p class="disclaimer">I declare that all information contained in this invoice is being completed on behalf of a company or an individual.</p>
+        <p class="disclaimer">Signature: __________________________</p>
+
+    {% else %}
+
+        <h1>Create a Commercial Invoice</h1>
+        <form action="" method="post">
+        <h2>Ship to</h2>
+        <div class="f-left">
+            <p><strong>Use address on order:</strong></p>
+            {% with ship_to as address %}
+                {% include "addresses/address_snippet_shipping.html" %}
+            {% endwith %}
+        </div>
+        <div class="f-right">
+            <p><strong>Use address in Mimic address book:</strong></p>
+            <select name="address" id="id_address">
+                <option value="">--Select--</option>
+                {% for a in addresses %}
+                <option value="{{ a.id }}">{{ a.last_name }}, {{ a.first_name }}{% if a.company %} ({{ a.company }}){% endif %}</option>
+                {% endfor %}
+            </select>
+            <a href="../../../../addresses/address/add/" class="add-another" id="add_id_address" onclick="return showAddAnotherPopup(this);"> <img src="{{ MEDIA_URL }}admin/img/admin/icon_addlink.gif" width="10" height="10" alt="Add Another"/></a>
+        </div>
+        <hr class="clear">
+        <h2>Client Tax ID</h2>
+        <p><input type="text" name="tax_id" size="20"></p>
+        <hr class="clear">
+        <h2>PO Number</h2>
+        <p><input type="text" name="po_number" size="20"></p>
+        <hr class="clear">
+        <h2>Date</h2>
+        <p><input type="text" name="date" value="{{ date|date:"Y-m-d" }}" class="vDateField"></p>
+        <hr class="clear">
+        <h2>Via</h2>
+        <select name="courier">
+            <option value="">--Select--</option>
+            <option value="CanadaPost">CanadaPost</option>
+            <option value="DHL">DHL</option>
+            <option value="FedEx">FedEx</option>
+            <option value="Freight">Freight</option>
+            <option value="Purolator">Purolator</option>
+            <option value="UPS">UPS</option>
+        </select>
+
+        <h2>Reason for shipping</h2>
+        <p><input type="text" name="reason" size="20"></p>
+
+        <h2>Parties to Transaction</h2>
+        <input type="radio" name="parties" id="id_parties_related" value="related" /> <label for="id_parties_related">Related</label><br />
+        <input type="radio" name="parties" id="id_parties_nonrelated" value="nonrelated" /> <label for="id_parties_nonrelated">Non-related</label>
+
+        <h2>Broker Info</h2>
+        <p>Duties and taxes payable by:<br />
+        <input type="radio" name="duties" id="id_duties_exporter" value="exporter" /> <label for="id_duties_exporter">Exporter</label><br />
+        <input type="radio" name="duties" id="id_duties_consignee" value="consignee" /> <label for="id_duties_consignee">Consignee</label><br />
+        <input type="radio" name="duties" id="id_duties_other" value="other" /> <label for="id_duties_other">Other</label>
+        </p>
+
+
+        <hr class="clear">
+
+        <h2>Items</h2>
+        <table id="ItemsTable">
+            <tr><th>Quantity</th><th>Item</th><th>Description</th><th>HS&nbsp;#</th><th>Value&nbsp;(CDN)</th></tr>
+            {% for item in ordered_items %}{% with item.inventory_history.product as p %}
+            <tr class="item-row" id="item_{{ p.id }}">
+                <input type="hidden" id="price_{{ p.id }}" value="{{ p.price }}" />
+                <input type="hidden" id="qty_{{ p.id }}" value="{{ item.inventory_history.amount }}" />
+
+                <td><input type="text" size="3" name="qty_{{ p.id }}" value="{{ item.inventory_history.amount }}"></td>
+                <td>{{ item }}<input type="hidden" name="item_{{ p.id }}" value="{{ item }}"></td>
+                <td>{{ item.inventory_history.product.description }}<input type="hidden" name="desc_{{ p.id }}" value="{{ item.inventory_history.product.description }}"></td>
+                <td>
+                    <select name="hs_num_{{ p.id }}">
+                        <option value="">--Select--</option>
+                        <option value="4901.99.00">Books &amp; Brochures</option>
+                        <option value="4911.99.00">General Print</option>
+                        <option value="8524.31.11">Information CD</option>
+                        <option value="4911.10.00">Price Lists &amp; Catalogs</option>
+                        <option value="8524.31.19">Software CD</option>
+                        <option value="4901.10.00">Spec Sheets</option>
+                        <option value="4911.10.00">Trade Advertising Material</option>
+                    </select>
+                </td>
+                <td>
+                    $<input type="text" size="6" id="value_{{ p.id }}" name="value_{{ p.id }}" value="">
+                    <input type="checkbox" id="id_exclude_{{ p.id }}" name="exclude_{{ p.id }}" /> <label for="id_exclude_{{ p.id }}">Exclude</label>
+                </td>
+            </tr>
+            {% endwith %}{% endfor %}
+        </table>
+        <p><input type="submit" value="Create commerical invoice" name="submit"></p>
+            </form>
+    {% endif %}
+</div>{% endblock %}

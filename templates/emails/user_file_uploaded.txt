@@ -1,0 +1,23 @@
+You have successfully uploaded the following file via the mimicprint2.com site.
+
+Title: {{ form.title }}
+File: {{ file }} [{{ file.size|filesizeformat }}]
+Date: {% now "l, F j, Y \a\t H:i" %}
+
+Name: {{ form.name }}
+Company: {{ form.company }}
+Contact user: {{ form.contact_user }}
+Phone: {{ form.phone }}
+Email: {{ form.email }}
+
+Comments: {{ form.comments }}
+
+If you requested it, an account representative will contact you as soon as
+possible regarding your file.
+
+Thank you,
+--
+Mimic Print & Media Services
+Tel: 905.415.2772
+Fax: 905.415.2005
+Web: http://www.mimicprint.com/

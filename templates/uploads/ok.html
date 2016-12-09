@@ -1,0 +1,15 @@
+{% extends "base_public.html" %}
+
+{% block title %}Upload a File{% endblock %}
+{% block page_title %}<img src="{{ MEDIA_URL }}img/public/upload.gif" alt="Upload a File" width="132" height="25">{% endblock %}
+{% block body_id %}upload{% endblock %}
+{% block banner_img %}<img src="{{ MEDIA_URL }}img/public/pencil_tops.jpg" alt="Image of pencil tips" width="750" height="95">{% endblock %}
+
+{% block content %}
+    <div class="msgbox">
+        <p class="success">Your file was uploaded successfully.</p>
+    </div>
+    <p>If you requested it, an account representative will contact you as soon as possible regarding your file.</p>
+
+    <p>Click here to <a href="/upload/" title="Send us a file">upload another file</a>{% if request.user.is_authenticated %} or <a href="{% url dashboard %}">return to your Dashboard</a>{% endif %}.</p>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "charts/base_chart.html" %}
+
+{% block title %}Create a chart{% endblock %}
+{% block page_title %}Create a chart{% endblock %}
+{% block body_class %}onecol{% endblock %}
+
+
+{% block content %}
+    <p>Below are the various charts that are available for creation. Click on a name to proceed.</p>
+
+    <table class="reports">
+        <thead>
+            <tr><th>Name</th></tr>
+        </thead>
+        <tbody>
+            <tr class="odd"><td>
+                    <a href="{% url chart_detail "products" %}" title="Create this chart">Products ordered over time</a><br>
+                    Charts the amount of one or more products has been ordered over time. This allows you to see which products are most popular, and when they are ordered most often.</td></tr>
+            <tr class="even"><td>
+                    <a href="{% url chart_detail "orgs" %}" title="Create this chart">Single product ordered over time: Organization comparison</a><br>
+                    This chart is useful if you belong to several organizations which correspond to locations, campuses, branch offices, etc. It charts the ordering history of one product against one or more locations, so you can determine which locations are most active.</td></tr>
+            <tr class="odd"><td>
+                    <a href="{% url chart_detail "users" %}" title="Create this chart">Single product ordered over time: User comparison</a><br>
+                    Similar to the organization comparison, this charts the ordering history of one product against one or more users, allowing you to gauge demand but also catch any erratic ordering behaviour.</td></tr>
+        </tbody>
+    </table>
+{% endblock %}

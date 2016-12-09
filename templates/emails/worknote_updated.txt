@@ -1,0 +1,15 @@
+The work note for order {{ worknote.order }} was just updated.
+
+---------------------------------------------------------------------
+STATUS: {{ worknote.status }}
+
+NOTES:
+{{ worknote.notes|safe }}
+
+---------------------------------------------------------------------
+
+You can view this note online at
+http://{{ site.domain }}/admin/orders/worknote_view/{{ worknote.id }}/, or
+edit it at http://{{ site.domain }}/admin/orders/worknote/{{ worknote.id }}/.
+
+Now get to work! :)

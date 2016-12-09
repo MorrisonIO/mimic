@@ -1,0 +1,25 @@
+<table class="qty_meta_info">
+    <tr>
+        <td class="qty_input">
+            {% if product.fixed_order_qtys and not unrestricted_qtys %}{% load product_filters %}
+                <select name="qty_{{ product.id }}">
+                    <option value=""></option>
+                    {% for q in product.fixed_order_qtys|qty_list %}
+                        <option value="{{ q }}">{{ q }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input type="text" size="4" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+            {% endif %}
+        </td>
+        <td class="qty_info">
+            {% if product.approval_required and not ignore_pa %}
+            <div><a href="#" class="tooltip"><img src="{{ MEDIA_URL }}img/exclamation_small.png" alt="?"><span>This item requires manager approval before being processed.</span></a><span class="qty_meta">AR</span></div>
+            {% endif %}
+
+            {% if product.min_order_qty and not unrestricted_qtys %}
+            <div><a href="#" class="tooltip"><img src="{{ MEDIA_URL }}img/exclamation_small.png" alt="?"><span>You must order at least this many items.</span></a><span class="qty_meta">Min: {{ product.min_order_qty }}</span></div>
+            {% endif %}
+        </td>
+    </tr>
+</table>

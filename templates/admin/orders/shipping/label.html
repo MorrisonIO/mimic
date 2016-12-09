@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+<script type="text/javascript" src="../../../../../jsi18n/"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/core.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/calendar.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/CollapsedFieldsets.js"></script>
+<link rel="stylesheet" media="print" type="text/css" href="{{ MEDIA_URL }}css/print.css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo; 
+        <a href="/admin/orders/order/">Orders</a> &rsaquo; 
+        <a href="/admin/orders/order/{{ order.id }}/">{{ order }}</a> &rsaquo; 
+        Label
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if printable %}
+        <p class="noprint"><input type="submit" name="print" value="Print label" onClick="javascript:window.print()" /> or use your back button to re-edit.</p>
+        <hr class="noprint">
+        <p class="check">Shipped by: ____________&nbsp;&nbsp;&nbsp;&nbsp;Box count: _____</p>
+        <h1 class="logo">mimic print &amp; media services</h1>
+        <p class="logo">20 steelcase rd w unit 13 markham on l3r1b2 canada<br />
+tel: 905.415.2772 fax: 905.415.2005 www.mimicprint.com</p>
+        <div id="label">
+        <h3>Ship to:</h3>
+        {% with ship_to as address %}
+            {% include "addresses/address_snippet_shipping.html" %}
+        {% endwith %}
+        <p><strong>Contents: </strong>{{ contents|safe }}</p>
+
+        <p class="box"><b>BOX&nbsp;&nbsp;</b>________&nbsp;&nbsp;of&nbsp;&nbsp;________ </p>
+    {% else %}
+        <div id="label">
+        <h1>Create a Label</h1>
+        <form action="" method="post">
+        <h2>Ship to</h2>
+        <div class="f-left">
+            <p><strong>Use address on order:</strong></p>
+            {% with ship_to as address %}
+                {% include "addresses/address_snippet_shipping.html" %}
+            {% endwith %}
+        </div>
+        <div class="f-right">
+            <p><strong>Use address in Mimic address book:</strong></p>
+            <select name="address" id="id_address">
+                <option value="">--Select--</option> 
+                {% for a in addresses %}
+                <option value="{{ a.id }}">{{ a.last_name }}, {{ a.first_name }}{% if a.company %} ({{ a.company }}){% endif %}</option>
+                {% endfor %}
+            </select>
+            <a href="../../../../addresses/address/add/" class="add-another" id="add_id_address" onclick="return showAddAnotherPopup(this);"> <img src="{{ MEDIA_URL }}admin/img/admin/icon_addlink.gif" width="10" height="10" alt="Add Another"/></a>
+        </div>
+        <hr class="clear">
+        <h2>Contents</h2>
+        <input type="text" size="40" name="contents">
+        <p><input type="submit" value="Create label" name="submit"></p>
+            </form>
+    {% endif %}
+</div><!--label-->{% endblock %}

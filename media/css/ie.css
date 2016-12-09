@@ -1,0 +1,59 @@
+/*  Fix min and max width. 
+ *  If width is greater than 1280, set width to 1280; else if width is
+ *  less than 960, set width to 960; else set width to auto. If
+ *  javascript is not available, set width to 950.
+ *  http://www.gunlaug.no/contents/wd_additions_14.html
+ */
+* html .container {
+    width: 950px;
+    width:expression(((document.compatMode && 
+    document.compatMode=='CSS1Compat') ? 
+    document.documentElement.clientWidth : 
+    document.body.clientWidth) 
+    > 1280 ? "1280px" : (((document.compatMode && 
+    document.compatMode=='CSS1Compat') ? 
+    document.documentElement.clientWidth : 
+    document.body.clientWidth) < 960 ? "960px" : "auto")); 
+}
+
+/* Push #main down to surround .content and .sidebar. Floating #main
+ * left works too, but then IE7 does not display .sidebar as it's full 
+ * width, just enough to surround its content.
+ */
+.content_wrapper {
+    zoom: 1;
+}
+
+* html .content {
+    display: inline;
+    width: 69.9%;
+}
+* html .sidebar_touch,
+* html .sidebar {
+    float: right;
+    margin-right: 0;
+}
+
+/* Button fixes */
+a.button, button {
+    padding: 6px 10px;
+}
+button img, a.button img {
+    vertical-align: middle;
+}
+
+img.spinner {
+    vertical-align: baseline;
+    margin-right: 4px;
+}
+
+div.nolabel,
+div.buttons { 
+    margin-left: 185px;
+}
+
+a.icon {
+    padding: 3px 6px;
+}
+
+

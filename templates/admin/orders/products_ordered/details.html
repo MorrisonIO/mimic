@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo; 
+        <a href="/admin/orders/order/">Orders</a> &rsaquo; 
+        <a href="/admin/orders/order/{{ order.id }}/">{{ order }}</a> &rsaquo; 
+        Products
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Products on order {{ order }}</h1>
+    <div id="content-main">
+    <fieldset class="module">
+        <h2>Products</h2>
+        <div class="form-row">
+        <table width="50%">
+            <thead><tr><th>Qty</th><th width="90%">Product</th><th>Print-ready&nbsp;file</th></tr></thead>
+            <tbody>
+            {% for item in ordered_items %}{% with item.inventory_history.product as product %}
+
+            <tr class="{% cycle 'row1' 'row2' %}">
+                <td align="center">{{ item.inventory_history.amount }}</td>
+                <td><a href="/admin/products/product/{{ product.id }}/" title="Click to view/edit product">{{ product }}</a></td>
+                <td align="center">
+                {% if product.is_variable %}
+                <a href="{% url vardata_prefix %}{{ product.var_form }}/{{ item.id }}/" title="Click to download print-ready file"><img src="{{ MEDIA_URL }}img/page_white_acrobat.png" alt="PDF"></a>
+                {% else %}
+                    &nbsp;
+                {% endif %}
+                </td>
+            </tr>
+            {% endwith %}{% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </fieldset>
+    </div>
+{% endblock %}
+
+

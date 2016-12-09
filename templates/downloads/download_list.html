@@ -1,0 +1,46 @@
+{% extends "downloads/base_download.html" %}
+
+{% block content %}
+    {% if downloads %}
+        <p>Below are files waiting for you to download. Right click on the file icon and choose "Save as..." to download it. If you are finished downloading a file and no longer want to see it in this list, click the Delete icon.</p>
+        <table class="addresses">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Date uploaded</th>
+                    <th class="actions">Size</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for download in downloads %}
+                    <tr class="{% cycle odd,even %}">
+                    {% load file_ext %}
+                    <td><img src="{{ MEDIA_URL }}img/{% get_filetype download %}.png" alt="" height="16" width="16">  <strong>{{ download }}</strong>{% if download.comments %}<em>: {{ download.comments }}</em>{% endif %}</td>
+                    <td>{{ download.date_added|date:"l, F j, Y \a\t H:i" }}</td>
+                    <td class="actions">
+                        {{ download.file.size|filesizeformat }}
+                    </td>
+                    <td class="actions">
+                        <a href="{{ download.file.url }}" title="Download this file"><img src="{{ MEDIA_URL }}/img/arrow_270.png" alt="Download" height="16" width="16"></a>
+                        {% if download.is_deletable %}
+                            <a href="{% url download_delete download.id %}" title="Delete this file" rel="dialog"><img src="{{ MEDIA_URL }}img/cross.png" alt="Delete" height="16" width="16"></a>
+                        {% else %}
+                            <img src="{{ MEDIA_URL }}img/cross_gray.png" alt="Delete" title="This file has been marked as non-deletable" height="16" width="16">
+                        {% endif %}
+                    </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no files waiting for you to download.</p>
+    {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+{% if downloads %}
+    <div class="static_msgbox alert_n">
+        <p>Deleting a file will remove it from the server and make it unavailable to other members of your group.</p>
+    </div>
+{% endif %}
+{% endblock %}

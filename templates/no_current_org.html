@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Error{% endblock %}
+{% block page_title %}Error{% endblock %}
+
+
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $("div#org_menu").show();
+    $("#org_menu").addClass('no_current_org');
+    $("#setorg select").after('<img src="{{ MEDIA_URL }}img/exclamation.png" alt="" class="alert">');
+})
+</script>
+{% endblock %}
+
+
+{% block content %}
+    <p>Because you belong to more than one organization, in order to display the correct content for this page, you must have an <em>active</em> organization set. Select one from the menu above.</p>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "reports/base_report.html" %}
+
+{% block title %}Analytics{% endblock %}
+{% block page_title %}Analytics{% endblock %}
+
+
+{% block content %}
+<p>Click a button to the right to create a new report or chart. If you want to do a simple search for an order, you can do so from the <a href="{% url order_index %}">Order list</a> page.</p>
+    {% if reports %}
+        <p>Below are reports you have saved. Click an icon to run a report and view the results, edit, delete, or download a CSV file suitable for importing into Excel.</p>
+        <table class="reports">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr class="{% cycle odd,even %}">
+                    <td><strong>{{ report }}</strong></td>
+                    <td class="actions">
+                        <a href="{% url report_detail report.id %}" title="View this report"><img src="{{ MEDIA_URL }}img/information.png" alt="View" height="16" width="16"></a>
+                        <a href="{% url report_edit report.id %}" title="Edit this report"><img src="{{ MEDIA_URL }}img/edit.png" alt="Edit" height="16" width="16"></a>
+                        <a href="{% url report_download report.id "download" %}" title="Download this report"><img src="{{ MEDIA_URL }}img/page_white_excel.png" alt="Download" height="16" width="16"></a>
+                        <a href="{% url report_delete report.id %}" title="Delete this report" rel="dialog"><img src="{{ MEDIA_URL }}img/cross.png" alt="Delete" height="16" width="16"></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You do not have any saved reports to view.</p>
+    {% endif %}
+{% endblock %}
+
+{% block sidebar_class %}{% endblock %}
+{% block sidebar %}
+    <p>
+    <a href="{% url report_add %}" title="Create a new report" class="button">
+        <img src="{{ MEDIA_URL }}img/plus_circle.png" alt="">
+        Create a report
+    </a>
+    <a href="{% url chart_index %}" title="Create a new chart" class="button">
+        <img src="{{ MEDIA_URL }}img/plus_circle.png" alt="">
+        Create a chart
+    </a>
+    </p>
+{% endblock %}

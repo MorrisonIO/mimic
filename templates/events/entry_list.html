@@ -1,0 +1,24 @@
+{% extends "base_public.html" %}
+
+{% block title %}News{% endblock %}
+{% block page_title %}<img src="{{ MEDIA_URL }}img/public/recent_news.gif" alt="Recent News" width="136" height="17">{% endblock %}
+{% block body_id %}news{% endblock %}
+{% block banner_img %}<img src="{{ MEDIA_URL }}img/public/pencil_tops.jpg" alt="Image of pencil tips" width="750" height="95">{% endblock %}
+
+{% block content %}
+    <p>Here are the most recent updates from the Mimic headquarters.</p>
+
+    {% load markup %}
+    {% for entry in entry_list %}
+        <div class="entry">
+            <h3>{{ entry }}</h3>
+            <p class="entry_meta">Published on {{ entry.date_created|date:"l, F j, Y \a\t H:i" }}</p>
+            {% if entry.summary %}
+                {{ entry.summary|markdown|safe }}
+            {% else %}
+                {{ entry.body|truncatewords_html:"60"|markdown|safe }}
+            {% endif %}
+            <p class="read_more"><a href="{% url public_events_detail entry.slug %}">Read more</a> &rarr;</p>
+        </div>
+    {% endfor %}
+{% endblock %}

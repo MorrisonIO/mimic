@@ -1,0 +1,14 @@
+{% load product_filters %}{% autoescape off %}CIF_I_V3.0
+LOADMODE: F
+CODEFORMAT: UNSPSC_V13.5
+CURRENCY: CAD
+SUPPLIERID_DOMAIN: DUNS
+UNUOM: TRUE
+COMMENTS: MimicPrint print products catalogue
+CHARSET: UTF-8
+ITEMCOUNT: {{ products|length }}
+TIMESTAMP: {{ now|strftime:"%Y-%m-%d %H:%M:%S" }}
+FIELDNAMES: Supplier ID,Supplier Part ID,Manufacturer Part ID,Item Description,SPSC Code,Unit Price,Unit of Measure,Lead Time,Manufacturer Name,Supplier URL,Manufacturer URL,Market Price,Short Name,Currency
+DATA
+{% for p in products %}AN01011448026,{{ p.part_number|cifq }},{{ p.id }},{{ p.name|default:p.name|cifq }},82121503,{{ p.price }},QB,5,{{ p.name|cifq }},{{ p.id|product_url|cifq }},{{ p.id|product_url|cifq }},{{ p.price }},{{ p|clear_name|truncatechars:46|cifq }},CAD
+{% endfor %}ENDOFDATA{% endautoescape %}

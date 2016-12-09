@@ -1,0 +1,89 @@
+{% extends "addresses/base_address.html" %}
+
+{% block title %}Address Book{% endblock %}
+{% block page_title %}Address Book{% endblock %}
+{% block body_class %}twocol_wide{% endblock %}
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(){
+    var $view = $.cookie('ab_view');
+    if ( $view == "table" ) {
+        $("#address_bc").hide();
+        $("#ab_view_table").addClass("icon_selected");
+    } else {
+        $("#address_table").hide();
+        $("#ab_view_bc").addClass("icon_selected");
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+    {% if search %}
+    <p>Your search for <strong>"{{ query_string }}"</strong> found {% if found_addresses.count %}<strong>{{ found_addresses.count }}</strong> result{{ found_addresses|pluralize }}{% else %} no results{% endif %}. <a href="{% url address_index %}" title="Your address book">Return to your Address Book</a>.</p>
+    {% else %}
+        <p>The primary purpose of your Address Book is to store addresses that you ship to frequently. These will be shown when you place an order, so that you may simply select one instead of manually typing it each time.</p>
+    {% endif %}
+
+    {% if addresses.object_list or found_addresses %}
+        <div class="view a-right">View: <a href="#" id="ab_view_bc" title="Business card" class="icon"><img src="{{ MEDIA_URL }}img/card_address.png" alt="Business card"></a><a href="#" id="ab_view_table" title="Table" class="icon"><img src="{{ MEDIA_URL }}img/table.png" alt="Table"></a></div>
+        <h3>{% if search %}Search results{% else %}Your addresses{% endif %}</h3>
+
+        {# table view #}
+        <table id="address_table" class="tablesorter">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Company</th>
+                    <th>Title</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for address in addresses.object_list %}
+                    {% include "addresses/addresses_table_view.html" %}
+                {% endfor %}
+                {% for address in found_addresses %}
+                    {% include "addresses/addresses_table_view.html" %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {# business card view #}
+        <table id="address_bc">
+            <tbody>
+                {% for address in addresses.object_list %}
+                    {% include "addresses/addresses_bc_view.html" %}
+                {% endfor %}
+                {% for address in found_addresses %}
+                    {% include "addresses/addresses_bc_view.html" %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if addresses %}
+            {% ifnotequal addresses.paginator.num_pages 1 %}
+                {% with addresses as items %}
+                    {% include "pagination.html" %}
+                {% endwith %}
+            {% endifnotequal %}
+        {% endif %}
+    {% else %}
+        {% if not search %}
+            <p class="error">There are no addresses in your Address Book.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block sidebar_class %}center{% endblock %}
+{% block sidebar %}
+    <p>
+    <a href="{% url address_add %}" title="Add an address" class="button">
+        <img src="{{ MEDIA_URL }}img/plus_circle.png" alt="">
+        Add an address
+    </a>
+    </p>
+{% endblock %}

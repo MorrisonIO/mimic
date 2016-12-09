@@ -1,0 +1,41 @@
+<div id="order_progress">
+
+    <a class="step active-on-{% ifequal page "cart" %}inactive{% else %}active{% endifequal %}" href="{% url cart_summary %}" title="View your cart summary">
+        <span class="number">1</span>
+        <span class="desc">Review products</span>
+    </a>
+
+    <{% if request.session.shipto_address %}a{% else %}div{% endif %} 
+    class="step 
+    {% ifequal page "shipto" %}active-on-inactive{% endifequal %}
+    {% ifequal page "additional" %}active-on-active{% endifequal %}
+    {% ifequal page "finalize" %}active-on-active{% endifequal %}
+    "
+    {% if request.session.shipto_address %} href="{% url provide_shipto %}" title="Provide a shipping address"{% endif %} 
+    >
+        <span class="number">2</span>
+        <span class="desc">Shipping</span>
+    </{% if request.session.shipto_address %}a{% else %}div{% endif %}>
+
+    <{% if request.session.due_date %}a{% else %}div{% endif %} 
+    class="step 
+    {% ifequal page "additional" %}active-on-inactive{% endifequal %}
+    {% ifequal page "finalize" %}active-on-active{% endifequal %}
+    "
+    {% if request.session.due_date %} href="{% url provide_addinfo %}" title="Provide additional info"{% endif %} 
+    >
+        <span class="number">3</span>
+        <span class="desc">Additional info</span>
+    </{% if request.session.due_date %}a{% else %}div{% endif %}>
+
+    <{% if request.session.due_date %}a{% else %}div{% endif %} 
+    class="step end {% ifequal page "finalize" %}end-active{% endifequal %}"
+    {% if request.session.due_date %} href="{% url confirm_order %}" title="Finalize this order"{% endif %} 
+    >
+        <span class="number">4</span>
+        <span class="desc">Finalize</span>
+    </{% if request.session.due_date %}a{% else %}div{% endif %}>
+</div>
+<br class="clear"></br>
+
+    

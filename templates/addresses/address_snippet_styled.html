@@ -1,0 +1,22 @@
+<div class="address">
+    <p>
+    <strong class="addr_name">{{ address.first_name }} {{ address.last_name }}</strong><br>
+    {% if address.title %}{{ address.title }}{% if address.company %}, {% endif %}{% endif %}{% if address.company %}<strong>{{ address.company }}</strong>{% endif %}
+    </p>
+
+    <p>
+    {{ address.address1 }}<br>
+    {% if address.address2 %}{{ address.address2 }}<br>{% endif %}
+    {% if address.address3 %}{{ address.address3 }}<br>{% endif %}
+    {{ address.city }}, {{ address.province }}<br>
+    {{ address.country }} {{ address.postal_code }}<br>
+    <span class="addr_res">This is a {% if address.is_residential %}residential{% else %}business{% endif %} address.</span>
+    </p>
+
+    <p>
+    {% if address.email %}<em class="addr_label">email</em> <a href="mailto:{{ address.email }}" title="Send an email">{{ address.email }}</a><br>{% endif %}
+    <em class="addr_label">phone</em> {{ address.phone }}<br>
+    {% if address.cell %}<em class="addr_label">cell</em> {{ address.cell }}<br>{% endif %}
+    {% if address.fax %}<em class="addr_label">fax</em> {{ address.fax }}<br>{% endif %}
+    </p>
+</div>

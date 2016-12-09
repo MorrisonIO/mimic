@@ -1,0 +1,29 @@
+{% extends "registration/reg_base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block page_title %}Ordering System Login{% endblock %}
+
+{% block content %}
+    {% if form.errors %}
+        <div class="msgbox alert_e"><p>You have entered an invalid username/password combination. Please try again.</p></div>
+    {% endif %}
+
+    <form method="post" action=".">
+        <fieldset>
+            <div class="form_row required"><label for="id_username">Username</label>{{ form.username }}</div>
+            <div class="form_row required"><label for="id_password">Password</label>{{ form.password }}</div>
+        </fieldset>
+
+        <div class="submit">
+            <div class="buttons">
+                <button type="submit" class="positive">
+                    <img src="{{ MEDIA_URL }}img/tick_circle.png" alt=""> 
+                    Login
+                </button>
+                <a href="{% url password_reset %}" title="Reset your password" class="forgot">Forgot your password?</a>
+                <input type="hidden" name="next" value="{% if next %}{{ next }}{% endif %}">
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

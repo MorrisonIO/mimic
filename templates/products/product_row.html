@@ -1,0 +1,22 @@
+<td><strong>{% if product.preview %}<a href="{{ product.preview.url }}" rel="dialog" title="Pop open a preview">{% endif %}{{ product.name }}{% if product.preview %}</a>{% endif %}</strong>{% if product.description %}: <i>{{ product.description }}</i>{% endif %}</td>
+
+{% if cat.show_revision %}<td>{{ product.revision }}</td>{% endif %}
+{% if cat.show_part_number %}<td>{{ product.part_number }}</td>{% endif %}
+{% if cat.show_price %}
+    {% if user_is_manager or profile.can_see_prices %}
+        <td>
+            {% if product.price %}
+                {{ product.price }}
+            {% else %}
+                n/a
+            {% endif %}
+        </td>
+    {% endif %}
+{% endif %}
+{% if cat.show_inventory %}<td>{% if product.track_inventory %}{{ product.inventory }}{% endif %}</td>{% endif %}
+
+<td>
+{% include "products/qty_field.html" %}
+<input type="hidden" name="u_{{ product.id }}" value="{{ product.unique_id }}">
+<input type="hidden" name="o_{{ product.id }}" value="{{ forloop.parentloop.parentloop.counter }}{{ forloop.parentloop.counter }}">
+</td>

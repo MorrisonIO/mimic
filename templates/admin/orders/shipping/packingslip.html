@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+<script type="text/javascript" src="../../../../../jsi18n/"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/core.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/calendar.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/CollapsedFieldsets.js"></script>
+<link rel="stylesheet" media="print" type="text/css" href="{{ MEDIA_URL }}css/print.css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo; 
+        <a href="/admin/orders/order/">Orders</a> &rsaquo; 
+        <a href="/admin/orders/order/{{ order.id }}/">{{ order }}</a> &rsaquo; 
+        Packing Slip
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if printable %}
+        <h2 class="create">Packing Slip</h2>
+        <p class="noprint"><input type="submit" name="print" value="Print packing slip" onClick="javascript:window.print()" /> (make 3 copies) or use your back button to re-edit.</p>
+        <h1 class="logo">mimic print &amp; media services</h1>
+        <p class="logo">20 steelcase rd w unit 13 markham on l3r1b2 canada<br />
+tel: 905.415.2772 fax: 905.415.2005 www.mimicprint.com</p>
+
+        <div id="packingslip">
+        
+        <table class="packingslip" cellspacing="0">
+            <tr><td class="head">Ship to</td><td class="head">Details</td></tr>
+<!--            <tr><td valign="top">{{ ship_to.get_html|safe }}</td><td><p>-->
+        <tr><td valign="top">
+        {% with ship_to as address %}
+            {% include "addresses/address_snippet_shipping.html" %}
+        {% endwith %}
+        </td></tr>
+        <b>Date: </b>{{ date }}<br>
+        <b>Your PO #: </b>{{ order.po_number }}<br>
+        <b>Our order #:</b> {{ order }}</p></td>
+</tr>
+        </table>
+
+        <div id="items">
+        <table class="packingslip" cellspacing="0">
+            <tr>
+                <td class="head">Item</th>
+                <td class="head">Description</th>
+                <td class="head">Quantity</th>
+                <td class="head" align="center">Packages</th>
+            </tr>
+            {% for item in ordered_items %}
+                <tr>
+                    <td>{{ item }}</td>
+                    <td>{{ item.inventory_history.product.description }}</td>
+                    <td align="center">
+                        {% for key, value in request.POST.items %}
+                            {% ifequal key item.inventory_history.product.name %}
+                                {{ value }}
+                            {% endifequal %}
+                        {% endfor %}
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div id="received">
+            <h3>Received by:</h3>
+            <p class="receiver">Print name: </p>
+            <p class="recdate">Date: </p>
+        </div>
+        <div id="fsc">
+            <p>FSC Cert no. SW-COC-003290</p>
+        </div>
+    {% else %}
+        <div id="packingslip">
+        <h1>Create a Packing Slip</h1>
+        <form action="" method="post">
+        <h2>Ship to</h2>
+        <div class="f-left">
+            <p><strong>Use address on order:</strong></p>
+            {% with ship_to as address %}
+                {% include "addresses/address_snippet_shipping.html" %}
+            {% endwith %}
+        </div>
+        <div class="f-right">
+            <p><strong>Use address in Mimic address book:</strong></p>
+            <select name="address" id="id_address">
+                <option value="">--Select--</option> 
+                {% for a in addresses %}
+                <option value="{{ a.id }}">{{ a.last_name }}, {{ a.first_name }}{% if a.company %} ({{ a.company }}){% endif %}</option>
+                {% endfor %}
+            </select>
+            <a href="../../../../addresses/address/add/" class="add-another" id="add_id_address" onclick="return showAddAnotherPopup(this);"> <img src="{{ MEDIA_URL }}admin/img/admin/icon_addlink.gif" width="10" height="10" alt="Add Another"/></a>
+        </div>
+        <!--
+        <hr class="clear">
+        <h2>Attention</h2>    
+        <p><input type="text" name="attention" size="20"></p>
+        -->
+        <hr class="clear">
+        <h2>Date</h2>
+        <p><input type="text" name="date" value="{{ date|date:"Y-m-d" }}" class="vDateField"></p>
+        <hr class="clear">
+        <h2>Items</h2>
+        <table>
+            <tr><th>Item</th><th>Description</th><th>Quantity</th></tr>
+            {% for item in ordered_items %}
+            <tr>
+                <td>{{ item }}</td>
+                <td>{{ item.inventory_history.product.description }}</td>
+                <td><input type="text" size="3" name="{{ item.inventory_history.product.name }}" value="{{ item.inventory_history.amount }}"></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p><input type="submit" value="Create packing slip" name="submit"></p>
+            </form>
+    {% endif %}
+</div><!--packingslip-->{% endblock %}

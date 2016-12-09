@@ -1,0 +1,30 @@
+<tr class="{% cycle odd,even %}">
+    <td class="address">
+        <div class="actions">
+            <a href="{% url address_edit address.id %}" title="Edit this address"><img src="{{ MEDIA_URL }}img/edit.png" alt="Edit" height="16" width="16"></a> <a href="{% url address_duplicate address.id "duplicate" %}" title="Duplicate this address"><img src="{{ MEDIA_URL }}img/duplicate.png" alt="Duplicate" height="16" width="16"></a> <a href="{% url address_delete address.id %}" title="Delete this address" rel="dialog"><img src="{{ MEDIA_URL }}img/cross.png" alt="Delete" height="16" width="16"></a>
+        </div>
+        <div class="details">
+            <p>
+                <strong class="addr_name">{{ address.first_name }} {{ address.last_name }}</strong><br>
+                {% if address.title %}{{ address.title }}, {% endif %}{% if address.company %}<strong>{{ address.company }}</strong><br>{% endif %}
+                <a href="mailto:{{ address.email }}" title="Send an email">{{ address.email }}</a><br>
+                <em class="addr_label">phone</em> {{ address.phone }}<br>
+            </p>
+            <div class="more">
+                <p>
+                    {% if address.cell %}<em class="addr_label">cell</em> {{ address.cell }}<br>{% endif %}
+                    {% if address.fax %}<em class="addr_label">fax</em> {{ address.fax }}<br>{% endif %}
+                 </p>
+                 <p>
+                 {{ address.address1 }}<br>
+                 {% if address.address2 %}{{ address.address2 }}<br>{% endif %}
+                 {% if address.address3 %}{{ address.address3 }}<br>{% endif %}
+                 {{ address.city }}, {{ address.province }}<br>
+                 {{ address.postal_code }} {{ address.country }}<br>
+                 <span class="addr_res">This is a {% if address.is_residential %}residential{% else %}business{% endif %} address.</span>
+                  </p>
+             </div>
+             <a href="#" class="toggle" title="View all details for this address">Show</a>
+        </div>
+    </td>
+</tr>

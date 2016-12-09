@@ -1,0 +1,15 @@
+.ms-container {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.ms-selectable, .ms-selection {
+  width: 48%;
+}
+
+.big-button {
+  display: block;
+  margin: 10px auto;
+  font-size: 1.1em;
+  font-weight: bold;
+}

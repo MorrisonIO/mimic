@@ -1,0 +1,74 @@
+{% extends "orders/base_cart.html" %}
+
+{% block title %}Confirm your order{% endblock %}
+{% block page_title %}Confirm your order{% endblock %}
+
+{% block content %}
+{% if not request.session.cart or not request.session.shipto_address or not request.session.due_date %}
+    <p><strong class="error">Error.</strong> It looks as though a necessary piece of information is missing from your order, so your order cannot be finalized. See below for steps to proceed:</p>
+    <ol class="bulletted">
+        {% if not request.session.cart %}<li><a href="{% url product_list %}" title="Select some products to order">Select a product and quantity to order</a></li>{% endif %}
+        {% if not request.session.shipto_address %}<li><a href="{% url provide_shipto %}" title="Enter a shipping address">Provide a shipping address</a></li>{% endif %}
+        {% if not request.session.due_date %}<li><a href="{% url provide_addinfo %}" title="Enter additional information">Provide a due date and additional information</a></li>{% endif %}
+    </ol>
+{% else %}
+
+    {% load order_progress %}{% show_order_progress request "finalize" %}
+    <p>Please confirm all details of your order below. If everything is correct, click <span class="buttondesc">Submit order</span> below.</p>
+
+    <h4><strong>Products</strong></h4>
+    <div class="order_part">
+        <ul>
+        {% for item in request.session.cart.items %}
+            <li>{{ item.quantity }} {{ item.product }}</li>{# TODO could use the line_item.html template here, except that references item.name instead of item.product #}
+        {% endfor %}
+        </ul>
+        <a href="{% url cart_summary %}" class="modify" title="Back to your product summary">change</a>
+    </div>
+
+    <h4><strong>Shipping address</strong></h4>
+    <div class="order_part">
+        {% with request.session.shipto_address as address %}
+            {% include "addresses/address_snippet_plain.html" %}
+        {% endwith %}
+        <a href="{% url provide_shipto %}" class="modify" title="Back to selecting shipping address">change</a>
+    </div>
+
+
+    <h4><strong>Additional info</strong></h4>
+    <div class="order_part">
+        <p><strong>Due date:</strong> {{ request.session.due_date }}</p>
+
+        {% if request.session.po_number %}
+            <p><strong>P.O. number:</strong> {{ request.session.po_number }}</p>
+        {% endif %}
+
+        {% if request.session.additional_info %}
+            <p><strong>Additional info:</strong></p><pre>{{ request.session.additional_info }}</pre>
+        {% endif %}
+
+        {% if request.session.user_notes %}
+            <p><strong>Your notes:</strong></p><pre>{{ request.session.user_notes }}</pre>
+        {% endif %}
+
+        {% if request.session.cc_confirmation %}
+            <p><strong>CC order confirmation to:</strong> {{ request.session.cc_confirmation }}</p>
+        {% endif %}
+        <a href="{% url provide_addinfo %}" class="modify" title="Back to providing additional info">change</a>
+    </div>
+
+    <form action="{% url process_order %}" method="post">
+    <div class="submit">
+        <div class="center">
+            <p class="order_notice">Clicking this button will finalize this order to us, and this action cannot be undone. Please ensure your order is correct before proceeding.</p>
+            <img src="{{ MEDIA_URL }}img/spinner.gif" alt="" class="spinner">
+            <button type="submit" class="positive">
+                <img src="{{ MEDIA_URL }}img/tick_circle.png" alt="">
+                Submit order
+            </button>
+        </div>
+    </div>
+    </form>
+{% endif %}
+{% endblock %}
+

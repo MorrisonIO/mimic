@@ -1,0 +1,58 @@
+{% extends "orders/base_cart.html" %}
+
+{% block title %}Shipping address{% endblock %}
+{% block page_title %}Shipping address{% endblock %}
+
+{% block content %}
+{% load order_progress %}{% show_order_progress request "shipto" %}
+{% if request.session.shipto_address %}
+<p style="display: {% if form.errors %}none{% endif %}">Below is the shipping address we will use for this order. You may choose another if necessary. Click <span class="buttondesc">Continue ordering</span> to proceed to the next step.</p>
+<div id="shipto" style="display: {% if form.errors %}none{% endif %}">
+    <div id="address">
+        {% with request.session.shipto_address as address %}
+            {% include "addresses/address_snippet_styled.html" %}
+            <a href="#" id="t_provide_shipto" class="modify">Use a different address</a>
+        {% endwith %}
+    </div>
+</div>
+{% endif %}
+
+<div id="provide_shipto" style="display: {% if form.errors or not request.session.shipto_address %}block{% else %}none{% endif %}">
+    {% if not request.session.shipto_address %}<p>Provide a shipping address for this order, either by selecting from your Address Book or by entering one manually.</p>{% endif %}
+    <form action="." method="post" id="shipto_form">
+        <div class="shipto_field required">
+            <label for="shipto_address">Shipping address</label>
+            <select name="shipto_address" id="shipto_menu">
+                <option value="">-- Select from Address Book --</option>
+                {% for address in addresses %}
+                    <option value="{{ address.id }}">{{ address }}</option>
+                {% endfor %}
+            </select>
+            <span class="or">or</span>
+            <a href="#" id="t_address_form">enter an address manually</a>
+        </div>
+        <div id="address_form" style="display: {% if form.errors %}block{% else %}none{% endif %}">
+            {% include "addresses/address_edit_form.html" %}
+            <div class="submit">
+                <div class="buttons">
+                    <img src="{{ MEDIA_URL }}img/spinner.gif" alt="" class="spinner">
+                    <button type="submit" class="positive">
+                        <img src="{{ MEDIA_URL }}img/tick_circle.png" alt="">
+                        Ship to this address
+                    </button>
+                    <input type="checkbox" name="add_to_ab" value="1"> <span class="add_to_ab">Add to Address book</input></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="submit" id="continue" style="display: {% if not form.errors and request.session.shipto_address %}block{% else %}none{% endif %}">
+    <div class="center">
+        <a href="{% url provide_addinfo %}" class="button">
+            <img src="{{ MEDIA_URL }}img/arrow.png" alt="">
+            Continue ordering
+        </a>
+    </div>
+</div>   
+{% endblock %}
