@@ -1,0 +1,24 @@
+{% extends "base_public.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block body_id %}{% ifequal flatpage.title "Welcome" %}home{% else %}{{ flatpage.title|lower }}{% endifequal %}{% endblock %}
+{% block page_title %}
+  {% ifnotequal flatpage.title "Welcome" %}
+    <h1 class="flatpage-title">{{ flatpage.title|safe }}</h1>
+  {% endifnotequal %}
+{% endblock %}
+
+{% block banner_img %}
+    {% ifequal flatpage.title "Welcome" %}
+        <img src="{% static "img/public/pencils.jpg" %}" alt="(Image of pencil tips) Corporate printing done properly. Get the point?" width="750" height="270">
+    {% else %}
+        <img src="{% static "img/public/pencil_tops.jpg" %}" alt="Image of pencil tips" width="750" height="95">
+    {% endifequal %}
+{% endblock %}
+
+{% block content %}
+    {{ flatpage.content|safe }}
+{% endblock %}
+
+

@@ -1,0 +1,424 @@
+/*
+    File:   screen.css
+    Title:  Screen CSS for mimicprint.com 
+    Author: Dieter Limeback <dieter.limeback@mimicprint.com>
+*/
+
+@import url("fonts.css");
+
+body {
+    background: #e2e2e2;
+    font-size: 100%;
+    font-family: 'Garamond', "Lucida Grande", Verdana, sans-serif;
+}
+
+a {
+    color: #f78f1e;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+p {
+    font-size: 1em; 
+    line-height: 1.5em; 
+}
+
+hr { display: none; }
+strong { font-weight: bold; }
+em { font-style: italic; }
+
+div#container {
+    background: #fff url(../../img/public/bg.gif);
+    background-repeat: repeat-y;
+    background-position: top left;
+    width: 764px; /* 750 + 2*7px drop shadow */
+    margin: 0 auto;
+}
+
+div#top_links, div#header, div#banner, div#main_content, div#footer {
+    margin: 0 7px; /* make room for drop shadow */
+}
+
+#main_content p {
+    margin: 0 0 1.5em 0;
+}
+
+#header {
+    clear: both;
+    float: left;
+    width: 300px;
+}
+    
+#header p.client_login {
+    background: #333;
+    text-align: right;
+    color: #999;
+    padding: 8px 15px 6px 0;
+    margin: 0;
+}
+
+#top_links {
+    background: #333;
+    padding: 7px 10px 5px 15px;
+}
+
+#top_links p {
+    color: #999;
+    font-size: 0.95em; 
+    line-height: 1.2em;
+}
+
+#top_links p.skip {
+    float: left;
+}
+
+#top_links p.client_login {
+    text-align: right;
+}
+
+#top_links p.client_login a {
+    font-weight: normal;
+}
+
+#top_links p.skip a {
+    color: #333;
+    font-weight: normal;
+}
+
+#top_links p.skip a:hover {
+    color: #f78f1e;
+    text-decoration: none;
+}
+
+#header h1 {
+    margin: 17px 0 0 40px;
+}
+
+#nav {
+    background: #e2e2e2 url(../../img/public/grey_corner_tl.gif);
+    background-repeat: no-repeat;
+    background-position: top left;
+    float: right;
+    width: 290px;
+    height: 30px;
+    margin: 66px 7px 0 0px;
+}
+
+#nav ul {
+    margin: 8px 10px 5px 0;
+    text-align: right;
+}
+
+#nav ul li {
+    list-style-type: none;
+    display: inline;
+}
+
+#nav ul li.last {
+    padding-right: 0;
+}
+
+#nav ul li a {
+    color: #6890a5;
+    padding: 3px 5px;
+}
+
+#nav ul li a:hover {
+    background: #ccc;
+    text-decoration: none;
+}
+
+body#home a#n-home,
+body#services a#n-services,
+body#news a#n-news,
+body#contact a#n-contact {
+    color: #999;
+}
+
+div#banner {
+    clear: both;
+}
+
+div#main_content {
+    float: left;
+    width: 430px; /* 510 - 40 left padding - 4 right 'padding' */
+    padding: 0 0 40px 40px;
+}
+body#offline div#main_content { width: 80%; }
+
+div#main_content p {
+    color: #444;
+}
+div#main_content span.new {
+    color: #900;
+    font-weight: bold;
+}
+
+div#main_content h2 {
+    margin: 33px 0 18px 0;
+}
+div#main_content h2.error {
+    font-size: 1.6em;
+    color: #900;
+}
+
+div#sidebar {
+    margin: 50px 7px 0 517px;
+    border: 1px solid #fff;
+}
+
+#login_box {
+    background: #90DDB8 url(../../img/public/login_box_top.gif) no-repeat top left;
+    margin: 0 0 20px 0;
+    width: 200px;
+}
+#login_box h3 {
+    padding: 20px 0 0 0;
+    margin: 0 0 0 53px;
+}
+
+#login_box form {
+    margin: 25px 13px 0 13px;
+}
+
+#login_box label {
+    color: #5c859c;
+}
+
+#login_box input.textfield {
+    width: 167px;
+}
+
+#login_box p {
+    margin-bottom: 1.3em;
+}
+
+#login_box p.submit {
+    text-align: right;
+    margin-bottom: 0;
+}
+
+#login_box p.lost_password {
+    text-align: center;
+    font-size: 0.833em;
+    padding: 10px 0; 
+}
+#upload_box {
+    background: #D9E64A url(../../img/public/upload_box_top.gif) no-repeat top left;
+/*    margin: 0 20px;*/
+    padding: 10px 0;
+    width: 200px;
+}
+#upload_box p {
+    font-size: 1.2em;
+    line-height: 1.2em;
+    color: #666;
+    padding: 0 10px 0 55px;
+}
+
+
+div#footer {
+    clear: both;
+    padding: 3px 40px 100px 40px;
+    border-bottom: 1px solid #666;
+    background: #f1e8ce;
+}
+
+div#footer p {
+    font-size: 0.833em;
+    color: #888;
+    margin: 0;
+}
+
+div#footer a {
+    color: #888;
+    border-bottom: 1px dotted;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+div#footer a:hover {
+    border-bottom: 1px solid;
+}
+
+form { /* on contact page */
+    margin-bottom: 2em;
+}
+fieldset {
+    margin: 1em 0 1px 0;
+    background: #efefef;
+    padding: 15px;
+    border: 0;
+}
+#main_content fieldset p {
+    color: #999;
+    margin-bottom: 1em;
+    font-style: italic;
+}
+ul.errorlist { 
+    color: #900;
+    font-weight: bold;
+}
+label {
+    margin: 0;
+    padding: 0;
+    color: #333;
+    font-family:  'Lucida Sans Unicode', 'Lucida Grande', verdana, arial, sans-serif;
+    line-height: 1.2em;
+    font-size: 1em;   
+    display: block;
+    font-style: normal;
+}
+
+p.tel {
+    background: url(../../img/public/phone.gif);
+    background-position: top left;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+}
+
+p.fax {
+    background: url(../../img/public/fax.gif);
+    background-position: top left;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+}
+
+p.email {
+    background: url(../../img/public/email.gif);
+    background-position: top left;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+}
+
+p.postal {
+    background: url(../../img/public/house.gif);
+    background-position: top left;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+}
+
+#main_content h3 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 1.6em;
+    margin: 1.6em 0 1em 0;
+    color: #37657f;
+}
+#news #main_content div.entry {
+    border-top: 1px dotted #aaa;
+    margin: 30px 0;
+}
+#news #main_content h3 {
+    margin: 30px 0 0 0;
+}
+#news #main_content p.entry_meta {
+    color: #999;
+    font-style: italic;
+}
+#news #main_content p.read_more {
+    text-align: right;
+}
+
+#main_content h4 {
+    color: #77605a;
+    font-weight: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#main_content p {
+    line-height: 1.4em;
+    margin: 0 0 1.4em 0;
+}
+
+#main_content div.msgbox {
+    margin-bottom: 1em;
+}
+
+#main_content div.msgbox p.success, #main_content div.msgbox p.error {
+    padding: 0.5em 0.5em 0.5em 40px;
+}
+#main_content div.msgbox p.error {
+    background: #ba0000 url(../../img/public/error.gif);
+    background-position: left center;
+    background-repeat: no-repeat;
+    color: #fff;
+}
+#main_content div.msgbox p.success {
+    background: #cff8c3 url(../../img/public/success.gif);
+    background-position: left center;
+    background-repeat: no-repeat;
+    border: 1px solid #0c0;
+}
+
+.submitnotop { /* for surrounding submit buttons */
+    background: #daedff;
+    padding: 0.5em 1em;
+    text-align: center;
+    margin-top: 1px;
+}
+
+.submit p {
+/*    font-weight: bold;*/
+    font-size: 1em;
+    text-align: center;
+    line-height: 1.4em;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+
+body#offline #sidebar { display: none; }
+
+/* progress bar */
+#progress_container {
+    padding: 15px 0 0 0;
+    width: 400px;;
+    margin: 0 auto;
+}
+#progress_filename {
+    margin: 0 0 10px 0;
+    height: 1em;
+}
+#progress_bar { 
+    height: 10px;
+    background: url(../../img/public/progress_bg.gif) repeat-x top left;
+    border: 1px solid #999;
+    margin-bottom: 5px;
+    text-align: left;
+}
+#progress_indicator {
+    background: url(../../img/public/green_stripe.gif) no-repeat top right;
+    display: block;
+    width: 0px;
+    overflow: hidden;
+    height: 10px;
+    text-align: left;
+}
+#upload_note {
+    font-size: 0.9em;
+    clear: both;
+    display: block;
+}
+
+h5 {
+  color:#ED6C34;
+  font-size: xx-large;
+}
+
+h6 {
+  color:#D1537F;
+  font-size:xx-large; 
+}
+
+.flatpage-title {
+  font-size:21px;
+  color: #4DAE75;
+  margin-bottom: 15px;
+}
+
+p.tel, p.fax, p.email {
+  padding-left: 55px;
+  line-height: 55px !important;
+}

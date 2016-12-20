@@ -1,0 +1,44 @@
+/*
+    File:   custom-admin.css
+    Title:  CSS for custom admin pages for mimicprint2.com 
+    Author: Dieter Limeback <dieter.limeback@mimicprint.com>
+*/   
+
+hr { background: #ccc; }
+.clear { clear: both; }
+
+/* WorkNotes personal colours */
+span.dieter { color: #900; }
+span.erin { color: #990; }
+span.david { color: #099; }
+span.laura { color: #909; }
+span.lenny { color: #009; }
+span.production { color: #c60; }
+span.new { color: #090; }
+
+
+/* Shipping forms */
+#comm_inv .f-left,
+#label .f-left,
+#packingslip .f-left {
+    width: 49%;
+    float: left;
+}
+#comm_inv .f-right,
+#label .f-right,
+#packingslip .f-right {
+    width: 49%;
+    float: right;
+}
+#docket div.docketinfo,
+#docket div.jobinfo {
+    border: 1px solid #aaa;
+    padding: 0 10px;
+    margin: 10px 0;
+}
+
+#docket div.instr {
+     border: 1px solid #ccc;
+     margin: 10px 0;
+     padding: 0 10px;
+}
