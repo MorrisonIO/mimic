@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'contact_form',
     'uploads.apps.UploadsConfig',
+    'orgs.apps.OrgsConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
