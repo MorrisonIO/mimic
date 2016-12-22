@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
-from mimicprint.products.models import Product
-from mimicprint.orders.models import OrderedItem
+from products.models import Product
+from orders.models import OrderedItem
 
 
 PROVINCE_CHOICES = (

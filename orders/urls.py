@@ -1,6 +1,7 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, patterns
 
-urlpatterns = patterns('mimicprint.orders.views',
+
+urlpatterns = patterns('orders.views',
     url(r'^$', 
         view = 'order_list',
         name = 'order_index',

@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext, loader, Context
 from django.core.mail import mail_managers, send_mail
 from django.core.urlresolvers import reverse
-from mimicprint.uploads.forms import UploadFileForm
+from uploads.forms import UploadFileForm
 from django.conf import settings 
 from django.core.cache import cache
 import re

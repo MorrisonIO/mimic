@@ -8,10 +8,10 @@
 from django.core.mail import EmailMessage
 from django.core.management import setup_environ
 from django.contrib.auth.models import User
-from mimicprint import settings
-from mimicprint.products.models import Product, Category, ComponentRatio
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.orders.models import Order, OrderedItem
+from . import settings
+from products.models import Product, Category, ComponentRatio
+from orgs.models import Org, UserProfile
+from orders.models import Order, OrderedItem
 import csv
 import datetime
 import StringIO

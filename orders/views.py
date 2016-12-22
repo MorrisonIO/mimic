@@ -15,15 +15,15 @@ from django.http import HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext, loader, Context
 
-from mimicprint.addresses.forms import AddressForm
-from mimicprint.addresses.models import Address
-from mimicprint.decorators import current_org_required
-from mimicprint.helpers.views import get_query
-from mimicprint.orders.forms import OrderForm
-from mimicprint.orders.models import Cart, Order, InventoryHistory, OrderedItem
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.products.models import Product
-from mimicprint.vardata.models import *
+from addresses.forms import AddressForm
+from addresses.models import Address
+from decorators import current_org_required
+from helpers.views import get_query
+from orders.forms import OrderForm
+from orders.models import Cart, Order, InventoryHistory, OrderedItem
+from orgs.models import Org, UserProfile
+from products.models import Product
+from vardata.models import *
 
 
 @login_required

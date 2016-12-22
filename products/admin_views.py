@@ -5,8 +5,8 @@ from django.forms import widgets
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext, loader, Context
 from django.contrib.auth.models import User
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.products.models import Product, ProductSelection
+from orgs.models import Org, UserProfile
+from products.models import Product, ProductSelection
 from django.db import connection
 from django.db.transaction import commit_on_success
 from datetime import datetime

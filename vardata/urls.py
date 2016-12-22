@@ -1,6 +1,6 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, patterns
 
-urlpatterns = patterns('mimicprint.vardata.views',
+urlpatterns = patterns('vardata.views',
     url(r'^$',
         view = 'index',
         name = 'vardata_prefix',

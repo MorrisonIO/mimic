@@ -1,7 +1,7 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, patterns
 from django.views.generic.simple import direct_to_template
 
-urlpatterns = patterns('mimicprint.uploads.views',
+urlpatterns = patterns('uploads.views',
     url(r'^$', 
         view = 'upload_file',
         name = 'upload_file',

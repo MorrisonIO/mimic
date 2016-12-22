@@ -1,10 +1,10 @@
 from django import forms
 from django.forms import widgets, ModelForm
 from django.contrib.auth.models import User
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.products.models import Product, Category
-from mimicprint.orders.models import Order
-from mimicprint.reports.models import Report
+from orgs.models import Org, UserProfile
+from products.models import Product, Category
+from orders.models import Order
+from reports.models import Report
 import re
 
 class ReportForm(forms.ModelForm):

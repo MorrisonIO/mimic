@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import widgets, ModelForm
-from mimicprint.orgs.models import UserProfile
+from orgs.models import UserProfile
 from contact_form.forms import ContactForm
 
 

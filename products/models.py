@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import permalink
 from django.conf import settings
 from django.contrib.auth.models import User
-from mimicprint.orgs.models import Org
+from orgs.models import Org
 import string
 import random
 

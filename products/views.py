@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from mimicprint.products.models import Product, Category
-from mimicprint.orgs.models import UserProfile
-from mimicprint.decorators import current_org_required
-from mimicprint.helpers.views import get_query
+from products.models import Product, Category
+from orgs.models import UserProfile
+from decorators import current_org_required
+from helpers.views import get_query
 
 
 @login_required

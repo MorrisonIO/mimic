@@ -5,7 +5,7 @@ entry_info = {
     "queryset": Entry.objects.public()
 }
 
-urlpatterns = patterns('mimicprint.events.views', 
+urlpatterns = patterns('events.views', 
     url(r'^$', 
         view = 'client_events_index',
         name = 'client_events_index',

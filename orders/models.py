@@ -7,9 +7,9 @@ from django.core.mail import send_mail, mail_managers
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
-from mimicprint.products.models import Product
-from mimicprint.orgs.models import Org
-from mimicprint.addresses.models import Address
+from products.models import Product
+from orgs.models import Org
+from addresses.models import Address
 import string
 import array
 from time import time
@@ -19,7 +19,10 @@ class Item:
     """
     One Product in a Cart -- one thing that the user intends to order.
 
-    A unique_id is also stored along with the product for each item in a cart, since in the case of variable items there might be more than one instance of the same product being ordered, and when modifying or deleting there needs to be a way to distinguish between them.
+    A unique_id is also stored along with the product for each item in a cart,
+    since in the case of variable items there might be more than one instance
+    of the same product being ordered, and when modifying
+    or deleting there needs to be a way to distinguish between them.
     """
     def __init__(self, product, unique_id, quantity):
         self.product = product
@@ -260,7 +263,7 @@ class InventoryHistory(models.Model):
         href_path = ''
         oi = OrderedItem.objects.get(inventory_history=self)
         if self.product.is_variable:
-            from mimicprint.vardata.models import *
+            from vardata.models import *
             model = self.product.var_form.replace('Form', '')
             var_form = eval(model) 
             var_data = var_form.objects.get(ordereditem=oi)

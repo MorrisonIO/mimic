@@ -1,6 +1,6 @@
 from django.conf.urls import url, patterns
 
-urlpatterns = patterns('mimicprint.charts.views',
+urlpatterns = patterns('charts.views',
     url(r'^$', 
         view = 'index',
         name = 'chart_index',

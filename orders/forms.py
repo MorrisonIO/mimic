@@ -5,10 +5,10 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import widgets, ModelForm, BaseForm
 
-from mimicprint.orgs.models import Org
-from mimicprint.addresses.models import Address
-from mimicprint.products.models import Product
-from mimicprint.orders.models import Order
+from orgs.models import Org
+from addresses.models import Address
+from products.models import Product
+from orders.models import Order
 
 
 class OrderForm(forms.ModelForm):
@@ -84,7 +84,11 @@ class ShipToField(forms.Field):
     def __init__(self, data=None, *args, **kwargs):
         super(ShipToField, self).__init__(data, *args, **kwargs)
         staff = list(User.objects.filter(is_staff=True))
-        addresses = [(a.id, a) for a in Address.objects.filter(owners__in=staff)]
+        try:
+            addresses = [(a.id, a) for a in Address.objects.filter(owners__in=staff)]
+        except Exception as ex:
+            print "Error ShipToField: {}".format(ex)
+            addresses = []
         self.widget = forms.Select(attrs={'class':'required'}, choices=addresses)
         self.required = True
 
@@ -102,9 +106,12 @@ class FastOrderForm(forms.Form):
     Form for adding a FastOrder. Data we need to get from user: due_date*, org*, ship_to*, po_number, additional_info,products + quantities (at least one required). All other fields of the Order model are either not relevant, or can by filled in dynamically.
     """
     org_choices = [('', '---------'),]
-    org_choices += [(org.id, org.name) for org in Org.objects.all()]
     product_choices = [('', '---------'),]
-    product_choices += [(prod.id, prod.name) for prod in Product.objects.all()]
+    try:
+        org_choices += [(org.id, org.name) for org in Org.objects.all()]
+        product_choices += [(prod.id, prod.name) for prod in Product.objects.all()]
+    except Exception as ex:
+        print "Error FastOrderForm: {}".format(ex)
 
     org = forms.ChoiceField(required=True, choices=org_choices, widget=forms.Select(attrs={'class': 'required'}))
     due_date = forms.DateField(required=True, widget=forms.TextInput(attrs={'class': 'vDateField required', 'size': '12'}))

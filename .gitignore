@@ -1,4 +1,17 @@
 env_django19/
+addresses/migrations/*
+ddresses/migrations/*
+downloads/migrations/*
+events/migrations/*
+orders/migrations/*
+orgs/migrations/*
+products/migrations/*
+reports/migrations/*
+vardata/migrations/*
+fonts/
+templates/base.html
+templates/dashboard.html
+templates/templatetags/
 *.pyc
 *.swp
 .DS_Store

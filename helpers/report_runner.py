@@ -2,8 +2,8 @@ from mimicprint import settings
 from django.core.management import setup_environ
 from django.db import connection
 from django.core.mail import EmailMessage
-from mimicprint.reports.views import make_report
-from mimicprint.reports.models import Report
+from reports.views import make_report
+from reports.models import Report
 from django.contrib.auth.models import User, Group
 from datetime import datetime
 import re

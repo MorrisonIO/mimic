@@ -1,5 +1,5 @@
 from django import template
-from mimicprint.orgs.models import Org
+from orgs.models import Org
 register = template.Library()
 
 @register.inclusion_tag('templatetags/order_progress.html')

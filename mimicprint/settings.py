@@ -40,8 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'contact_form',
-    'uploads.apps.UploadsConfig',
+    # APPS
+    'addresses.apps.AddressesConfig',
+    'charts.apps.ChartsConfig',
+    'downloads.apps.DownloadsConfig',
+    'events.apps.EventsConfig',
+    'orders.apps.OrdersConfig',
     'orgs.apps.OrgsConfig',
+    'products.apps.ProductsConfig',
+    'reports.apps.ReportsConfig',
+    'uploads.apps.UploadsConfig',
+    'vardata.apps.VardataConfig',
+    'helpers.apps.HelpersConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -53,7 +63,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware', 
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'mimicprint.urls'

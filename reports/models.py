@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models import permalink
 from django.contrib.auth.models import User
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.products.models import Product, Category
-from mimicprint.orders.models import Order
+from orgs.models import Org, UserProfile
+from products.models import Product, Category
+from orders.models import Order
 from django.core import serializers
 from django.db.models.query import QuerySet
 import datetime

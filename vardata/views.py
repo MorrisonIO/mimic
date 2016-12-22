@@ -20,8 +20,8 @@ from django.conf import settings
 import os
 import string
 from time import time
-from mimicprint.orders.models import OrderedItem
-from mimicprint.vardata.models import *
+from orders.models import OrderedItem
+from vardata.models import *
 import re
 import cgi
 

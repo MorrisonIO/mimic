@@ -9,12 +9,12 @@ from django.core.mail import EmailMessage
 from django.core.management import setup_environ
 from django.contrib.auth.models import User
 from django.db.models import Q
-from mimicprint import settings
-from mimicprint.products.models import Product, Category, ComponentRatio
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.orders.models import Order, OrderedItem
-from mimicprint.helpers.views import price_calc
-from mimicprint.helpers.reporter import ReportFormatter
+from . import settings
+from products.models import Product, Category, ComponentRatio
+from orgs.models import Org, UserProfile
+from orders.models import Order, OrderedItem
+from helpers.views import price_calc
+from helpers.reporter import ReportFormatter
 from sys import exit
 import csv
 import datetime

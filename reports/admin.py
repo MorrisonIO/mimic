@@ -1,6 +1,6 @@
 from django.contrib import admin
 from models import Report
-from mimicprint.orders.models import Order
+from orders.models import Order
 from django import forms
 
 class ReportAdminForm(forms.ModelForm):

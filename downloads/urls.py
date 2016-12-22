@@ -5,7 +5,7 @@ info_dict = {
     'queryset': Download.objects.all(),
 }
 
-urlpatterns = patterns('mimicprint.downloads.views',
+urlpatterns = patterns('downloads.views',
     url(r'^$', 
         view = 'index',
         name = 'download_index',

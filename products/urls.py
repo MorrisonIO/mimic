@@ -1,6 +1,6 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, patterns
 
-urlpatterns = patterns('mimicprint.products.views',
+urlpatterns = patterns('products.views',
     url(r'^$', 
         view = 'index',
         name = 'product_list',

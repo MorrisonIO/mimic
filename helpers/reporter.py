@@ -2,8 +2,8 @@
 
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from openpyxl.cell import get_column_letter as gcl, Cell
-from openpyxl.style import Alignment, NumberFormat, Fill, Color, Font, Border
+from openpyxl.cell import Cell, get_column_letter as gcl
+from openpyxl.styles import Alignment, alignment, numbers, Fill, Color, colors, Font, Border, borders
 
 #### WARNING: OpenPYXl has a bug that breaks office 2007 compatibility:
 ####   https://bitbucket.org/ericgazoni/openpyxl/issue/109/simple-formula-write-not-working
@@ -152,16 +152,16 @@ class ReportFormatter:
                 cell.style.fill.start_color.index = color
 
     DEFAULT_LABEL_STYLE = {
-        'color': Color.WHITE,
+        'color': colors.WHITE,
         'bold': True,
-        'halign': Alignment.HORIZONTAL_RIGHT
+        'halign': Alignment.horizontal #HORIZONTAL_RIGHT
     }
 
     DEFAULT_CELL_STYLE = {
         'formula': True,
         'bold': True,
-        'color': Color.WHITE,
-        'format': NumberFormat.FORMAT_CURRENCY_USD_SIMPLE
+        'color': colors.WHITE,
+        'format': numbers.FORMAT_CURRENCY_USD_SIMPLE
     }
 
     def _make_totals(self, start_row, label = None, label_pos = None, cell_style = None, **label_opts):
@@ -214,7 +214,7 @@ class ReportFormatter:
         else:
             return self.wb.save(fname)
 
-    def _row_borders(self, row = None, border = Border.BORDER_THIN):
+    def _row_borders(self, row = None, border = borders.BORDER_THIN):
         if row is None:
             row = self.row
 
@@ -282,7 +282,7 @@ class OrdersReport(ReportFormatter):
         self.cell(self.COLUMN_ITEM, self.row - 1, wrap_text=False)
 
     TOTAL_CELL_STYLE = {
-        'color': Color.BLACK
+        'color': colors.BLACK
     }
 
     def section_end(self):
@@ -292,9 +292,9 @@ class OrdersReport(ReportFormatter):
         self._make_totals(
             self.section_row,
             label='%s ORDER TOTAL' % (self.location_name,),
-            color=Color.BLACK,
+            color=colors.BLACK,
             label_pos=self.COLUMN_ITEM,
-            halign=Alignment.HORIZONTAL_LEFT,
+            halign=Alignment.horizontal, #HORIZONTAL_LEFT,
             cell_style=self.TOTAL_CELL_STYLE
         )
         self._row_color('606060', self.row + 1)
@@ -304,7 +304,7 @@ class OrdersReport(ReportFormatter):
         pass
     
     GRAND_TOTAL_CELL = {
-        'color': Color.WHITE
+        'color': colors.WHITE
     }
 
     def grand_total(self, label = 'TOTAL FOR ALL LOCATIONS'):

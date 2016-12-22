@@ -8,13 +8,13 @@ from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-from mimicprint.reports.models import Report
-from mimicprint.reports.forms import ReportForm
-from mimicprint.orgs.models import Org, UserProfile
-from mimicprint.products.models import Category, Product
-from mimicprint.orders.models import Order, OrderedItem
+from reports.models import Report
+from reports.forms import ReportForm
+from orgs.models import Org, UserProfile
+from products.models import Category, Product
+from orders.models import Order, OrderedItem
 import datetime
-from mimicprint.helpers.reporter import ReportFormatter
+from helpers.reporter import ReportFormatter
 from dateutil.relativedelta import relativedelta
 
 @login_required

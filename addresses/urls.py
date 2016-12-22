@@ -1,7 +1,7 @@
 from django.conf.urls import url, patterns
 from .models import Address
 
-urlpatterns = patterns('mimicprint.addresses.views',
+urlpatterns = patterns('addresses.views',
     url(r'^$',
         view = 'index',
         name = 'address_index',
