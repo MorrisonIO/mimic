@@ -20,7 +20,7 @@ def index(request):
     """
     Shows the main list of addresses.
     """
-        address_list = Address.objects.filter(owners__in=[request.user]).order_by('last_name')
+    address_list = Address.objects.filter(owners__in=[request.user]).order_by('last_name')
     paginator = Paginator(address_list, 10) # 10 addresses per page
     
     # ensure page requested is an int; otherwise show pg 1

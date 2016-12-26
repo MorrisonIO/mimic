@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block body_id %}addresses{% endblock %}
 
 {% block search %}
 <div id="search">
-    <form action="{% url address_search %}" method="get">
+    <form action="#" method="get"> {# {% url address_search %} #}
         <input type="text" name="q" title="Search addresses..." id="search_input">
-        <input type="image" src="{{ MEDIA_URL }}img/search.gif" id="search_submit" alt="Search">
+        <input type="image" src="{% static 'img/search.gif' %}" id="search_submit" alt="Search">
     </form>
 </div>
 {% endblock %}

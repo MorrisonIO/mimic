@@ -1,4 +1,5 @@
 {% extends "addresses/base_address.html" %}
+{% load staticfiles %}
 
 {% block title %}Address Book{% endblock %}
 {% block page_title %}Address Book{% endblock %}
@@ -81,8 +82,8 @@ $(document).ready(function(){
 {% block sidebar_class %}center{% endblock %}
 {% block sidebar %}
     <p>
-    <a href="{% url address_add %}" title="Add an address" class="button">
-        <img src="{{ MEDIA_URL }}img/plus_circle.png" alt="">
+    <a href="#" title="Add an address" class="button"> {# {% url address_add %} #}
+        <img src="{% static 'img/plus_circle.png' %}" alt="">
         Add an address
     </a>
     </p>
