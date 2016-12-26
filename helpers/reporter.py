@@ -2,7 +2,8 @@
 
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from openpyxl.cell import Cell, get_column_letter as gcl
+from openpyxl.cell import Cell as gcl
+from openpyxl.utils import get_column_letter
 from openpyxl.styles import Alignment, alignment, numbers, Fill, Color, colors, Font, Border, borders
 
 #### WARNING: OpenPYXl has a bug that breaks office 2007 compatibility:

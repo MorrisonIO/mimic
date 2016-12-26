@@ -1,0 +1,12 @@
+{{ address.first_name }} {{ address.last_name }}
+{% if address.title %}{{ address.title }}{% if address.company %}, {% endif %}{% endif %}{% if address.company %}{{ address.company }}{% endif %}
+{{ address.address1 }}
+{% if address.address2 %}{{ address.address2 }}{% endif %}
+{% if address.address3 %}{{ address.address3 }}{% endif %}
+{{ address.city }}, {{ address.province }}
+{{ address.country }} {{ address.postal_code }}
+Residential: {% if address.is_residential %}Yes{% else  %}No{% endif %}
+{% if address.email %}Email: {{ address.email }}{% endif %}
+Phone: {{ address.phone }}
+{% if address.cell %}Cell: {{ address.cell }}{% endif %}
+{% if address.fax %}Fax: {{ address.fax }}{% endif %}

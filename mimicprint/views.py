@@ -1,6 +1,6 @@
 from django.shortcuts import render #get_object_or_404,
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext, loader, Context
@@ -42,15 +42,15 @@ def dashboard(request):
         else:
             order_list = Order.objects.filter(placed_by__exact=request.user)[:5]
         downloads = Download.objects.filter(org=current_org).order_by('-date_added')[:5]
-    else: 
+    else:
         order_list, downloads = None, None
 
-    return render_to_response( 'dashboard.html', { 
+    return render(request, 'dashboard.html', {
         'current_org': current_org,
         'order_list': order_list,
         'entries_list': entries_list,
         'downloads': downloads,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 def setorg(request):
@@ -85,7 +85,22 @@ def setorg(request):
                 request.session['current_org'] = org
         return HttpResponseRedirect(reverse('dashboard'))
 
-# @login_required
+
+@login_required
+def logout_user(request):
+    """
+    Logs out the user to domain-specific page
+    """
+
+    from django.contrib.auth.views import logout
+
+    next_page = None
+    if 'HTTP_X_FORWARDED_HOST' in request.META and 'podrexall' in request.META['HTTP_X_FORWARDED_HOST']:
+        next_page = 'http://www.podrexall.com/loggedout.html'
+
+    return logout(request, next_page)# @login_required
+
+
 # def profile(request):
 #     """
 #     Shows a user's profile page, where they can set various options on their account. 

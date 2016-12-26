@@ -715,7 +715,7 @@ a.toggle_qty_modify
 table.qty_meta_info tr { border: 0; }
 table.qty_meta_info td { padding: 0; vertical-align: middle; }
 table.qty_meta_info td.qty_input { width: 65px; }
-table.qty_meta_info td.qty_info { vertical-align: middle; }:
+table.qty_meta_info td.qty_info { vertical-align: middle; }
 table.qty_meta_info td div { padding: 0; display: block; }
 
 table.line_item { margin-bottom: 20px; }

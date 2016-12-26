@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.forms import widgets, ModelForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 
 from helpers.views import get_query
@@ -20,9 +20,9 @@ def index(request):
     """
     Shows the main list of addresses.
     """
-    address_list = Address.objects.filter(owners__in=[request.user]).order_by('last_name')
+        address_list = Address.objects.filter(owners__in=[request.user]).order_by('last_name')
     paginator = Paginator(address_list, 10) # 10 addresses per page
-
+    
     # ensure page requested is an int; otherwise show pg 1
     try:
         page = int(request.GET.get('page', '1'))
@@ -34,9 +34,9 @@ def index(request):
     except (EmptyPage, InvalidPage): # if pg # is out of range, show last page
         addresses = paginator.page(paginator.num_pages)
 
-    return render_to_response('addresses/address_list.html', {
+    return render(request, 'addresses/address_list.html', {
         'addresses': addresses,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -45,9 +45,9 @@ def detail(request, address_id):
     Shows an individual address.
     """
     address = get_object_or_404(Address, pk=address_id, owners__in=[request.user])
-    return render_to_response('addresses/address_detail.html', {
+    return render(request, 'addresses/address_detail.html', {
         'address': address,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required

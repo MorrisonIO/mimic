@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block body_id %}addresses{% endblock %}
+
+{% block search %}
+<div id="search">
+    <form action="{% url address_search %}" method="get">
+        <input type="text" name="q" title="Search addresses..." id="search_input">
+        <input type="image" src="{{ MEDIA_URL }}img/search.gif" id="search_submit" alt="Search">
+    </form>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}

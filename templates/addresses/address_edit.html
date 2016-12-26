@@ -1,0 +1,29 @@
+{% extends "addresses/base_address.html" %}
+
+{% block title %}{% if address %}Edit{% else %}Add{% endif %} an address{% endblock %}
+{% block page_title %}{% if address %}Edit{% else %}Add{% endif %} an address{% endblock %}
+
+{% block body_class %}onecol{% endblock %}
+
+{% block content %}
+    {% if address %}
+    <p>Now editing the address for <strong>{{ address.first_name }} {{ address.last_name }}</strong>.
+    {% else %}
+        <p>Create a new address book entry by completing the form below.
+    {% endif %}
+    Fields with bold labels are required.</p>
+
+    <form action="." method="post">
+        {% include "addresses/address_edit_form.html" %}
+        <div class="submit">
+            <div class="buttons">
+                <img src="{{ MEDIA_URL }}img/spinner.gif" alt="" class="spinner">
+                <button type="submit" class="positive">
+                    <img src="{{ MEDIA_URL }}img/tick_circle.png" alt="">
+                    Save address
+                </button>
+                or <a href="{% url address_index %}" title="Cancel" class="alt_option">Cancel</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

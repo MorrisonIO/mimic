@@ -19,6 +19,7 @@ import datetime
 import os
 from distutils.dir_util import mkpath
 
+register = template.Library()
 
 def _cleanfilename(filename):
     
@@ -43,12 +44,12 @@ def js_tag(filename):
     
     return tag 
 
-def css_tag(filename):
-    tag = "<link rel=\"stylesheet\" href=\"%s%s\" />" % (settings.STATIC_URL, _cleanfilename(filename) + ".css?" + _hashit(filename))
 
+@register.simple_tag
+def css_tag(filename):
+    tag = "%s" % (_cleanfilename(filename) + ".css?" + _hashit(filename))
     return tag
 
-register = template.Library()
 register.simple_tag(js_tag)
 register.simple_tag(css_tag)
 

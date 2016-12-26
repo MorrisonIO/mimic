@@ -29,10 +29,10 @@ urlpatterns = [
         'django.contrib.auth.views.login',
         name = 'login'
     ),
-    # url(r'^accounts/logout/$',
-    #     'mimicprint.views.logout_user',
-    #     name = 'logout'
-    # ),
+    url(r'^accounts/logout/$',
+        'mimicprint.views.logout_user',
+        name = 'logout'
+    ),
     # url(r'^accounts/profile/$',
     #     view = 'mimicprint.views.profile',
     #     name = 'profile'

@@ -1,8 +1,8 @@
 from django.conf.urls import url, patterns
-from .models import Address
+#from .models import Address
 
 urlpatterns = patterns('addresses.views',
-    url(r'^$',
+    url(r'^',
         view = 'index',
         name = 'address_index',
     ),
