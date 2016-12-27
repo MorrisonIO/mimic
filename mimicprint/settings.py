@@ -142,6 +142,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
 
 STATIC_URL = '/static/'
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
 # MEDIA_URL = 'http://localhost:8000/media/'

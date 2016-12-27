@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <script type="text/javascript">
     toggleSpinner();
 </script>
@@ -9,11 +10,11 @@
 <div class="wrapper">
     <p>Are you sure you want to delete the address for <strong>{{ address.first_name }} {{ address.last_name }}</strong>?</p>
 
-    <form method="post" action="{% url address_delete address.id %}">
+    <form method="post" action="{% url 'addresses:address_delete' address.id %}"> {% csrf_token %} 
         <div class="center">
-            <img src="{{ MEDIA_URL }}img/spinner_white.gif" alt="" class="spinner">
+            <img src="{% static 'img/spinner_white.gif' %}" alt="" class="spinner">
             <button type="submit" class="positive">
-                <img src="{{ MEDIA_URL }}img/tick_circle.gif" alt="">
+                <img src="{% static 'img/tick_circle.gif' %}" alt="">
                 Delete address
             </button>
             or <a href="#" title="Close this window" class="alt_option" onClick="closeDialog(); return false">Cancel</a>

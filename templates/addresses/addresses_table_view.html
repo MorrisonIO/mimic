@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <tr class="{% cycle odd,even %}">
     <td>{{ address.first_name }}</td>
     <td>{{ address.last_name }}</td>
@@ -6,9 +7,9 @@
     <td><a href="mailto:{{ address.email }}" title="Send an email">{{ address.email }}</a></td>
     <td>{{ address.phone }}</td>
     <td class="actions">
-        <a href="{% url address_detail address.id %}" title="View this address" rel="dialog"><img src="{{ MEDIA_URL }}img/information.png" alt="View" height="16" width="16"></a>
-        <a href="{% url address_edit address.id %}" title="Edit this address"><img src="{{ MEDIA_URL }}img/edit.png" alt="Edit" height="16" width="16"></a>
-        <a href="{% url address_duplicate address.id "duplicate" %}" title="Duplicate this address"><img src="{{ MEDIA_URL }}img/duplicate.png" alt="Duplicate" height="16" width="16"></a>
-        <a href="{% url address_delete address.id %}" title="Delete this address" rel="dialog"><img src="{{ MEDIA_URL }}img/cross.png" alt="Delete" height="16" width="16"></a>
+        <a href="{% url 'addresses:address_detail' address.id %}" title="View this address" rel="dialog"><img src="{% static 'img/information.png '%}" alt="View" height="16" width="16"></a>
+        <a href="{% url 'addresses:address_edit' address.id %}" title="Edit this address"><img src="{% static 'img/edit.png '%}" alt="Edit" height="16" width="16"></a>
+        <a href="{% url 'addresses:address_duplicate' address.id "duplicate" %}" title="Duplicate this address"><img src="{% static 'img/duplicate.png '%}" alt="Duplicate" height="16" width="16"></a>
+        <a href="{% url 'addresses:address_delete' address.id %}" title="Delete this address" rel="dialog"><img src="{% static 'img/cross.png '%}" alt="Delete" height="16" width="16"></a>
     </td>
 </tr>

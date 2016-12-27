@@ -61,7 +61,7 @@
         <div id="sidebar">
             <div id="login_box">
                 <h3><img src="{% static 'img/public/client_login.gif' %}" alt="Client Login"></h3>
-                <form method="post" action="/accounts/login/">
+                <form method="post" action="{% url 'login' %}">{% csrf_token %}
                     <p><label for="id_username">Username</label>
                     <input type="text" name="username" class="textfield vTextField required" id="id_username"></p>
                     <p><label for="id_password">Password</label>

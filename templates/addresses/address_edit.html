@@ -1,4 +1,5 @@
 {% extends "addresses/base_address.html" %}
+{% load staticfiles %}
 
 {% block title %}{% if address %}Edit{% else %}Add{% endif %} an address{% endblock %}
 {% block page_title %}{% if address %}Edit{% else %}Add{% endif %} an address{% endblock %}
@@ -13,16 +14,16 @@
     {% endif %}
     Fields with bold labels are required.</p>
 
-    <form action="." method="post">
+    <form action="." method="post">{% csrf_token %}
         {% include "addresses/address_edit_form.html" %}
         <div class="submit">
             <div class="buttons">
-                <img src="{{ MEDIA_URL }}img/spinner.gif" alt="" class="spinner">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
                 <button type="submit" class="positive">
-                    <img src="{{ MEDIA_URL }}img/tick_circle.png" alt="">
+                    <img src="{% static 'img/tick_circle.png' %}" alt="">
                     Save address
                 </button>
-                or <a href="{% url address_index %}" title="Cancel" class="alt_option">Cancel</a>
+                or <a href="{% url 'addresses:address_index' %}" title="Cancel" class="alt_option">Cancel</a>
             </div>
         </div>
     </form>

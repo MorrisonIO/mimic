@@ -66,9 +66,9 @@ def delete(request, address_id):
         request.user.message_set.create(message='s|The address was successfully deleted. <a href="%s" title="Restore address back to your Address Book">Undo</a>' % reverse('address_undo_delete', args=[token]))
         return HttpResponseRedirect(reverse('address_index'))
     else:
-        return render_to_response('addresses/delete_confirm.html', {
+        return render(request, 'addresses/delete_confirm.html', {
             'address': address,
-        }, context_instance=RequestContext(request))
+        })
 
 
 @login_required
@@ -125,10 +125,10 @@ def add_or_edit(request, address_id=None, duplicate=None):
     else:
         form = address_form
 
-    return render_to_response('addresses/address_edit.html', {
+    return render(request, 'addresses/address_edit.html', {
         'form': form,
         'address': address,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def search(request):
@@ -138,8 +138,8 @@ def search(request):
         address_query = get_query(query_string, ['first_name', 'last_name', 'company'])
         found_addresses = Address.objects.filter(address_query).filter(owners__in=[request.user]).order_by('-last_name')
 
-    return render_to_response('addresses/address_list.html', {
+    return render(request, 'addresses/address_list.html', {
         'search': True,
         'query_string': query_string,
         'found_addresses': found_addresses
-    }, context_instance=RequestContext(request))
+    })
