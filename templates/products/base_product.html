@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body_id %}products{% endblock %}
+
+{% block search %}
+<div id="search">
+    <form action="{% url 'products:product_search' %}" method="get">
+        <input type="text" name="q" title="Search products..." id="search_input">
+        <input type="image" src="{% static 'img/search.gif' %}" id="search_submit" alt="Search">
+    </form>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}

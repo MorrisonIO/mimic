@@ -1,0 +1,87 @@
+{% extends "products/base_product.html" %}
+{% load staticfiles %}
+
+{% block title %}Product list{% endblock %}
+{% block page_title %}Product list{% endblock %}
+{% block body_class %}onecol{% endblock %}
+
+{% block custom_head %}
+{% if not search %}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        if ( '{{ profile.default_product_view }}' == 'c' ) {
+            $("h3.category").addClass('cat-closed');
+            $("table.product_list").hide();
+        }
+    });
+    </script>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% if search %}
+<p>Your search for <strong>"{{ query_string }}"</strong> found {% if products.count %}<strong>{{ products.count }} result{{ products|pluralize }}</strong>{% else %} no results{% endif %}. {% if products %}To place an order, enter the quantit{{ products|pluralize:"y,ies" }} you require, or <a href="{% url 'products:product_list' %}" title="Product list">return to the full product list</a>.{% endif %}</p>
+{% else %}
+    {% if products %}
+        <p>Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title.</p>
+    {% endif %}
+{% endif %}
+
+{% if products %}
+    <form action="{% url 'products:process_products' %}" method="post">
+
+    {% for cat in categories %}
+        <h3 class="category">{% if search %}Search results{% else %}{{ cat.name }}{% endif %}</h3>
+        <table class="product_list tablesorter">
+        <thead>
+        <tr>
+            <th>{% if cat.name_altname %}{{ cat.name_altname }}{% else %}Item{% endif %}</th>
+            {% if cat.show_revision %}<th>{% if cat.revision_altname %}{{ cat.revision_altname }}{% else %}Revision{% endif %}</th>{% endif %}
+            {% if cat.show_part_number %}<th>{% if cat.part_number_altname %}{{ cat.part_number_altname }}{% else %}Part&nbsp;Number{% endif %}</th>{% endif %}
+            {% if cat.show_price %}
+                {% if user_is_manager or profile.can_see_prices %}
+                    <th>{% if cat.price_altname %}{{ cat.price_altname }}{% else %}Price{% endif %}</th>
+                {% endif %}
+            {% endif %}
+            {% if cat.show_inventory %}<th>Inventory</th>{% endif %}
+            <th class="qty" colspan="2">Quantity</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for product in products %}
+            {% if search %}
+                <tr class="{% cycle odd,even %}">
+                    {% include "products/product_row.html" %}
+                </tr>
+            {% else %}
+                {% for prodcat in product.categories.all %}
+                    {% ifequal prodcat cat %}
+                        <tr class="{% cycle odd,even %}">
+                            {% include "products/product_row.html" %}
+                        </tr>
+                    {% endifequal %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+        </table>
+    {% endfor %}
+
+    <div class="submit">
+        <div class="center">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="submit" class="">
+                <img src="{% static 'img/arrow.png' %}" alt="">
+                Continue
+            </button>
+        </div>
+    </div>
+    </form>
+{% else %}
+    {% if not search %}
+        <p>There are no products available for ordering.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}
