@@ -1,0 +1,122 @@
+{% extends "reports/base_report.html" %}
+{% load staticfiles %}
+
+{% block title %}View a report{% endblock %}
+{% block page_title %}View a report{% endblock %}
+{% block body_class %}onecol{% endblock %}
+
+{% block actions %}
+
+{% endblock %}
+
+{% block content %}
+<div id="report_details">
+    <p><b>{% if report.is_visible %}Parameters for report '{{ report.name }}'{% else %}Your report parameters{% endif %}: </b></p>
+    <ul>
+        {% ifequal report.daterange_type "fn" %}
+            <li>Only the most recent {{ report.last_orders }}.</li>
+        {% else %}
+            {% if not report.daterange_type %}
+                <li>Ordered on any date.</li>
+            {% else %}
+                <li>Placed between {{ start_date }} and {{ end_date }}.</li>
+            {% endif %}
+        {% endifequal %}
+        <li>Placed by members of:
+            {% for org in orgs %} 
+                <em>{{ org }}{% if not forloop.last %}, {% endif %}</em> 
+            {% endfor %}
+        </li>
+        {% if report.ordered_by.all %}
+            <li>Placed by:
+            <ul>
+                {% for user in report.ordered_by.all %}
+                    <li><em>{{ user.user.get_full_name }} [{{ user.org }}]</em></li>
+                {% endfor %}
+            </ul>
+            </li>
+        {% else %}
+        <li>Placed by any user in above org{{ orgs|pluralize }}.</li>
+        {% endif %}
+        {% if report.categories.all %}
+            <li>Products belong to following categories:
+                <ul>
+                  {% for cat in report.categories.all %}
+                      <li><em>{{cat}}</em></li>
+                  {% endfor %}
+                </ul>
+            </li>
+        {% else %}
+        <li>Products in any category belongin to above org{{ orgs|pluralize }}.</li>
+        {% endif %}
+        {% if report.products.all %}
+            <li>Containing the following products:
+            <ul>
+                {% for prod in report.products.all %} 
+                    <li><em>{{ prod }}</em></li>
+                {% endfor %}
+            </ul>
+            </li>
+        {% else %}
+        <li>Containing any product belonging to above org{{ orgs|pluralize }} and categorie{{ categories|pluralize }}.</li>
+        {% endif %}
+    </ul>
+</div>
+
+{% if orders %}
+    <p>Your report returned <strong>{{ num_orders }} order{{ num_orders|pluralize }}</strong>.
+    {% if is_paginated %}
+        Now viewing page {{ page }} of {{ total_pages }}.
+    {% endif %}
+    {% if has_previous %}
+        <a href="{{ report.get_absolute_url }}page{{ previous_page }}/" title="View the previous page of results">Prev</a>
+    {% endif %}
+    {% if has_previous and has_next %} | {% endif %}
+    {% if has_next %}
+        <a href="{{ report.get_absolute_url }}page{{ next_page }}/" title="View the next page of results">Next</a>
+    {% endif %}
+    </p>
+
+    <table id="report_results" class="tablesorter">
+        <thead>
+        <tr>
+            <th>Order</th>
+            <th>Placed on</th>
+            <th>Placed by</th>
+            <th>Org</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr class="{% cycle odd,even %}">
+                <td><a href="{{ order.get_absolute_url }}" title="Click to view this order's details">{{ order.name }}</a></td>
+                <td>{{ order.date|date:"l, F j, Y \a\t H:i" }}</td>
+                <td>{{ order.placed_by.get_full_name }}</td>
+                <td>{{ order.org }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No orders match your report criteria.</p>
+{% endif %}
+{% endblock %}
+
+
+{% block sidebar_class %}{% endblock %}
+{% block sidebar %}
+    {% if report.is_visible %}
+    <p>
+    <a href="{% url 'reports:report_edit' report.id %}" title="Edit this report" class="button">
+        <img src="{% static 'img/edit.png' %}" alt="">
+        Edit this report
+    </a>
+    </p>
+    <p>
+    <a href="{% url 'reports:report_delete' report.id %}" title="Delete this report" rel="dialog" class="negative button">
+        <img src="{% static 'img/cross_circle.png' %}" alt="">
+        Delete this report
+    </a>
+    </p>
+    {% endif %}
+{% endblock %}

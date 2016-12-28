@@ -1,0 +1,23 @@
+{% load staticfiles %}
+<script type="text/javascript">
+    toggleSpinner();
+</script>
+
+<div class="msgbox alert_w">
+    <h3>Confirm delete</h3>
+</div>
+
+<div class="wrapper">
+    <p>Are you sure you want to delete the file <strong>{{ download }}</strong>?</p>
+
+    <form method="post" action="{% url 'downloads:download_delete' download.id %}">
+        <div class="center">
+            <img src="{% static 'img/spinner_white.gif' %}" alt="" class="spinner">
+            <button type="submit" class="positive">
+                <img src="{% static 'img/tick_circle.gif' %}" alt="">
+                Delete file
+            </button>
+            or <a href="#" title="Close this window" class="alt_option" onClick="closeDialog(); return false">Cancel</a>
+        </div>
+    </form>
+</div>

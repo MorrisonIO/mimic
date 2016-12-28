@@ -1,0 +1,96 @@
+{% extends "events/base_events.html" %}
+
+{% block title %}Events{% endblock %}
+{% block page_title %}Events{% endblock %}
+
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#public_entries").hide();
+    $("#org_entries").hide();
+
+    var manager = '{{ perms.reports.change_report }}';
+    var org_entries = '{{ org_entries }}';
+    if ( manager == 'True' && org_entries != '[]' ) {
+        $("#org_entries").show();
+    } else {
+        $("#public_entries").show();
+    }
+
+    $("#show_public_entries").click(function(){
+        $("#public_entries").show();
+        $("#org_entries").hide();
+        return false;
+    })
+    $("#show_org_entries").click(function(){
+        $("#org_entries").show();
+        $("#public_entries").hide();
+        return false;
+    })
+});
+</script>
+{% endblock %}
+
+{% block content %}{#% load markup %#}
+
+    {% if search %}
+        <p>Your search for <strong>"{{ query_string }}"</strong> found {% if found_entries.count %}<strong>{{ found_entries.count }}</strong> result{{ found_entries|pluralize }}{% else %} no results{% endif %}. <a href="{% url 'events:client_events_index' %}" title="Events">Return to Events</a>.</p>
+        <div id="found_entries">
+            {% for entry in found_entries %}
+                <div class="public_entry">
+                    <h4><a href="{% url 'events:client_events_detail' entry.slug %}" title="Read this entry">{{ entry }} <span class="arr">&rarr;</span></a></h4>
+                    <p class="publish_date">{{ entry.date_created|date:"l, M j, Y \a\t H:i" }}</p>
+                    {% if entry.summary %}
+                        {{ entry.summary|safe }} {#markdown#}
+                    {% else %}
+                        {{ entry.body|truncatewords_html:"60"|safe }} {#markdown#}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div id="public_entries">
+            <h3 class="entries">Recent news</h3>
+            <p>Below are the latest updates from Mimic headquarters.</p>
+            {% for entry in public_entries %}
+            <div class="public_entry">
+                <h4><a href="{% url 'events:client_events_detail' entry.slug %}" title="Read this entry">{{ entry }} <span class="arr">&rarr;</span></a></h4>
+                <p class="publish_date">{{ entry.date_created|date:"l, M j, Y \a\t H:i" }}</p>
+                {% if entry.summary %}
+                    {{ entry.summary|safe }} {#markdown#}
+                {% else %}
+                    {{ entry.body|truncatewords_html:"60"|safe }}{#markdown#}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if org_entries %}
+            <div id="org_entries">
+                <h3 class="entries">Value savings log</h3>
+                <p>This is a list of events where some action we have taken has resulted in a savings to you in time or money. If you want further information about these events, please feel free to contact your Mimic account representative.</p>
+                {% for entry in org_entries %}
+                <div class="org_entry">
+                    <h4><a href="{% url 'events:client_events_detail' entry.slug %}" title="Read this entry">{{ entry }} <span class="arr">&rarr;</span></a></h4>
+                    <p class="publish_date">{{ entry.date_created|date:"l, M j, Y \a\t H:i" }}</p>
+                    {% if entry.summary %}
+                        {{ entry.summary|safe }} {#markdown#}
+                    {% else %}
+                        {{ entry.body|truncatewords_html:"60"|safe }}{#markdown#}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+{% if perms.orders.change_order and org_entries %}
+    <p class="entry_nav_text">Select a list to view:</p>
+    <ul id="entry_nav">
+        <li><a href="#" id="show_org_entries">Value savings log</a></li>
+        <li><a href="#" id="show_public_entries">Recent news</a></li>
+    </ul>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'orders/base_order.html' %}
+{% load staticfiles %}
+
+{% block title %}Order {% if is_confirmation %}confirmation{% else %}details{% endif %}{% endblock %}
+{% block page_title %}Order {% if is_confirmation %}confirmation{% else %}details{% endif %}{% endblock %}
+{% block body_class %}twocol{% endblock %}
+
+{% block custom_head %}
+    <link rel="stylesheet" href="{% static 'css/order-print.css' %}" type="text/css" media="print">
+{% endblock %}
+
+{% block content %}
+<div class="order_summary">
+    <h5>Order number</h5>
+    <p>{{ order.name }}</p>
+
+    <h5>Items</h5>
+    <table class="line_item">
+    {% for item in line_items %}
+        {% include "orders/line_item.html" %}
+    {% endfor %}
+    </table>
+
+    <h5>Placed on</h5>
+    <p>{{ order.date|date:"l, F j, Y \a\t H:i" }}, by {{ order.placed_by.get_full_name }} ({{ order.org }})</p>
+
+    <h5>Due date</h5>
+    <p>{{ order.due_date|date:"l, F j, Y" }}</p>
+
+    <h5>Ship to</h5>
+    {% with order.ship_to as address %}
+        {% include "addresses/address_snippet_plain.html" %}
+    {% endwith %}
+
+    <h5>Additional info</h5>
+    <p><b>P.O. number: </b>{% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}</p>
+    <p><b>Additional info: </b>{% if order.additional_info %}</p><pre>{{ order.additional_info }}</pre>{% else %}None.</p>{% endif %}
+    <p><b>Your notes: </b>{% if order.user_notes %}</p><pre>{{ order.user_notes }}</pre>{% else %}None.</p>{% endif %}
+
+    <h5>Status</h5>
+    <p><b>{{ order.get_status_display }}</b>. {{ order.get_status_explanation }}</p>
+</div>
+{% endblock %}
+
+{% block sidebar_class %}right{% endblock %}
+{% block sidebar %}
+    {% ifequal order.status "pa" %}
+        {% if perms.order.change_order %}
+            <div class="bottom-margin">
+                <form action="{% url approve_order %}" method="post">
+                    <input type="hidden" name="order_id_{{ order.id }}"></input>
+                    <input type="hidden" name="detail" value="1"></input>
+                    <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                    <button type="submit" class="positive" name="profile">
+                        <img src="{% static 'img/tick_circle.png' %}" alt=""> 
+                        Approve this order
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+        
+    {% endifequal %}
+    <p class="right">
+    <a href="#" title="Print this page" class="button" rel="print">
+        <img src="{% static 'img/printer.png' %}" alt="">
+        Print this page
+    </a>
+    </p>
+{% endblock %}

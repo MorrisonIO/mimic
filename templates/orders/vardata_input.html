@@ -1,0 +1,25 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Input required{% endblock %}
+{% block page_title %}Input required{% endblock %}
+
+{% block content %}
+    <p>The document <b>"{{ product }}"</b> you ordered requires you to provide some specific information. Please complete the form below. Fields with bold labels are required. You will be shown a preview image of your document, and you will be able to make changes to the information you enter.</p>
+
+    <form action="." method="post">
+        <fieldset>
+            {% include "form_snippet.html" %}
+        </fieldset>
+            
+        <div class="submit">
+            <div class="buttons">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <button type="submit" class="">
+                    <img src="{% static 'img/arrow.png' %}" alt="">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

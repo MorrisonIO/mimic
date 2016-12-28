@@ -1,0 +1,23 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Additional info{% endblock %}
+{% block page_title %}Additional info{% endblock %}
+
+{% block content %}
+{% load order_progress %}{% show_order_progress request "additional" %}
+<p>Please provide the following additional information for your order. Fields with bold labels are required.</p>
+<form action="." method="post">
+{% include "form_snippet.html" %}
+<div class="submit" id="continue">
+    <div class="center">
+        <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+        <button type="submit" class="">
+            <img src="{% static 'img/arrow.png' %}" alt="">
+            Continue ordering
+        </button>
+    </div>
+</div>   
+</form>
+{% endblock %}
+

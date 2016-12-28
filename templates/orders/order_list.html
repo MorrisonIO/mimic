@@ -1,0 +1,82 @@
+{% extends "orders/base_order.html" %}
+{% load staticfiles %}
+
+{% block title %}Your orders{% endblock %}
+{% block page_title %}Your orders{% endblock %}
+
+{% block content %}
+    {% if search %}
+        <p>Your search for <strong>"{{ query_string }}"</strong> found {% if order_list.count %}<strong>{{ order_list.count }}</strong> result{{ order_list|pluralize }}{% else %} no results{% endif %}. <a href="{% url 'orders:order_index' %}" title="Order list">Return to the Order list</a>.</p>
+    {% else %}
+        {% if user_is_approval_manager %}
+            <p>Below is a list of orders placed by members of your organization. To approve an order, select the checkbox beside it and click <span class="buttondesc">Approve selected order(s)</span>. If you wish to <em>deny</em> an order that is Pending Approval, please <a href="/contact/" title="Various ways to contact us">contact us</a> to proceed. Orders that are more than three weeks old are not displayed. To see a more detailed ordering history, create a <a href="{% url 'reports:report_index' %}" title="Create, edit, or view a report">report</a>.</p>
+            <form action="{% url 'orders:approve_order' %}" method="post">
+        {% else %}
+            <p>Below is a list of current orders that you have placed. Orders with a status of Closed that are more than one week old are not displayed.</p>
+        {% endif %}
+    {% endif %}
+
+    {% if order_list %}
+        <table class="tablesorter" id="order_list">
+            <thead>
+            <tr>
+                <th>Order</th>
+                <th>Placed On</th>
+                {% if user_is_approval_manager %}
+                    <th>Placed By</th>
+                {% endif %}
+                <th>Status</th>
+                {% if user_is_approval_manager %}
+                    <th>Select</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in order_list %}
+                <tr class="{% cycle odd,even %}">
+                    <td><a href="{{ order.get_absolute_url }}" title="Click to view this order's details">{{ order.name }}</a></td>
+                    <td>{{ order.date|date:"l, F j, Y \a\t H:i" }}</td>
+                    {% if user_is_approval_manager%}
+                        <td>{{ order.placed_by.get_full_name }}</td>
+                    {% endif %}
+                    <td><span class="
+                        {% ifequal order.status "pa" %}
+                            error
+                        {% else %}
+                            {% ifequal order.status "ac" %}
+                                nothing
+                            {% else %}
+                                success
+                            {% endifequal %}
+                        {% endifequal %}
+                    ">{{ order.get_status_display }}</span></td>
+                    {% if user_is_approval_manager %}
+                        <td class="actions">
+                        {% ifequal order.status "pa" %}
+                            <input type="checkbox" name="order_id_{{ order.id }}">
+                        {% endifequal %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+        {% if user_is_approval_manager %}
+            <div class="submit">
+                <div class="buttons nolabel center">
+                    <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                    <button type="submit" class="positive">
+                        <img src="{% static 'img/tick_circle.png' %}" alt="">
+                        Approve selected order(s)
+                    </button>
+                </div>
+            </div>
+            </form>
+        {% endif %}
+    {% else %}
+        {% if not search %}
+            <p>There are no orders to display at this time.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

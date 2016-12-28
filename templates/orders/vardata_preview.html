@@ -1,0 +1,30 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Document preview{% endblock %}
+{% block page_title %}Document preview{% endblock %}
+
+{% block content %}
+    <p>Below is a low resolution preview of how your item will appear when it is produced. You can also click on the image to download a PDF version.</p>
+    
+    <p>If you wish to re-edit your information, click <span class="buttondesc">Modify</span>. If everything is accurate, click <span class="buttondesc">Confirm</span> to add this item to your order.</p>
+
+    <div id="vardata_preview"><a href="{{ pdf_file }}" title="Click to download a PDF of this preview"><img src="{{ img_file }}" alt="Preview image" /></a></div>
+
+    <div class="submit">
+        <div class="buttons center nolabel">
+            <a href="{% url vardata_input %}" title="Modify" id="vardata_modify" class="button">
+                <img src="{% static 'img/edit.png' %}" alt="">
+                Modify
+            </a>
+            <form action="{% url vardata_preview %}" method="post" id="vardata_confirm"> 
+                <input type="hidden" name="preview_ok" value="preview_ok">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <button type="submit" class="positive">
+                    <img src="{% static 'img/tick_circle.png' %}" alt="">
+                    Confirm
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

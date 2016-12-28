@@ -1,0 +1,142 @@
+{% extends "reports/base_report.html" %}
+{% load staticfiles %}
+
+{% block title %}{% if report %}Edit{% else %}Add{% endif %} a report{% endblock %}
+{% block page_title %}{% if report %}Edit{% else %}Add{% endif %} a report{% endblock %}
+{% block body_class %}onecol{% endblock %}
+
+
+{% block custom_head %}
+<link rel="stylesheet" href="{% static 'css/jquery-gs.css' %}" media="all" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/jquery-cron.css' %}" media="all" type="text/css" />
+<script type="text/javascript" src="{% static 'js/jquery-gs.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-cron.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/init-cron.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    {# Make the narrowing fieldset visible if there are form errors. Currently it's only possible to have a validation error in the date pane (other fields are optional ) #}
+    {% if form.errors %} 
+        $("#narrow_date").show();
+    {% endif %}
+});
+</script>
+{% endblock %}
+
+
+{% block content %}
+{% if report %}
+    <p>Now editing the report saved as <b>{{ report }}</b>. Fields with bold labels are required. Click <span class="buttondesc">Save report</span> to save your changes and view the results of this report.</p>
+{% else %}
+    <p>Create a new report by completing the form below. If you wish to save this report to view it again at a later time, enter a name and click <span class="buttondesc">Save &amp; view results</span>. If you wish to view the report only once, click <span class="buttondesc">View results only</span>.</p>
+{% endif %}
+
+<form action="." method="post" id="report_form">
+    <h3>Filter results</h3>
+    <p>You may narrow down which orders get included in your results by filtering on the following criteria. If you do not select any options, your report will include all orders. Note that these filters are added together to limit your results. For example, if you narrow by date range and by organization, only orders that match <em>both</em> those criteria will be included.</p>
+    <p class="narrow_desc">Filter results by:</p>
+    <ul id="report_nav">
+        <li><a id="n_date" href="#">Date</a></li>
+        <li><a id="n_org" href="#">Organization</a></li>
+        <li><a id="n_product" href="#">Product</a></li>
+        <li><a id="n_category" href="#">Category</a></li>
+        <li><a id="n_states" href="#">States</a></li>
+        <li><a id="n_user" href="#">User</a></li>
+        {% if user_can_schedule %}
+            <li><a id="n_schedule" href="#">Schedule</a></li>
+        {% endif %}
+    </ul>
+
+    <fieldset id="narrow_default">
+        <p>Click a tab above to narrow by that criteria.</p>
+    </fieldset>
+
+    <fieldset id="narrow_date">
+        <p>Display only orders placed between certain dates. If you do not select any dates, your entire ordering history will be included.</p>
+        <div class="date_option">
+            Monthly:<br>
+            <div class="option_details">
+                <input type="radio" name="daterange_type" value="tm" id="option_tm" {% ifequal daterange_type 'tm' %}checked="checked"{% endifequal %}> <label for="option_tm">This month's orders</label><br>
+                <input type="radio" name="daterange_type" value="lm" id="option_lm" {% ifequal daterange_type 'lm' %}checked="checked"{% endifequal %}> <label for="option_lm">Last month's orders</label>
+            </div>
+        </div>
+
+        <div class="date_option">
+            Quarterly:<br>
+            <div class="option_details">
+                <input type="radio" name="daterange_type" value="tq" id="option_tq" {% ifequal daterange_type 'tq' %}checked="checked"{% endifequal %}/> <label for="option_tq">This quarter's orders</label><br>
+                <input type="radio" name="daterange_type" value="lq" id="option_lq" {% ifequal daterange_type 'lq' %}checked="checked"{% endifequal %}/> <label for="option_lq">Last quarter's orders</label><br>
+                First quarter starts {{ form.quarter_start }} 1st{% if form.errors.quarter_start %}{{ form.errors.quarter_start }}{% endif %}
+            </div>
+        </div>
+
+        <div class="date_option">
+            Fixed dates:<br>
+            <div class="option_details">
+                <input type="radio" name="daterange_type" value="fd" id="option_fd" {% ifequal daterange_type 'fd' %}checked="checked"{% endifequal %}> <label for="option_fd">Orders placed between {{ form.start_date }} {% if form.errors.start_date %}{{ form.errors.start_date }}{% endif %} <span style="margin: 0 15px">and</span> {{ form.end_date }} {% if form.errors.end_date %}{{ form.errors.end_date }}{% endif %}</label>
+            </div>
+        </div>
+
+        <div class="date_option">
+            Fixed number:<br>
+            <div class="option_details">
+                <input type="radio" name="daterange_type" value="fn" id="option_fn" {% ifequal daterange_type 'fn' %}checked="checked"{% endifequal %}> <label for="option_fn">Display the most recent {{ form.last_orders }} orders {% if form.errors.last_orders %}{{ form.errors.last_orders }}{% endif %}</label>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset id="narrow_org">
+        <p>Display only orders placed by members of the following organizations. If you do not select any organizations, all will be included in the search.</p>
+        {{ form.orgs }}
+    </fieldset>
+
+    <fieldset id="narrow_user">
+        <p>Display only orders placed by the following users. Use Ctrl-click (Command-click on a Mac) to select more than one. If you do not select any users, all will be included in the search.</p>
+        {{ form.ordered_by }}
+    </fieldset>
+
+    <fieldset id="narrow_states">
+      <p>Display only orders in following states:</p>
+      {{ form.states }}
+    </fieldset>
+
+    <fieldset id="narrow_product">
+        <p>Display only orders that contain the following products. Use Ctrl-click (Command-click on a Mac) to select more than one. If you do not select any products, orders with all products will be included in the search.</p>
+        {{ form.products }}
+    </fieldset>
+
+    <fieldset id="narrow_categories">
+        <p>Display only orders that contain the following product categories. Use Ctrl-click (Command-click on a Mac) to select more than one. If you do not select any categories, orders with all categories will be included in the search.</p>
+        {{ form.categories }}
+    </fieldset>
+
+    {% if user_can_schedule %}
+        <fieldset id="narrow_schedule">
+            <p> Schedule report. Report will be ran at specified time and results will be sent to Mimic Staff.</p>
+            {{  form.scheduled }}<label for="scheduled">Schedule</label>
+            <div>
+              {{ form.schedule }}
+            </div>
+        </fieldset>
+    {% endif %}
+
+    <div class="submit">
+        <div class="buttons nolabel">
+            <p class="instructions">Save this report as {{ form.name }} 
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="submit" name="save_report" value="1" class="positive" style="margin-right: 20px;">
+                <img src="{% static 'img/tick_circle.png' %}" alt="">
+                Save &amp; view results
+            </button>
+            {% if not report %}
+                or
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <button type="submit" name="view_report" class="positive">
+                    <img src="{% static 'img/tick_circle.png' %}" alt="">
+                    View results only
+                </button>
+            {% endif %}
+            </p>
+        </div>
+    </div>
+</form>
+{% endblock %}

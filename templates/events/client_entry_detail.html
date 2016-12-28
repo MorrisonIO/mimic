@@ -1,0 +1,15 @@
+{% extends "events/base_events.html" %}
+
+{% block title %}Event Detail{% endblock %}
+{% block page_title %}Event Detail{% endblock %}
+
+{% block content %}{#% load markup %#}
+<div class="org_entry">
+    <h4>{{ entry }}</h4>
+    <p class="publish_date">Published on {{ entry.date_created|date:"l, F j, Y \a\t H:i" }}</p>
+    {{ entry.body|markdown|safe }}
+    {% if entry.docket %}<p><strong>Docket:</strong> {{ entry.docket }}</p>{% endif %}
+    {% if entry.invoice %}<p><strong>Invoice:</strong> {{ entry.invoice }}</p>{% endif %}
+    <p class="back">&larr; <a href="{% url 'events:client_events_index' %}">Back to Events</a></p>
+</div>
+{% endblock %}

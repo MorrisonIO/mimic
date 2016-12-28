@@ -1,0 +1,77 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Your order{% endblock %}
+{% block page_title %}Your order{% endblock %}
+
+{% block content %}
+    {% if cart.items %}
+    {% load order_progress %}{% show_order_progress request "cart" %}
+    <p class="order_options">Here are the contents of your order so far.</p>
+
+        <p class="center">
+        <a href="{% url 'orders:product_list' %}" class="button"><img src="{% static 'img/plus_circle.png' %}" alt="">Add items</a>
+        <a href="{% url 'orders:cancel_order' %}" class="button negative"><img src="{% static 'img/cross_circle.png' %}" alt="">Cancel order</a>
+        </p>
+
+        <table class="cart">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th class="qty">Quantity</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in cart.items %}
+                <tr>
+                    <td><strong>{{ item.product }}</strong>
+                        {% if item.product.is_variable %}
+                            <div class="vardata_info">
+                            {% for data in request.session.data_approved %}
+                                {% ifequal data.unique_id item.unique_id %}
+                                    {% for key, value in data.items %}
+                                        {% ifnotequal key 'unique_id' %}{% ifnotequal key 'product_id' %}{% ifnotequal key 'quantity' %}{# blech #}
+                                            {% if value %}
+                                                {{ value|safe }}<br>
+                                           {% endif %}
+                                        {% endifnotequal %}{% endifnotequal %}{% endifnotequal %}
+                                    {% endfor %}
+                                {% endifequal %}
+                            {% endfor %}
+                            <a href="{% url 'orders:vardata_remodify' item.unique_id %}" title="Modify this information" class="modify">change</a>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="qty">
+                        {{ item.quantity }} <a href="#" title="Modify this amount" class="toggle_qty_modify">change</a>
+                        <form action="{% url 'orders:process_products' %}" method="post" class="qty_modify">
+                            {% with item.product as product %}
+                                {% include "products/qty_field.html" %}
+                            {% endwith %}
+                            <input type="hidden" name="u_{{ item.product.id }}" value="{{ item.unique_id }}">
+                            <input type="hidden" name="o_{{ item.product.id }}" value="0">{# orderer field doesn't matter since can only update one field at a time #}
+                            <input type="submit" value="Update" name="cart_modify" class="qty_mod">
+                        </form>
+                    </td>
+                    <td class="actions">
+                        <a href="{% url 'orders:delete_item' item.unique_id %}" title="Delete this item"><img src="{% static 'img/cross.png' %}" alt="Delete"></a>
+                    </td>    
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+        <div class="submit">
+            <div class="center">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <a href="{% url 'orders:provide_shipto' %}" class="button">
+                    <img src="{% static 'img/arrow.png' %}" alt="">
+                    Continue ordering
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <p>There are no items in your order. Visit the <a href="{% url 'products:product_list' %}">Product list</a> to select items for ordering.</p>
+    {% endif %}
+
+{% endblock %}
