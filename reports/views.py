@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, Http404, HttpResponseServerError
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader, Context
 from django import forms
 from django.forms import widgets, extras
@@ -23,10 +23,10 @@ def report_list(request):
     """
     Shows the list of reports that a manager has saved.
     """
-    reports = Report.objects.filter(owner__exact = request.user.id, is_visible__exact=True)
-    return render_to_response('reports/report_list.html', {
+    reports = Report.objects.filter(owner__exact=request.user.id, is_visible__exact=True)
+    return render(request, 'reports/report_list.html', {
         'reports': reports,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 @permission_required('reports.change_report')
@@ -57,7 +57,7 @@ def show_report(request, report_id, download=None, page=None):
     except InvalidPage:
         raise Http404
 
-    return render_to_response('reports/report_view.html', {
+    return render(request, 'reports/report_view.html', {
         'report': report,
         'page': this_page,
         'is_paginated': p.num_pages > 1,
@@ -74,7 +74,7 @@ def show_report(request, report_id, download=None, page=None):
         'userprofiles': report.reported_userprofiles,
         'categories': report.reported_categories,
         'num_orders': all_orders.count(),
-    }, context_instance=RequestContext(request))
+    })
 
 def make_report(orders):
     """
@@ -120,9 +120,9 @@ def delete(request, report_id):
         request.user.message_set.create(message="s|The report was successfully deleted.")
         return HttpResponseRedirect(reverse('report_index'))
     else:
-        return render_to_response('reports/delete_confirm.html', {
+        return render(request, 'reports/delete_confirm.html', {
             'report': report,
-        }, context_instance=RequestContext(request))
+        })
 
 
 @login_required
@@ -168,9 +168,9 @@ def add_or_edit(request, report_id=None):
             request.user.message_set.create(message="e|There was a problem with your submission. Please refer to the messages below and try again.")
             daterange_type = request.POST.get('daterange_type', None)
 
-    return render_to_response('reports/report_edit.html', {
+    return render(request, 'reports/report_edit.html', {
         'report': report,
         'form': form,
         'daterange_type': daterange_type, # we must pass this in separately because we've broken that form field up manually
         'user_can_schedule': request.user.groups.filter(name='Mimic Staff').count() > 0
-    }, context_instance=RequestContext(request))
+    })

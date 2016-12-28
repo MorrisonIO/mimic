@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, Http404, HttpResponseForbidden
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -21,10 +21,10 @@ def client_events_index(request):
     else:
         org_entries = None
 
-    return render_to_response('events/client_entry_list.html', {
+    return render(request, 'events/client_entry_list.html', {
         'org_entries': org_entries, 
         'public_entries': Entry.objects.public()
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -42,9 +42,9 @@ def client_events_detail(request, slug):
     else:
         entry = get_object_or_404(Entry, slug=slug, status__exact='public')
 
-    return render_to_response('events/client_entry_detail.html', {
+    return render(request, 'events/client_entry_detail.html', {
         'entry': entry,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def search(request):
@@ -54,8 +54,8 @@ def search(request):
         entry_query = get_query(query_string, ['title', 'body', 'invoice', 'docket'])
         found_entries = Entry.objects.filter(entry_query).filter(org=request.session['current_org']).order_by('-date_created')
 
-    return render_to_response('events/client_entry_list.html', {
+    return render(request,'events/client_entry_list.html', {
         'search': True,
         'query_string': query_string,
         'found_entries': found_entries
-    }, context_instance=RequestContext(request))
+    })

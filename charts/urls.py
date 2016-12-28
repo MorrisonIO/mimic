@@ -1,12 +1,9 @@
 from django.conf.urls import url, patterns
+from . import views
 
-urlpatterns = patterns('charts.views',
-    url(r'^$', 
-        view = 'index',
-        name = 'chart_index',
-    ),
-    url(r'^(?P<chart>(products|orgs|users))/$', 
-        view = 'make_chart',
-        name = 'chart_detail'
-    ),
-)
+app_name = 'charts'
+
+urlpatterns = [
+    url(r'^$', views.index, name='chart_index'),
+    url(r'^(?P<chart>(products|orgs|users))/$', views.make_chart, name='chart_detail'),
+]
