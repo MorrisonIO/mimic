@@ -1,12 +1,12 @@
-from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, Http404, HttpResponseServerError
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader, Context
 from django import forms
 from django.forms import widgets, extras
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 from reports.models import Report
 from products.models import Category, Product
 from orders.models import Order, OrderedItem
@@ -20,8 +20,7 @@ def index(request):
     """
     Shows the main charts home page, where the user selects which type of chart to create.
     """
-    return render_to_response('charts/chart_index.html', {
-    }, context_instance=RequestContext(request))
+    return render(request, 'charts/chart_index.html', {})
 
 
 def datetime_to_ms(dt):
@@ -103,7 +102,8 @@ def make_chart(request, chart):
             data = "{" + data_string[:-2] + "}" # strip off last comma for IE
 
         else:
-            request.user.message_set.create(message="e|There was a problem with your submission. Refer to the messages below and try again.")
+            messages.warning(request, "e|There was a problem with your submission.\
+            Refer to the messages below and try again.")
     else:
         if chart == 'products':
             form = ProductChartForm(request=request)
@@ -112,8 +112,8 @@ def make_chart(request, chart):
         else: # orgs
             form = OrgChartForm(request=request)
 
-    return render_to_response('charts/chart_detail.html', {
+    return render(request, 'charts/chart_detail.html', {
         'form': form,
         'data': data,
         'chart': chart,
-    }, context_instance=RequestContext(request))
+    })

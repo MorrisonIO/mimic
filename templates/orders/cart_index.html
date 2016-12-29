@@ -10,7 +10,7 @@
     <p class="order_options">Here are the contents of your order so far.</p>
 
         <p class="center">
-        <a href="{% url 'orders:product_list' %}" class="button"><img src="{% static 'img/plus_circle.png' %}" alt="">Add items</a>
+        <a href="{% url 'products:product_list' %}" class="button"><img src="{% static 'img/plus_circle.png' %}" alt="">Add items</a>
         <a href="{% url 'orders:cancel_order' %}" class="button negative"><img src="{% static 'img/cross_circle.png' %}" alt="">Cancel order</a>
         </p>
 

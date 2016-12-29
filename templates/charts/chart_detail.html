@@ -1,0 +1,67 @@
+{% extends "reports/base_report.html" %}
+{% load staticfiles %}
+
+{% block custom_head %}
+<script language="javascript" type="text/javascript" src="{% static 'js/jquery.flot.js' %}"></script>
+<!--[if IE 6]>
+<script language="javascript" type="text/javascript" src="{% static 'js/flot-old/excanvas.pack.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static 'js/flot-old/jquery.flot.js'%}"></script>
+<![endif]-->
+<!--[if gt IE 6]>
+<script language="javascript" type="text/javascript" src="{% static 'js/excanvas.r60.js'%}"></script>
+<![endif]-->
+<script language="javascript" type="text/javascript" src="{% static 'js/charts.js'%}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    {% if data %}
+        var data = {{ data|safe }};
+        var hide = false;
+    {% else %}
+        var data = [];
+        var hide = true;
+        $('#chart p').hide();
+    {% endif %}
+    makeChart(data, hide);
+});
+</script>
+{% endblock %}
+
+{% block title %}Create a chart{% endblock %}
+{% block page_title %}Create a chart{% endblock %}
+{% block body_class %}onecol{% endblock %}
+
+{% block content %}
+    <form action="." method="post" id="chart_form">{% csrf_token %}
+        {% ifequal chart "products" %}
+            <h4>Amount of products ordered over time</h4>
+        {% endifequal %}
+        {% ifequal chart "locations" %}
+            <h4>Single product ordered over time: Organization comparison</h4>
+        {% endifequal %}
+        {% ifequal chart "users" %}
+            <h4>Single product ordered over time: User comparison</h4>
+        {% endifequal %}
+        
+        <fieldset>
+            <p>Select the product{% if products %}s{% endif %} {% if locations %}and organizations{% endif %}{% if users %}and users{% endif %} you wish to chart from the list below. Note that the more items you select, the less legible the chart might be.</p>
+            {% include "form_snippet.html" %}
+        </fieldset>
+
+        <div class="submit attach">
+            <div class="buttons nolabel center">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <button type="submit" name="show_chart" id="submit" class="positive">
+                    <img src="{% static 'img/tick_circle.png' %}" alt="">
+                    Show chart
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div id="chart">
+        <div id="legend"></div>
+        <div id="placeholder"></div>
+        <br class="clear">
+        <p id="choices">Check below to show/hide items from the chart:</p>
+    </div>
+{% endblock %}

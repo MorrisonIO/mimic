@@ -8,11 +8,12 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.forms import widgets, ModelForm
 from django.http import HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader, Context
 
 from addresses.forms import AddressForm
@@ -85,7 +86,7 @@ def put_in_cart(request, product, unique_id, quantity, overwrite=False):
 
     # make sure amount ordered was not lower than any min set
     if product.min_order_qty and quantity < product.min_order_qty and not unrestricted_qtys:
-        request.user.message_set.create(message='w|The amount of "%s" ordered was updated to reflect minimum quantity restrictions.' % product)
+        messages.warning(request, 'w|The amount of "%s" ordered was updated to reflect minimum quantity restrictions.' % product)
         quantity = product.min_order_qty
 
     # update cart
@@ -97,7 +98,7 @@ def put_in_cart(request, product, unique_id, quantity, overwrite=False):
             fixed_qtys = re.sub(r'[^0-9,]', '', product.fixed_order_qtys).split(',')
             new_qty = already_ordered.quantity + quantity
             if unicode(new_qty) not in fixed_qtys:
-                request.user.message_set.create(message='w|The total amount of "%s" ordered was not in the allowable range of values.' % product)
+                messages.warning(request, 'w|The total amount of "%s" ordered was not in the allowable range of values.' % product)
                 quantity = 0
         cart.incr_item(product, quantity)
     else: # add it
@@ -140,17 +141,17 @@ def vardata_input(request):
                 url = "%s%s/" % (reverse('vardata_prefix'), product.var_form)
                 return HttpResponseRedirect(url) # create preview images
             else:
-                request.user.message_set.create(message="e|There was a problem with your submission. Refer to the messages below and try again.")
+                messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
         else:
             if request.session.get('form_data', None):
                 form = var_form(request.session['form_data'])
             else:
                 form = var_form()
 
-        return render_to_response('orders/vardata_input.html', {
+        return render(request, 'orders/vardata_input.html', {
             'form': form,
             'product': product,
-        }, context_instance=RequestContext(request))
+        })
 
     else: # no outstanding items, show cart
         return HttpResponseRedirect(reverse('cart_summary'))
@@ -188,10 +189,10 @@ def vardata_preview(request):
         pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_URL, filename_prefix)
         img_file = "%spreviews/%s.gif" % (settings.MEDIA_URL, filename_prefix)
 
-        return render_to_response('orders/vardata_preview.html', {
+        return render(request, 'orders/vardata_preview.html', {
             'pdf_file': pdf_file,
             'img_file': img_file,
-        }, context_instance=RequestContext(request))
+        })
 
 
 @login_required
@@ -205,11 +206,11 @@ def cart_summary(request):
     profile = UserProfile.objects.get(user=user, org=org)
     unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
     cart = request.session.get('cart', None) or Cart()
-    return render_to_response('orders/cart_index.html', {
+    return render(request, 'orders/cart_index.html', {
         'cart': cart,
         'ignore_pa': profile.ignore_pa,
         'unrestricted_qtys': unrestricted_qtys,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def delete_order_session_vars(request):
@@ -241,7 +242,7 @@ def cancel_order(request):
     Cancels an order in progress. This completely trashes the cart session variables.
     """
     delete_order_session_vars(request)
-    request.user.message_set.create(message="s|Your order has been cancelled.")
+    messages.warning(request, "s|Your order has been cancelled.")
     return HttpResponseRedirect(reverse('cart_summary'))
 
 
@@ -260,7 +261,7 @@ def delete_from_cart(request, unique_id):
             if item['unique_id'] == unique_id:
                 request.session['data_approved'].remove(item)
 
-    request.user.message_set.create(message='s|The item was removed from your order.')
+    messages.info(request, 's|The item was removed from your order.')
     return HttpResponseRedirect(reverse('cart_summary'))
 
 
@@ -277,11 +278,12 @@ def provide_shipto(request):
                 new_addr = form.save()
                 if request.POST.get('add_to_ab', None):
                     new_addr.owners.add(request.user)
-                    request.user.message_set.create(message="s|The address was added to your Address Book.")
+                    messages.success(request, "s|The address was added to your Address Book.")
+                    print("addr was added")
                     new_addr.save()
                 request.session['shipto_address'] = new_addr
             else:
-                request.user.message_set.create(message="e|There was a problem with your submission. Refer to the messages below and try again.")
+                messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
 
         else:
             form = AddressForm()
@@ -290,10 +292,10 @@ def provide_shipto(request):
             request.session['shipto_address'] = address
     else:
         form = AddressForm()
-    return render_to_response('orders/provide_shipto.html', {
+    return render(request, 'orders/provide_shipto.html', {
         'form': form,
         'addresses': addresses,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -311,13 +313,13 @@ def provide_addinfo(request):
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
             return HttpResponseRedirect(reverse('confirm_order'))
         else:
-            request.user.message_set.create(message="e|There was a problem with your submission. Refer to the messages below and try again.")
+            messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
 
     else:
         form = OrderForm(request=request)
-    return render_to_response('orders/provide_addinfo.html', {
+    return render(request, 'orders/provide_addinfo.html', {
         'form': form,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -325,8 +327,7 @@ def confirm_order(request):
     """
     Final step in the ordering process: shows the user a final order summary, allows them to confirm and save/place the order.
     """
-    return render_to_response('orders/confirm_order.html', {
-    }, context_instance=RequestContext(request))
+    return render(request, 'orders/confirm_order.html', {})
 
 
 @login_required
@@ -344,10 +345,10 @@ def order_list(request):
     else:
         order_list = Order.objects.filter(placed_by__exact=request.user).filter(date__range=(cutoff, today))
 
-    return render_to_response('orders/order_list.html', {
+    return render(request, 'orders/order_list.html', {
         'order_list': order_list,
         'user_is_approval_manager': user_is_approval_manager,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -365,12 +366,12 @@ def show_order(request, order_id, confirm=False):
     oi = OrderedItem.objects.filter(order__exact=order.id)
     line_items = order.get_line_items()
 
-    return render_to_response('orders/order_detail.html', {
+    return render(request, 'orders/order_detail.html', {
         'is_confirmation': confirm,
         'order': order,
         'line_items': line_items,
         'user_is_manager': user_is_manager,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -386,7 +387,7 @@ def process_order(request):
     send_order_emails(request, order)
     delete_order_session_vars(request)
 
-    request.user.message_set.create(message="s|Your order has been successfully submitted.")
+    messages.success(request, "s|Your order has been successfully submitted.")
     return HttpResponseRedirect(reverse('order_confirmation', args=[order.id]))
 
 
@@ -554,7 +555,7 @@ def approve_order(request):
 #                print "\n==========\nSending mail to Mimic...\nTo: %s\nSubject: %s\n%s" % ([u for u in rep_list], subject, body)
                 send_mail(subject, body, 'orders@mimicprint.com', rep_list, fail_silently=False)
 
-        request.user.message_set.create(message="s|The order(s) have been approved.")
+        messages.success(request, "s|The order(s) have been approved.")
 
     if request.POST.get('detail', None):
         url = reverse('order_detail', args=[order_id])
@@ -573,8 +574,8 @@ def search(request):
         else:
             found_orders = Order.objects.filter(order_query).filter(placed_by=request.user).order_by('-date')
 
-    return render_to_response('orders/order_list.html', {
+    return render(request, 'orders/order_list.html', {
         'search': True,
         'query_string': query_string,
         'order_list': found_orders
-    }, context_instance=RequestContext(request))
+    })

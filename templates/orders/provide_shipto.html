@@ -50,7 +50,7 @@
 
 <div class="submit" id="continue" style="display: {% if not form.errors and request.session.shipto_address %}block{% else %}none{% endif %}">
     <div class="center">
-        <a href="{% url provide_addinfo %}" class="button">
+        <a href="{% url 'orders:provide_addinfo' %}" class="button">
             <img src="{% static 'img/arrow.png' %}" alt="">
             Continue ordering
         </a>

@@ -1,4 +1,3 @@
-from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, Http404, HttpResponseServerError
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader, Context
@@ -8,6 +7,7 @@ from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 from reports.models import Report
 from reports.forms import ReportForm
 from orgs.models import Org, UserProfile
@@ -117,7 +117,7 @@ def delete(request, report_id):
     report = get_object_or_404(Report, pk=report_id, owner=request.user.id)
     if request.method == "POST":
         report.delete()
-        request.user.message_set.create(message="s|The report was successfully deleted.")
+        messages.success(request, "s|The report was successfully deleted.")
         return HttpResponseRedirect(reverse('report_index'))
     else:
         return render(request, 'reports/delete_confirm.html', {
@@ -155,7 +155,8 @@ def add_or_edit(request, report_id=None):
 
             if request.POST.get('save_report', None):
                 new_report.is_visible = True
-                request.user.message_set.create(message="s|The report was successfully saved.")
+                messages.success(request, "s|The report was successfully saved.")
+                print('report saved')
 
             force_insert = oname and new_report.name != oname
             if force_insert:
@@ -165,7 +166,7 @@ def add_or_edit(request, report_id=None):
             form.save_m2m()
             return HttpResponseRedirect(reverse('report_detail', args=[new_report.id]))
         else:
-            request.user.message_set.create(message="e|There was a problem with your submission. Please refer to the messages below and try again.")
+            messages.warning(request, "e|There was a problem with your submission. Please refer to the messages below and try again.")
             daterange_type = request.POST.get('daterange_type', None)
 
     return render(request, 'reports/report_edit.html', {

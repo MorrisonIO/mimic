@@ -1,10 +1,11 @@
 from django.http import HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django import forms
 from django.forms import widgets
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext, loader, Context
 from django.contrib.auth.models import User
+from django.contrib import messages
 from orgs.models import Org, UserProfile
 from addresses.models import Address
 from products.models import Product
@@ -22,10 +23,10 @@ def products_ordered(request, order_id):
     """
     order = Order.objects.get(pk=order_id)
     ordered_items = OrderedItem.objects.filter(order=order)
-    return render_to_response('admin/orders/products_ordered/details.html', {
+    return render(request, 'admin/orders/products_ordered/details.html', {
         'order': order,
         'ordered_items': ordered_items,
-    }, context_instance=RequestContext(request))
+    })
 
 @staff_member_required
 def create_docket(request, order_id):
@@ -34,10 +35,10 @@ def create_docket(request, order_id):
     """
     order = Order.objects.get(pk=order_id)
     ordered_items = OrderedItem.objects.filter(order=order)
-    return render_to_response('admin/orders/dockets/docket.html', {
+    return render(request, 'admin/orders/dockets/docket.html', {
         'order': order,
         'ordered_items': ordered_items,
-    }, context_instance=RequestContext(request))
+    })
 
 @staff_member_required
 def save_invnum(request):
@@ -54,7 +55,7 @@ def save_invnum(request):
     order.invoice_number = request.POST['invoice_number']
     order.status = 'in'
     order.save()
-    request.user.message_set.create(message="The invoice number was saved successfully.")
+    messages.success(request, "The invoice number was saved successfully.")
     return HttpResponseRedirect('/admin/orders/order/')
 
 @staff_member_required
@@ -76,14 +77,14 @@ def create_packingslip(request, order_id):
             ship_to = Address.objects.get(pk=request.POST.get('address'))
         else:
             ship_to = order.ship_to
-    return render_to_response('admin/orders/shipping/packingslip.html', {
+    return render(request, 'admin/orders/shipping/packingslip.html', {
         'date': date,
         'order': order,
         'ship_to': ship_to,
         'printable': printable,
         'addresses': addresses,
         'ordered_items': ordered_items,
-    }, context_instance=RequestContext(request))
+    })
 
 @staff_member_required
 def create_label(request, order_id):
@@ -103,13 +104,13 @@ def create_label(request, order_id):
         else:
             ship_to = order.ship_to
         contents = request.POST.get('contents')
-    return render_to_response('admin/orders/shipping/label.html', {
+    return render(request, 'admin/orders/shipping/label.html', {
         'order': order,
         'ship_to': ship_to,
         'printable': printable,
         'addresses': addresses,
         'contents': contents,
-    }, context_instance=RequestContext(request))
+    })
 
 @staff_member_required
 def create_comm_inv(request, order_id):
@@ -151,7 +152,7 @@ def create_comm_inv(request, order_id):
                               'hs_num': request.POST.get(hs),
                               'value': request.POST.get(val)}
                 item_dict[p.id] = field_dict
-    return render_to_response('admin/orders/shipping/comm_inv.html', {
+    return render(request, 'admin/orders/shipping/comm_inv.html', {
         'date': date,
         'order': order,
         'total': total,
@@ -160,7 +161,7 @@ def create_comm_inv(request, order_id):
         'addresses': addresses,
         'ordered_items': ordered_items,
         'item_dict': item_dict,
-    }, context_instance=RequestContext(request))
+    })
 
 def worknote_format(notes):
     import re
@@ -180,10 +181,10 @@ def worknote_view(request, worknote_id):
     View an individual worknote in 'plain' format, which is easier for simply reading (ie not the admin editing form).
     """
     worknote = WorkNote.objects.get(pk=worknote_id)
-    return render_to_response('admin/orders/worknote/view.html', {
+    return render(request, 'admin/orders/worknote/view.html', {
         'worknote': worknote,
         'notes': worknote_format(worknote.notes),
-    }, context_instance=RequestContext(request))
+    })
 
 @staff_member_required
 def fastorder_add(request):
@@ -223,14 +224,14 @@ def fastorder_add(request):
                     amt = request.POST.get(qty_str, None)
                     subtract_inventory(product, o, amt, o.placed_by, 'Online order', o.date)
 
-            request.user.message_set.create(message="The FastOrder was successfully saved.")
+            messages.success(request, "The FastOrder was successfully saved.")
             return HttpResponseRedirect('/admin/orders/order/')
         else:
             errors = form.errors
     else: # show form
         form = FastOrderForm()
 
-    return render_to_response('admin/orders/order/fastorder.html', {
+    return render(request, 'admin/orders/order/fastorder.html', {
         'form': form,
         'errors': errors,
-    }, context_instance=RequestContext(request))
+    })

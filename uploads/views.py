@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseServerError
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader, Context
 from django.core.mail import mail_managers, send_mail
 from django.core.urlresolvers import reverse
@@ -74,10 +74,10 @@ def upload_file(request):
             message = "Error: There was a problem with your submission. Refer to the messages below and try again."
     else:
         form = UploadFileForm()
-    return render_to_response('uploads/upload.html', {
+    return render(request, 'uploads/upload.html', {
         'form': form,
         'message': message,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def upload_progress(request):

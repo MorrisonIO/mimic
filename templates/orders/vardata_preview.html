@@ -13,11 +13,11 @@
 
     <div class="submit">
         <div class="buttons center nolabel">
-            <a href="{% url vardata_input %}" title="Modify" id="vardata_modify" class="button">
+            <a href="{% url 'orders:vardata_input' %}" title="Modify" id="vardata_modify" class="button">
                 <img src="{% static 'img/edit.png' %}" alt="">
                 Modify
             </a>
-            <form action="{% url vardata_preview %}" method="post" id="vardata_confirm"> {% csrf_token %}
+            <form action="{% url 'orders:vardata_preview' %}" method="post" id="vardata_confirm"> {% csrf_token %}
                 <input type="hidden" name="preview_ok" value="preview_ok">
                 <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
                 <button type="submit" class="positive">

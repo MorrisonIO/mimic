@@ -1,6 +1,7 @@
 import base64
 
 from django import forms
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -9,6 +10,7 @@ from django.forms import widgets, ModelForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
+
 
 from helpers.views import get_query
 from .forms import AddressForm
@@ -22,7 +24,7 @@ def index(request):
     """
     address_list = Address.objects.filter(owners__in=[request.user]).order_by('last_name')
     paginator = Paginator(address_list, 10) # 10 addresses per page
-    
+
     # ensure page requested is an int; otherwise show pg 1
     try:
         page = int(request.GET.get('page', '1'))
@@ -63,7 +65,9 @@ def delete(request, address_id):
         address.save()
         t_str = '%s%s-%s' % (request.user.username, request.user.id, address.id)
         token = base64.b64encode(t_str)
-        request.user.message_set.create(message='s|The address was successfully deleted. <a href="%s" title="Restore address back to your Address Book">Undo</a>' % reverse('address_undo_delete', args=[token]))
+        messages.success(request, 's|The address was successfully deleted.\
+        <a href="%s" title="Restore address back to your Address Book">Undo</a>'\
+         % reverse('address_undo_delete', args=[token]))
         return HttpResponseRedirect(reverse('address_index'))
     else:
         return render(request, 'addresses/delete_confirm.html', {
@@ -84,8 +88,8 @@ def undo_delete(request, token):
     address = get_object_or_404(Address, pk=address_id)
     address.owners.add(request.user)
     address.save()
-    request.user.message_set.create(message='s|The address was successfully restored.')
-    return HttpResponseRedirect(reverse('address_index'))
+    messages.success(request ,'s|The address was successfully restored.')
+    return HttpResponseRedirect(reverse('addresses:address_index'))
 
 
 @login_required
@@ -99,8 +103,9 @@ def add_or_edit(request, address_id=None, duplicate=None):
         address.save()
         address.owners.add(request.user)
         address.save()
-        request.user.message_set.create(message="s|The address was successfully duplicated. Edit your new address below.")
-        return HttpResponseRedirect(reverse('address_edit', args=[address.id]))
+        messages.success(request, "s|The address was successfully duplicated.\
+        Edit your new address below.")
+        return HttpResponseRedirect(reverse('addresses:address_edit', args=[address.id]))
 
     if address_id:
         address = Address.objects.get(id=address_id, owners__in=[request.user])
@@ -118,10 +123,12 @@ def add_or_edit(request, address_id=None, duplicate=None):
             new_addr = form.save()
             new_addr.owners.add(request.user)
             new_addr.save()
-            request.user.message_set.create(message="s|The address was successfully saved.")
-            return HttpResponseRedirect(reverse('address_index'))
+            print('dir user', dir(request.user))
+            messages.add_message(request, messages.ERROR, "The address was successfully saved.")
+            return HttpResponseRedirect(reverse('addresses:address_index'))
         else:
-            request.user.message_set.create(message="e|There was a problem with your submission. Refer to the messages below and try again.")
+            messages.warning(request, "e|There was a problem with your submission.\
+            Refer to the messages below and try again.")
     else:
         form = address_form
 
@@ -132,6 +139,7 @@ def add_or_edit(request, address_id=None, duplicate=None):
 
 
 def search(request):
+    """ Search function """
     query_string, found_addresses = '', ''
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
