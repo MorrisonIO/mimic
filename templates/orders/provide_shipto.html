@@ -20,7 +20,7 @@
 
 <div id="provide_shipto" style="display: {% if form.errors or not request.session.shipto_address %}block{% else %}none{% endif %}">
     {% if not request.session.shipto_address %}<p>Provide a shipping address for this order, either by selecting from your Address Book or by entering one manually.</p>{% endif %}
-    <form action="." method="post" id="shipto_form">
+    <form action="." method="post" id="shipto_form">{% csrf_token %}
         <div class="shipto_field required">
             <label for="shipto_address">Shipping address</label>
             <select name="shipto_address" id="shipto_menu">

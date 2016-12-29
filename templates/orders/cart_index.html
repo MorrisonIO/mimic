@@ -45,7 +45,7 @@
                     </td>
                     <td class="qty">
                         {{ item.quantity }} <a href="#" title="Modify this amount" class="toggle_qty_modify">change</a>
-                        <form action="{% url 'orders:process_products' %}" method="post" class="qty_modify">
+                        <form action="{% url 'orders:process_products' %}" method="post" class="qty_modify">{% csrf_token %}
                             {% with item.product as product %}
                                 {% include "products/qty_field.html" %}
                             {% endwith %}

@@ -30,7 +30,7 @@ $(document).ready(function(){
     <p>Create a new report by completing the form below. If you wish to save this report to view it again at a later time, enter a name and click <span class="buttondesc">Save &amp; view results</span>. If you wish to view the report only once, click <span class="buttondesc">View results only</span>.</p>
 {% endif %}
 
-<form action="." method="post" id="report_form">
+<form action="." method="post" id="report_form">{% csrf_token %}
     <h3>Filter results</h3>
     <p>You may narrow down which orders get included in your results by filtering on the following criteria. If you do not select any options, your report will include all orders. Note that these filters are added together to limit your results. For example, if you narrow by date range and by organization, only orders that match <em>both</em> those criteria will be included.</p>
     <p class="narrow_desc">Filter results by:</p>

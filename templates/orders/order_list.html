@@ -10,7 +10,7 @@
     {% else %}
         {% if user_is_approval_manager %}
             <p>Below is a list of orders placed by members of your organization. To approve an order, select the checkbox beside it and click <span class="buttondesc">Approve selected order(s)</span>. If you wish to <em>deny</em> an order that is Pending Approval, please <a href="/contact/" title="Various ways to contact us">contact us</a> to proceed. Orders that are more than three weeks old are not displayed. To see a more detailed ordering history, create a <a href="{% url 'reports:report_index' %}" title="Create, edit, or view a report">report</a>.</p>
-            <form action="{% url 'orders:approve_order' %}" method="post">
+            <form action="{% url 'orders:approve_order' %}" method="post">{% csrf_token %}
         {% else %}
             <p>Below is a list of current orders that you have placed. Orders with a status of Closed that are more than one week old are not displayed.</p>
         {% endif %}

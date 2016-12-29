@@ -17,7 +17,7 @@
                 <img src="{% static 'img/edit.png' %}" alt="">
                 Modify
             </a>
-            <form action="{% url vardata_preview %}" method="post" id="vardata_confirm"> 
+            <form action="{% url vardata_preview %}" method="post" id="vardata_confirm"> {% csrf_token %}
                 <input type="hidden" name="preview_ok" value="preview_ok">
                 <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
                 <button type="submit" class="positive">

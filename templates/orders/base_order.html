@@ -6,7 +6,7 @@
 
 {% block search %}
 <div id="search">
-    <form action="{% url 'orders:order_search' %}" method="get">
+    <form action="{% url 'orders:order_search' %}" method="get">{% csrf_token %}
         <input type="text" name="q" title="Search orders..." id="search_input">
         <input type="image" src="{% static 'img/search.gif' %}" id="search_submit" alt="Search">
     </form>

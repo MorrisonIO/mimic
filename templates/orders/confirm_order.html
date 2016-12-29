@@ -58,7 +58,7 @@
         <a href="{% url 'orders:provide_addinfo' %}" class="modify" title="Back to providing additional info">change</a>
     </div>
 
-    <form action="{% url 'orders:process_order' %}" method="post">
+    <form action="{% url 'orders:process_order' %}" method="post">{% csrf_token %}
     <div class="submit">
         <div class="center">
             <p class="order_notice">Clicking this button will finalize this order to us, and this action cannot be undone. Please ensure your order is correct before proceeding.</p>

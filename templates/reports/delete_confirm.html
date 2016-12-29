@@ -10,7 +10,7 @@
 <div class="wrapper">
     <p>Are you sure you want to delete the report named <strong>{{ report }}</strong>? This action cannot be undone.</p>
 
-    <form method="post" action="{% url report_delete report.id %}">
+    <form method="post" action="{% url report_delete report.id %}">{% csrf_token %}
         <div class="center">
             <img src="{% static 'img/spinner_white.gif' %}" alt="" class="spinner">
             <button type="submit" class="positive">

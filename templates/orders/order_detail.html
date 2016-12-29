@@ -47,7 +47,7 @@
     {% ifequal order.status "pa" %}
         {% if perms.order.change_order %}
             <div class="bottom-margin">
-                <form action="{% url approve_order %}" method="post">
+                <form action="{% url approve_order %}" method="post">{% csrf_token %}
                     <input type="hidden" name="order_id_{{ order.id }}"></input>
                     <input type="hidden" name="detail" value="1"></input>
                     <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">

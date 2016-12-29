@@ -10,7 +10,7 @@
 <div class="wrapper">
     <p>Are you sure you want to delete the file <strong>{{ download }}</strong>?</p>
 
-    <form method="post" action="{% url 'downloads:download_delete' download.id %}">
+    <form method="post" action="{% url 'downloads:download_delete' download.id %}">{% csrf_token %}
         <div class="center">
             <img src="{% static 'img/spinner_white.gif' %}" alt="" class="spinner">
             <button type="submit" class="positive">

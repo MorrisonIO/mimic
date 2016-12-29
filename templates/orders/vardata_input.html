@@ -7,7 +7,7 @@
 {% block content %}
     <p>The document <b>"{{ product }}"</b> you ordered requires you to provide some specific information. Please complete the form below. Fields with bold labels are required. You will be shown a preview image of your document, and you will be able to make changes to the information you enter.</p>
 
-    <form action="." method="post">
+    <form action="." method="post">{% csrf_token %}
         <fieldset>
             {% include "form_snippet.html" %}
         </fieldset>
