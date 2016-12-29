@@ -123,8 +123,7 @@ def add_or_edit(request, address_id=None, duplicate=None):
             new_addr = form.save()
             new_addr.owners.add(request.user)
             new_addr.save()
-            print('dir user', dir(request.user))
-            messages.add_message(request, messages.ERROR, "The address was successfully saved.")
+            messages.success(request, "s|The address was successfully saved.")
             return HttpResponseRedirect(reverse('addresses:address_index'))
         else:
             messages.warning(request, "e|There was a problem with your submission.\
