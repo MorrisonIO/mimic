@@ -115,10 +115,10 @@ class Order(models.Model):
     approved_by = models.ForeignKey(User, blank=True, null=True, related_name="orders_approved_by_set")
     approved_date = models.DateTimeField('Approved on', blank=True, null=True)
     ship_to = models.ForeignKey(Address)
-    additional_info = models.TextField(blank=True, help_text="Any additional details Mimic might require to complete this order.")        
+    additional_info = models.TextField(blank=True, help_text="Any additional details Mimic might require to complete this order.", null=True)
     invoice_number = models.CharField(max_length=200, blank=True, null=True)
-    user_notes = models.TextField("Your notes", blank=True, help_text="Any information you wish to save with this order for your own records.")
-    saved = models.BooleanField(blank=True)
+    user_notes = models.TextField("Your notes", blank=True, help_text="Any information you wish to save with this order for your own records.", null=True)
+    # saved = models.BooleanField(blank=True, default=False) # field might be DEPRECATED
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -228,18 +228,23 @@ class InventoryHistory(models.Model):
 
     def save(self):
         """
-        Define a custom save function since the inventory level that's set in the Product also potentially needs to be modified. Note that if this change is coming from an online order, the amount (which will be positive) needs to be *subtracted* from inventory, but if it's coming via a manual change in the admin, a positive amount needs to be *added* (and a negative amount can be added as well, effectively subtracting it). 
+        Define a custom save function since the inventory level
+        that's set in the Product also potentially needs to be modified.
+        Note that if this change is coming from an online order,
+        the amount (which will be positive) needs to be *subtracted* from inventory,
+        but if it's coming via a manual change in the admin, a positive amount needs to be *added*
+        (and a negative amount can be added as well, effectively subtracting it).
         """
-        super(InventoryHistory, self).save() 
-        if self.product.track_inventory: 
+        super(InventoryHistory, self).save()
+        if self.product.track_inventory:
             if not self.product.inventory: # adding for the first time
                 self.product.inventory = 0
-            if self.order: 
+            if self.order:
                 self.product.inventory -= self.amount
             else:
                 self.product.inventory += self.amount
             self.product.save()
-            if self.product.inventory < self.product.replenish_threshold: 
+            if self.product.inventory < self.product.replenish_threshold:
                 site = Site.objects.get_current()
                 t = loader.get_template('emails/inventory_replenish_alert.txt')
                 subject = "[Mimic OOS] Inventory Alert: %s" % self.product
@@ -251,7 +256,9 @@ class InventoryHistory(models.Model):
                     'site': site,
                 })
                 body = t.render(c)
-                mimic_list = ["Replenishment <replenishment@mimicprint.com>"] # not possible to mail Mimic account reps, as that requires knowing the current Org (part of the request object which we have no access to)
+                # not possible to mail Mimic account reps, as that requires knowing
+                # the current Org (part of the request object which we have no access to)
+                mimic_list = ["Replenishment <replenishment@mimicprint.com>"]
                 send_mail(subject, body, 'orders@mimicprint.com', mimic_list, fail_silently=False)
         return
 

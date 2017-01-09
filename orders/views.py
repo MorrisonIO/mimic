@@ -70,9 +70,9 @@ def process_products(request):
             product = get_object_or_404(Product, pk=item['product_id'])
             put_in_cart(request, product, item['unique_id'], item['quantity'], item['overwrite'])
 
-        return HttpResponseRedirect(reverse('vardata_input'))
+        return HttpResponseRedirect(reverse('orders:vardata_input'))
     else: # shouldn't arrive at this view except via POST
-        return HttpResponseRedirect(reverse('product_list'))
+        return HttpResponseRedirect(reverse('products:product_list'))
 
 
 def put_in_cart(request, product, unique_id, quantity, overwrite=False):
@@ -154,7 +154,7 @@ def vardata_input(request):
         })
 
     else: # no outstanding items, show cart
-        return HttpResponseRedirect(reverse('cart_summary'))
+        return HttpResponseRedirect(reverse('orders:cart_summary'))
 
 
 @login_required
@@ -311,7 +311,7 @@ def provide_addinfo(request):
             request.session['additional_info'] = request.POST.get('additional_info', None)
             request.session['user_notes'] = request.POST.get('user_notes', None)
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
-            return HttpResponseRedirect(reverse('confirm_order'))
+            return HttpResponseRedirect(reverse('orders:confirm_order'))
         else:
             messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
 
@@ -381,7 +381,7 @@ def process_order(request):
     """
     # TODO more sanity checking: duplicate orders, reverse db saves if one of the steps doesn't complete successfully, etc
     if not request.session.get('cart', None) or not request.session.get('shipto_address', None) or not request.session.get('due_date', None):
-        return HttpResponseRedirect(reverse('confirm_order'))
+        return HttpResponseRedirect(reverse('orders:confirm_order'))
     order = save_new_order(request)
     save_ordered_items(request, order)
     send_order_emails(request, order)
@@ -407,6 +407,7 @@ def save_new_order(request):
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
     order.user_notes = request.session['user_notes']
+    print "request s",dir(request.session)
     order.save()
     return order
 
