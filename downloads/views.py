@@ -31,7 +31,7 @@ def detail(request, download_id):
     it is not visited directly, since the link the user clicks on to 'view'
      the file goes direct to where it is on the media server.)
     """
-    return HttpResponseRedirect(reverse('download_index'))
+    return HttpResponseRedirect(reverse('downloads:download_index'))
 
 
 @login_required
@@ -48,14 +48,14 @@ def delete(request, download_id):
             download.save()
             messages.success(request, 's|The file was successfully deleted.\
             <a href="%s" title="Restore file back to your Download area">Undo</a>'\
-            % reverse('download_undo_delete', args=[download.id]))
-        return HttpResponseRedirect(reverse('download_index'))
+            % reverse('downloads:download_undo_delete', args=[download.id]))
+        return HttpResponseRedirect(reverse('downloads:download_index'))
     else:
         if download.is_deletable:
             return render(request, 'downloads/delete_confirm.html', {
                 'download': download,
             })
-        return HttpResponseRedirect(reverse('download_index'))
+        return HttpResponseRedirect(reverse('downloads:download_index'))
 
 
 @login_required

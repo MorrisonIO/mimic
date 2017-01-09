@@ -388,7 +388,7 @@ def process_order(request):
     delete_order_session_vars(request)
 
     messages.success(request, "s|Your order has been successfully submitted.")
-    return HttpResponseRedirect(reverse('order_confirmation', args=[order.id]))
+    return HttpResponseRedirect(reverse('orders:order_confirmation', args=[order.id]))
 
 
 def save_new_order(request):
@@ -559,9 +559,9 @@ def approve_order(request):
         messages.success(request, "s|The order(s) have been approved.")
 
     if request.POST.get('detail', None):
-        url = reverse('order_detail', args=[order_id])
+        url = reverse('orders:order_detail', args=[order_id])
     else:
-        url = reverse('order_index')
+        url = reverse('orders:order_index')
     return HttpResponseRedirect(url)
 
 

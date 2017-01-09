@@ -118,7 +118,7 @@ def delete(request, report_id):
     if request.method == "POST":
         report.delete()
         messages.success(request, "s|The report was successfully deleted.")
-        return HttpResponseRedirect(reverse('report_index'))
+        return HttpResponseRedirect(reverse('reports:report_index'))
     else:
         return render(request, 'reports/delete_confirm.html', {
             'report': report,
@@ -164,7 +164,7 @@ def add_or_edit(request, report_id=None):
 
             new_report.save(force_insert)
             form.save_m2m()
-            return HttpResponseRedirect(reverse('report_detail', args=[new_report.id]))
+            return HttpResponseRedirect(reverse('reports:report_detail', args=[new_report.id]))
         else:
             messages.warning(request, "e|There was a problem with your submission. Please refer to the messages below and try again.")
             daterange_type = request.POST.get('daterange_type', None)

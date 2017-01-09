@@ -69,7 +69,7 @@ def upload_file(request):
                 body = t.render(c)
                 send_mail(subject, body, 'orders@mimicprint.com', [recipient], fail_silently=False)
 
-            return HttpResponseRedirect(reverse('upload_ok'))
+            return HttpResponseRedirect(reverse('uploads:upload_ok'))
         else:
             message = "Error: There was a problem with your submission. Refer to the messages below and try again."
     else:

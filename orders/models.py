@@ -125,7 +125,7 @@ class Order(models.Model):
 
     @permalink 
     def get_absolute_url(self):
-        return ('order_detail', None, { 'order_id': self.id })
+        return ('orders:order_detail', None, { 'order_id': self.id })
 
     class Meta:
         ordering = ['-date']
@@ -274,7 +274,7 @@ class InventoryHistory(models.Model):
             model = self.product.var_form.replace('Form', '')
             var_form = eval(model) 
             var_data = var_form.objects.get(ordereditem=oi)
-            href_path = '%s%s/%s/' % (reverse('vardata_prefix'), self.product.var_form, oi.id)
+            href_path = '%s%s/%s/' % (reverse('vardata:vardata_prefix'), self.product.var_form, oi.id)
         return {
             'quantity': self.amount,
             'name': self.product.name,

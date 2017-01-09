@@ -68,7 +68,7 @@ def delete(request, address_id):
         messages.success(request, 's|The address was successfully deleted.\
         <a href="%s" title="Restore address back to your Address Book">Undo</a>'\
          % reverse('address_undo_delete', args=[token]))
-        return HttpResponseRedirect(reverse('address_index'))
+        return HttpResponseRedirect(reverse('addresses:address_index'))
     else:
         return render(request, 'addresses/delete_confirm.html', {
             'address': address,

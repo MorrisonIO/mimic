@@ -142,7 +142,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
 
 STATIC_URL = '/static/'
 
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
