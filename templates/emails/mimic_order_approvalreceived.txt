@@ -1,0 +1,27 @@
+
+The following order, containing items that require approval, has been
+APPROVED by the manager responsible for this organization. Please place
+this order into production as soon as possible.
+
+------------------------------------------------------------------------
+ORDER NAME 
+{{ order.name }}
+
+APPROVED BY
+{{ order.approved_by.get_full_name }}
+
+APPROVED ON
+{{ order.approved_date|date:"Y-m-d" }}
+
+DUE DATE
+{{ order.due_date }}
+------------------------------------------------------------------------
+
+Details of this order can be viewed in the Admin section of the
+ordering system at http://{{ site.domain }}/admin/orders/order/{{ order.id }}/.
+
+--
+Mimic Print & Media Services
+Tel: 905.415.2772
+Fax: 905.415.2005
+Web: http://{{ site.domain }}/

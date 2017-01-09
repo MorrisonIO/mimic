@@ -1,0 +1,18 @@
+{#% load markup %#}
+This is an automated alert from the Mimic Online Ordering System.  
+Order {{ order }} has caused a product's inventory level to 
+drop below the specified replenish threshold. 
+
+Product:           {{ product }} {#|markdown#}
+Replenish at:      {{ replenish_threshold }}
+Current inventory: {{ inventory }}
+
+Mimic account reps have NOT been notified of this event. If necessary, arrange
+for more of this product to be created or acquired, or take whatever other
+course of action is most appropriate.
+
+--
+Mimic Print & Media Services
+Tel: 905.415.2772
+Fax: 905.415.2005
+Web: http://{{ site.domain }}/

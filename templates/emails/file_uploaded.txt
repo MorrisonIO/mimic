@@ -1,0 +1,15 @@
+The following file has been uploaded via the mimicprint2.com site. 
+NOTE: This file will be deleted from the server one week from today!
+--------------------------------------------------------------------
+
+Title: {{ form.title }}
+Download: {{ file_url }} [{{ file.size|filesizeformat }}]
+Date: {% now "l, F j, Y \a\t H:i" %}
+
+Name: {{ form.name }}
+Company: {{ form.company }}
+Contact user: {{ form.contact_user }}
+Phone: {{ form.phone }}
+Email: {{ form.email }}
+
+Comments: {{ form.comments }}
