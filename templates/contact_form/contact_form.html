@@ -1,0 +1,40 @@
+{% load staticfiles %}
+<script type="text/javascript">
+    toggleSpinner();
+</script>
+
+<div class="header wide">
+    <h3>We'd love to hear your comments</h3>
+</div>
+
+<div class="wrapper">
+    <p>Have an idea, comment or problem you want to pass on to us? Great! Please do&mdash;we welcome any feedback and take your satisfaction very seriously. Simply fill out this brief form (both fields are required).</p>
+    <p>Alternatively, if you'd prefer to discuss things over the phone, don't hesitate to call us at (905) 415-2772.</p>
+    <form method="post" action="{% url 'contact_form' %}" class="contact_form">{% csrf_token %}
+        <fieldset>
+            <div class="form_row required {% if form.feedback_type.errors %} error_field{% endif %}">
+                <label for="{{ form.feedback_type.auto_id }}">{{ form.feedback_type.label }}</label>
+                {{ form.feedback_type }}
+                {% if form.feedback_type.errors %}<span class="errorlist">{% for error in form.feedback_type.errors %}{{ error }}{% endfor %}</span>{% endif %}
+            </div>
+            <div class="form_row required {% if form.body.errors %} error_field{% endif %}">
+                <label for="{{ form.body.auto_id }}">{{ form.body.label }}</label>
+                {{ form.body }}
+                {% if form.body.errors %}<span class="errorlist">{% for error in form.body.errors %}{{ error }}{% endfor %}</span>{% endif %}
+            </div>
+            <input type="hidden" name="email" value="{{ request.user.email }}">
+            <input type="hidden" name="name" value="{{ request.user.get_full_name }}">
+        </fieldset>
+        
+        <div class="submit">
+            <div class="buttons">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="submit" class="positive">
+                <img src="{% static 'img/tick_circle.png' %}" alt="">
+                Send feedback
+            </button>
+            or <a href="#" title="Close this window" class="alt_option" onClick="closeDialog(); return false">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

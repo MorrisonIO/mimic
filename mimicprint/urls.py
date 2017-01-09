@@ -18,25 +18,18 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import page
+from django.views.generic import TemplateView
+from contact_form.views import ContactFormView
+from .forms import FeedbackForm
+from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^page/', page),
-    
+    url(r'^page/', views.page),
     # Authentication
-    url(r'^accounts/login/$',
-        'django.contrib.auth.views.login',
-        name = 'login'
-    ),
-    url(r'^accounts/logout/$',
-        'mimicprint.views.logout_user',
-        name = 'logout'
-    ),
-    # url(r'^accounts/profile/$',
-    #     view = 'mimicprint.views.profile',
-    #     name = 'profile'
-    # ),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^accounts/logout/$', 'mimicprint.views.logout_user', name='logout'),
+    url(r'^accounts/profile/$', views.profile, name='profile'),
     # url(r'^accounts/password_change/$',
     #     view = 'django.contrib.auth.views.password_change',
     #     name = 'password_change'
@@ -65,4 +58,14 @@ urlpatterns = [
     url(r'^oos/charts/', include('charts.urls')),
     url(r'^oos/downloads/', include('downloads.urls')),
     url(r'^oos/events/', include('events.urls')),
+    url(r'^upload/', include('uploads.urls')),
+
+    url(r'^oos/feedback/$', ContactFormView.as_view(form_class=FeedbackForm),
+            # {
+            #     'form_class': FeedbackForm,
+            #     'success_url': '/oos/feedback/sent/',
+            # },
+            name='contact_form'),
+    url(r'^oos/feedback/sent/$', TemplateView.as_view(template_name='contact_form/contact_form_sent.html'), name='contact_form_sent'),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

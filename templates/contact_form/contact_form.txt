@@ -1,0 +1,7 @@
+You have received the following feedback from the Mimic Ordering System:
+
+Type: {{ feedback_type }}
+Name: {{ name }}
+Email: {{ email }}
+Message:
+{{ body }}
