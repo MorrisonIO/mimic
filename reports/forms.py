@@ -62,7 +62,8 @@ class ReportForm(forms.ModelForm):
         """
         If viewing a quarterly-based date range, the quarter start date is required.
         """
-        if (self.cleaned_data['daterange_type'] == 'tq' or self.cleaned_data['daterange_type'] == 'lq') and not self.cleaned_data['quarter_start']:
+        if (self.cleaned_data['daterange_type'] == 'tq' or \
+        self.cleaned_data['daterange_type'] == 'lq') and not self.cleaned_data['quarter_start']:
             raise forms.ValidationError('Enter when your first fiscal quarter starts.')
         else:
             return self.cleaned_data['quarter_start']
@@ -91,7 +92,8 @@ class ReportForm(forms.ModelForm):
         """
         if self.cleaned_data['daterange_type'] == 'fd' and not self.cleaned_data['end_date']:
             raise forms.ValidationError('Enter the end date.')
-        elif self.cleaned_data['daterange_type'] == 'fd' and (self.cleaned_data['end_date'] < self.cleaned_data['start_date']):
+        elif self.cleaned_data['daterange_type'] == 'fd' and \
+        (self.cleaned_data['end_date'] < self.cleaned_data['start_date']):
             raise forms.ValidationError('End date must be later than start date.')
         else:
             return self.cleaned_data['end_date']

@@ -131,6 +131,7 @@ def add_or_edit(request, report_id=None):
     """
     Shows the form for adding or editing a report. Validates and saves data when necessary.
     """
+    req_post_data = request.POST.copy()
     if report_id:
         report = Report.objects.get(id=report_id, owner=request.user)
         oname = report.name
@@ -138,16 +139,17 @@ def add_or_edit(request, report_id=None):
         form = ReportForm(instance=report, request=request)
     else:
         report = ''
-        oname = ''
+        oname = ' '
         daterange_type = ''
         form = ReportForm(request=request)
 
     if request.method == 'POST':
+        if not hasattr(request.POST, 'schedule'):
+            req_post_data['schedule'] = u'* * * * *'
         if report:
-            form = ReportForm(data=request.POST, instance=report, request=request)
+            form = ReportForm(data=req_post_data, instance=report, request=request)
         else:
-            form = ReportForm(data=request.POST, request=request)
-
+            form = ReportForm(data=req_post_data, request=request)
         if form.is_valid():
             new_report = form.save(commit=False)
             new_report.owner_id = request.user.id
@@ -156,7 +158,6 @@ def add_or_edit(request, report_id=None):
             if request.POST.get('save_report', None):
                 new_report.is_visible = True
                 messages.success(request, "s|The report was successfully saved.")
-                print('report saved')
 
             force_insert = oname and new_report.name != oname
             if force_insert:

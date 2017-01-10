@@ -132,21 +132,22 @@ class Report(models.Model):
     DEFAULT_STATES = [x[0] for x in Order.STATUS_CHOICES]
 
     daterange_type = models.CharField(max_length=2, blank=True)
+    start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    is_visible = models.BooleanField()
+    is_visible = models.NullBooleanField()
     last_orders = models.PositiveIntegerField(max_length=3, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True)
     owner = models.ForeignKey(User, related_name="reports_owner_set")
     quarter_start = models.CharField(max_length=2, blank=True, null=True)
-    scheduled = models.BooleanField()
+    scheduled = models.BooleanField(default=False)
     schedule = models.CharField(max_length=100, default='* * * * *')
-    start_date = models.DateField(blank=True, null=True)
     orgs = models.ManyToManyField(Org, blank=True)
     products = models.ManyToManyField(Product, blank=True)
     ordered_by = models.ManyToManyField(UserProfile, blank=True, null=True, related_name="reports_ordered_by_set")
     categories = models.ManyToManyField(Category, blank=True, null=True)
-    states = SerializedArrayField(default=",".join(DEFAULT_STATES), max_length=255)
-    somefeild = models.CharField(max_length=200, default="test")
+    states = models.CharField(blank=True, max_length=255)
+    # states = SerializedArrayField(default=",".join(DEFAULT_STATES), max_length=255)
+    # somefeild = models.CharField(max_length=200, default="test")
 
     def __unicode__(self):
         return u'%s' % self.name
