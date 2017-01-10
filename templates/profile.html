@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}' %}our account{% endblock %}
+{% block page_title %}Your account{% endblock %}
+{% block body_id %}profile{% endblock %}
+
+{% block content %}
+<p>Below you may change various settings for your account. Fields with bold labels are required.</p>
+
+<form method="post" action=".">{% csrf_token %}
+    <h4>Change your password</h4>
+    <fieldset>
+        <div class="form_row required">
+            <label for="id_username">Username</label>
+            {{ request.user }} <em class="text_hint">(cannot be changed)</em>
+        </div>
+        {% with password_form as form %}
+            {% include "form_snippet.html" %}
+        {% endwith %}
+    </fieldset>
+    <div class="submit attach">
+        <div class="buttons">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="submit" class="positive" name="password">
+                <img src="{% static 'img/tick_circle.png' %}" alt=""> 
+                Change password
+            </button>
+        </div>
+    </div>
+</form>
+
+<h4>Organization settings</h4>
+{% if current_org %}
+    <form method="post" action=".">{% csrf_token %}
+        <fieldset>
+            {% with profile_form as form %}
+                {% include "form_snippet.html" %}
+            {% endwith %}
+        </fieldset>
+        <div class="submit attach">
+            <div class="buttons">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <button type="submit" class="positive" name="profile">
+                    <img src="{% static 'img/tick_circle.png' %}" alt=""> 
+                    Save details
+                </button>
+            </div>
+        </div>
+    </form>
+{% else %}
+    <p class="fakeform">In order to set organization specific settings on your account, you need to have an active organization selected. Do so from the menu in the top right corner.</p>
+{% endif %}
+{% endblock %}
