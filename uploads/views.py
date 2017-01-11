@@ -29,10 +29,10 @@ def handle_uploaded_file(f):
     """
     filename = sanitize_filename(f.name)
     path = '/uploads/%s' % filename
-    destination = open('%s%s' % (settings.MEDIA_ROOT, path), 'wb+')
+    destination = open('{0}{1}'.format(settings.STATICFILES_DIRS[0].encode('utf8'), path), 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
-    url = '%s%s' % (settings.MEDIA_URL, path)
+    url = '%s%s' % (settings.STATIC_URL, path)
     return url
 
 

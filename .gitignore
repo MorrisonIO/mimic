@@ -16,3 +16,4 @@ templates/templatetags/
 *.swp
 .DS_Store
 db.sqlite3.sqlite
+static/uploads

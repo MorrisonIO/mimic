@@ -1,0 +1,111 @@
+{% extends "base_public.html" %}
+{% load staticfiles %}
+
+{% block title %}Upload a File{% endblock %}
+{% block page_title %}<img src="{% static 'img/public/upload.gif'%}" alt="Upload a File" width="132" height="25">{% endblock %}
+{% block body_id %}upload{% endblock %}
+{% block banner_img %}<img src="{% static 'img/public/pencil_tops.jpg'%}" alt="Image of pencil tips" width="750" height="95">{% endblock %}
+{% block custom_head %} 
+<script type="text/javascript" src="{% static 'js/jquery.uploadProgress.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/upload_progress.js' %}"></script>
+<style type="text/css">
+/*
+#progress_container {
+    width: 100%;
+    height: 1.25em;
+    position: relative;
+}
+
+#progress_filename {
+    width: 100%;
+}
+
+#progress_bar {
+    width: 100%;
+    border: 1px solid #999;
+}
+
+#progress_indicator {
+    background: #090;
+    width: 0;
+    height: 4px;
+}
+*/
+</style>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() { 
+        // Create the iframe to query the progress url from
+        iframe = document.createElement('iframe');
+        iframe.name = "progressFrame";
+        $(iframe).css({width: '0', height: '0', position: 'absolute', top: '-3000px'});
+        document.body.appendChild(iframe);
+
+        var d = iframe.contentWindow.document;
+        d.open();
+        d.write('<html><head></head><body></body></html>');
+        d.close();
+        
+        // Add the js to the iframe's page
+        var b = d.body;
+        var s = d.createElement('script');
+        s.src = "{% static 'js/jquery.js'%}";
+        s.onload = function() {
+            var s1 = d.createElement('script');
+            s1.src = "{% static 'js/upload_progress.js'%}";
+            b.appendChild(s1);
+        }
+        b.appendChild(s);
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+    <p>Complete the form below to upload us a file.</p>
+
+    <form action="" method="post" id="upload_form" enctype="multipart/form-data">{% csrf_token %}
+        <fieldset>
+            {% if form.errors.name %}{{ form.errors.name }}{% endif %}
+            <p><label for="id_name"{% if form.name.field.required %} class="required"{% endif %}>Your name</label>
+            <input id="id_name" type="text" maxlength="100" name="name" value="{{ request.user.first_name }} {{ request.user.last_name }}"/>
+            </p>
+
+            {% if form.errors.company %}{{ form.errors.company }}{% endif %}
+            <p><label for="id_company"{% if form.company.field.required %} class="required"{% endif %}>{{ form.company.label }}</label>
+            <input id="id_company" type="text" maxlength="100" name="company" value="{{ request.session.current_org }}"/>
+            </p>
+
+            {% if form.errors.contact_user %}{{ form.errors.contact_user }}{% endif %}
+            <p><label for="id_contact_user"{% if form.contact_user.field.required %} class="required"{% endif %}>Should we contact you about this file?</label>{{ form.contact_user }}</p>
+
+            {% if form.errors.phone %}{{ form.errors.phone }}{% endif %}
+            <p><label for="id_phone"{% if form.phone.field.required %} class="required"{% endif %}>{{ form.phone.label }}</label>{{ form.phone }}<br>If you wish us to contact you by phone, this field is required.</p>
+
+            {% if form.errors.email %}{{ form.errors.email }}{% endif %}
+            <p><label for="id_email"{% if form.email.field.required %} class="required"{% endif %}>{{ form.email.label }}</label> 
+            <input id="id_email" type="text" name="email" value="{{ request.user.email }}"/>
+            <br>If you wish us to contact you by email, this field is required.</p>
+
+            {% if form.errors.title %}{{ form.errors.title }}{% endif %}
+            <p><label for="id_title"{% if form.title.field.required %} class="required"{% endif %}>{{ form.title.label }}</label>{{ form.title }}<br>Enter a descriptive name for your project or job.</p>
+
+            {% if form.errors.comments %}{{ form.errors.comments }}{% endif %}
+            <p><label for="id_comments"{% if form.comments.field.required %} class="required"{% endif %}>Comments / Instructions</label>{{ form.comments }}</p>
+            
+            {% if form.errors.file %}{{ form.errors.file }}{% endif %}
+            <p><label for="id_file"{% if form.file.field.required %} class="required"{% endif %} style="display: inline; padding-right: 1em;">{{ form.file.label }}</label>{{ form.file }}</p>
+        </fieldset>
+        <div class="submitnotop">
+            <input type="submit" id="submit_button" value="Upload" />
+
+            <div id="progress_container">
+                <div id="progress_filename">&nbsp;</div>
+                <div id="progress_bar">
+                    <div id="progress_indicator"></div>
+                </div>
+                <p id="upload_note">Do not close this window or navigate away from this page while your file is being transferred.</p>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}
