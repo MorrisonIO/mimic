@@ -31,7 +31,7 @@ $(document).ready(function(){
 </script>
 {% endblock %}
 
-{% block content %}{#% load markup %#}
+{% block content %}{% load markdown_deux_tags %}
 
     {% if search %}
         <p>Your search for <strong>"{{ query_string }}"</strong> found {% if found_entries.count %}<strong>{{ found_entries.count }}</strong> result{{ found_entries|pluralize }}{% else %} no results{% endif %}. <a href="{% url 'events:client_events_index' %}" title="Events">Return to Events</a>.</p>

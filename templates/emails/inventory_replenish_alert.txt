@@ -1,4 +1,4 @@
-{#% load markup %#}
+{% load markdown_deux_tags %}
 This is an automated alert from the Mimic Online Ordering System.  
 Order {{ order }} has caused a product's inventory level to 
 drop below the specified replenish threshold. 

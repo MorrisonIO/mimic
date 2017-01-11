@@ -9,7 +9,7 @@
 {% block content %}
     <p>Here are the most recent updates from the Mimic headquarters.</p>
 
-    {#% load markup %#}
+    {% load markdown_deux_tags %}
     {% for entry in entry_list %}
         <div class="entry">
             <h3>{{ entry }}</h3>

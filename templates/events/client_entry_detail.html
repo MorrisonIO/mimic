@@ -3,7 +3,7 @@
 {% block title %}Event Detail{% endblock %}
 {% block page_title %}Event Detail{% endblock %}
 
-{% block content %}{#% load markup %#}
+{% block content %}{% load markdown_deux_tags %}
 <div class="org_entry">
     <h4>{{ entry }}</h4>
     <p class="publish_date">Published on {{ entry.date_created|date:"l, F j, Y \a\t H:i" }}</p>
