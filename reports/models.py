@@ -99,7 +99,7 @@ class SerializedArrayField(models.CharField):
     def _deserialize(self, value):
         return value.split(',')
 
-    def db_type(self):
+    def db_internal_type(self):
         return 'text'
 
     def pre_save(self, model_instance, add):
@@ -145,9 +145,7 @@ class Report(models.Model):
     products = models.ManyToManyField(Product, blank=True)
     ordered_by = models.ManyToManyField(UserProfile, blank=True, null=True, related_name="reports_ordered_by_set")
     categories = models.ManyToManyField(Category, blank=True, null=True)
-    states = models.CharField(blank=True, max_length=255)
-    # states = SerializedArrayField(default=",".join(DEFAULT_STATES), max_length=255)
-    # somefeild = models.CharField(max_length=200, default="test")
+    states = SerializedArrayField(default=",".join(DEFAULT_STATES), max_length=255)
 
     def __unicode__(self):
         return u'%s' % self.name
