@@ -16,13 +16,13 @@
  </head>
 
 <body id="registration">
-    <h1>
+    <h1><a href="/">
         {% if on_podrexall %}
             <img src="{% static 'logo_icons/Rexall-Logo.png' %}" alt="Mimic" width="173" height="38">
         {% else %}
             <img src="{% static 'img/logo_mimic.png' %}" alt="Mimic" width="173" height="38">
         {% endif %}
-    </h1>
+    </a></h1>
     <div id="main">
         <h2>{% block page_title %}{% endblock %}</h2>
         <div id="content">

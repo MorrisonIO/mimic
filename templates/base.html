@@ -44,11 +44,13 @@
                 {% endif %}
             </div>
             <div id="logo">
+                <h1><a href="/">
               {% if user_session_org and user_session_org.logo_icon %}
-                <h1><img src="{{ user_session_org.logo_icon.url }}" alt="Mimic" height="38"></h1>
+                <img src="{{ user_session_org.logo_icon.url }}" alt="Mimic" height="38">
               {% else %}
-                <h1><img src="{% static 'img/logo_mimic.png' %}" alt="Mimic" width="173" height="38"></h1>
+                <img src="{% static 'img/logo_mimic.png' %}" alt="Mimic" width="173" height="38">
               {% endif %}
+              </a></h1>
             </div>
         </div><!--.container-->
     </div><!-- #header-->
