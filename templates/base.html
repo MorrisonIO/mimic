@@ -1,0 +1,106 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>{% block title %}{% endblock %} | Mimic Ordering System</title>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    {% load tag_helper %}
+    {#% css_tag "css/screen.css" as css_tg %#}
+    <link rel="stylesheet" href="{% static 'css/screen.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/print.css' %}" type="text/css" media="print">
+    <script type="text/javascript">var MEDIA_URL = "/static/";</script> 
+    <script type="text/javascript" src="{% static 'js/jquery-1.3.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.tablesorter.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.labelify.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/facebox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.datepick.pack.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.datepick.pack.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
+    {#% js_tag "js/global.js" %#}
+    <!--[if lte IE 7]>
+         <link rel="stylesheet" href="{% static 'css/ie.css' %}" />
+    <![endif]-->
+    <!--[if lte IE 6]>
+        {% css_tag "css/ie6.css" %}
+        <script type="text/javascript" src="{% static 'js/unitpngfix.js' %}"></script>
+    <![endif]-->
+    {% block custom_head %}{% endblock %}
+ </head>
+
+ <body id="{% block body_id %}{% endblock %}" class="{% block body_class %}{% endblock %}">
+ {% block body %}
+    <div id="header">
+        <div class="container">
+           <div id="login">
+
+                {% load header_nav %}
+                {% if request.session.current_org %}
+                    {% make_header_nav request.user request.session.current_org %}
+                {% else %}
+                    {% make_header_nav request.user "" %}
+                {% endif %}
+            </div>
+            <div id="logo">
+              {% if user_session_org and user_session_org.logo_icon %}
+                <h1><img src="{{ user_session_org.logo_icon.url }}" alt="Mimic" height="38"></h1>
+              {% else %}
+                <h1><img src="{% static 'img/logo_mimic.png' %}" alt="Mimic" width="173" height="38"></h1>
+              {% endif %}
+            </div>
+        </div><!--.container-->
+    </div><!-- #header-->
+
+    <div id="nav">
+        <div class="container">
+            <ul>
+                <li id="n_dashboard" class="first"><a href="{% url 'dashboard' %}" title="Dashboard">Dashboard</a></li>
+                <li id="n_addresses"><a href="{% url 'addresses:address_index' %}" title="Addresses">Addresses</a></li>
+                <li id="n_products"><a href="{% url 'products:product_list' %}" title="Products">Products</a></li>
+                <li id="n_orders"><a href="{% url 'orders:order_index' %}" title="Orders">Orders</a></li>
+                {% if perms.orders.change_order %}
+                    <li id="n_analytics"><a href="{% url 'reports:report_index' %}" title="Analytics">Analytics</a></li>
+                {% endif %}
+                <li id="n_downloads"><a href="{% url 'downloads:download_index' %}" title="Files">Projects</a></li>
+                <li id="n_events"><a href="{% url 'events:client_events_index' %}" title="Events" class="last">Events</a></li> 
+            </ul>
+            {% if request.session.cart %}
+                <p id={# #}"cart_info">Ongoing order: {#<a href="{% url 'orders:cart_summary' %}" title}="View your ongoing order">View</a> | <a href="{% url 'orders:cancel_order' %}" title="Cancel your ongoing order">Cancel</a></p>
+            {% endif %}
+        </div><!--.container-->
+    </div><!-- #nav-->
+
+    <div class="container">
+        <div id="main">
+            <div id="page_header">
+                <h1>{% block page_title %}{% endblock %}</h1>
+                {% block search %}{% endblock %}
+            </div>
+            <div class="content_wrapper">
+                <div class="content {% block content_class %}{% endblock %}">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="msgbox alert_{{ message.message|slice:":1" }}">
+                                <p>{{ message.message|slice:"2:"|safe }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% block content %}{% endblock %}
+                </div><!--.content-->
+
+                <div class="sidebar {% block sidebar_class %}{% endblock %}">
+                    {% block sidebar %}{% endblock %}
+                </div><!--.sidebar-->
+            </div><!--.content_wrapper-->
+        </div><!-- #main-->
+
+        <div id="footer">
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a> | <a href="#">Contact us</a><br>
+            &copy; 2009 Mimic Print &amp; Media Services. All rights reserved.</p>
+        </div><!-- #footer-->
+    </div><!--.container-->
+{% endblock %}
+</body>
+</html>

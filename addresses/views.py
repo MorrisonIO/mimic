@@ -65,9 +65,8 @@ def delete(request, address_id):
         address.save()
         t_str = '%s%s-%s' % (request.user.username, request.user.id, address.id)
         token = base64.b64encode(t_str)
-        messages.success(request, 's|The address was successfully deleted.\
-        <a href="%s" title="Restore address back to your Address Book">Undo</a>'\
-         % reverse('address_undo_delete', args=[token]))
+        messages.success(request, 's|The address was successfully deleted. <a href="%s" title="Restore address back to your Address Book">Undo</a>'\
+         % reverse('addresses:address_undo_delete', args=[token]))
         return HttpResponseRedirect(reverse('addresses:address_index'))
     else:
         return render(request, 'addresses/delete_confirm.html', {
