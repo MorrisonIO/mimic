@@ -25,7 +25,13 @@ def sanitize_filename(name):
 
 def handle_uploaded_file(f):
     """
-    Writes an uploaded file to the filesystem. This is currently putting uploads in the *public* media directory so they're easily accessible to Mimic staff. We randomize the filename, default permissions are 644, and there is no PHP or equiv on this server, but be aware other security issues. Note that lighttpd has an x-sendfile module, so that you could store the file somewhere non-public and deliver it to Mimic staff that way.
+    Writes an uploaded file to the filesystem.
+    This is currently putting uploads in the *public* media directory
+    so they're easily accessible to Mimic staff.
+    We randomize the filename, default permissions are 644,
+    and there is no PHP or equiv on this server,
+    but be aware other security issues. Note that lighttpd has an x-sendfile module,
+    so that you could store the file somewhere non-public and deliver it to Mimic staff that way.
     """
     filename = sanitize_filename(f.name)
     path = '/uploads/%s' % filename

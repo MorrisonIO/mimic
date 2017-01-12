@@ -167,12 +167,15 @@ def add_or_edit(request, report_id=None):
             form.save_m2m()
             return HttpResponseRedirect(reverse('reports:report_detail', args=[new_report.id]))
         else:
-            messages.warning(request, "e|There was a problem with your submission. Please refer to the messages below and try again.")
+            messages.warning(request, "e|There was a problem with your submission.\
+                                      Please refer to the messages below and try again.")
             daterange_type = request.POST.get('daterange_type', None)
 
     return render(request, 'reports/report_edit.html', {
         'report': report,
         'form': form,
-        'daterange_type': daterange_type, # we must pass this in separately because we've broken that form field up manually
-        'user_can_schedule': request.user.groups.filter(name='Mimic Staff').count() > 0
+        # we must pass this in separately because we've broken that form field up manually
+        'daterange_type': daterange_type,
+        'user_can_schedule': request.user.groups.filter(name='Mimic Staff').count() > 0 or \
+                             request.user.groups.filter(name='Client Staff').count() > 0
     })

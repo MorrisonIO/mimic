@@ -10,7 +10,7 @@ def get_filetype(file):
     for -- if the current filetype does not match anything on this list,
     a blank string is returned to the template to avoid voluminous if statements.
     """
-    known_exts = [ 
+    known_exts = [
         'pdf',
         'zip',
         'gz',
