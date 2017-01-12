@@ -43,7 +43,7 @@ def show_report(request, report_id, download=None, page=None):
 
     if download:
         reporter = make_report(all_orders)
-        response = HttpResponse(reporter.save(None), mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(reporter.save(None), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % (str(report),) # force save as dialog
         return response
 
