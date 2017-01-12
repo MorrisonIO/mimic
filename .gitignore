@@ -10,7 +10,6 @@ products/migrations/*
 reports/migrations/*
 vardata/migrations/*
 fonts/
-templates/dashboard.html
 templates/templatetags/
 *.pyc
 *.swp

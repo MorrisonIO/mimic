@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block body_id %}dashboard{% endblock %}
+{% block body_class %}twocol_even{% endblock %}
+ 
+{% block content %}
+    {% if current_org %}
+        <p class="logo center">{% if current_org.logo %}<img src="{{ current_org.logo.url }}" alt="{{ current_org }}">{% else %}{{ current_org }}{% endif %}</p>
+        {{ current_org.homepage_notes|safe }}
+    {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+<h3 class="dashhead">Recent orders</h3>
+<div class="dashpanel">
+    {% if current_org %}
+        {% if order_list %}
+            <table class="bottom-margin">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in order_list %}
+                    <tr>
+                        <td><a href="{% url 'orders:order_detail' order.id %}" title="View this order's details">{{ order }}</a></td>
+                        <td>{{ order.date|date:"Y-m-d" }}</td>
+                        <td><span class="
+                                {% ifequal order.status "pa" %}
+                                    error
+                                {% else %}
+                                    {% ifequal order.status "ac" %}
+                                        nothing
+                                    {% else %}
+                                        success
+                                    {% endifequal %}
+                                {% endifequal %}
+                            ">{{ order.get_status_display }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p class="bottom-nomargin">View <a href="{% url 'orders:order_index' %}" title="Order list">more recent orders</a> or <a href="{% url 'reports:report_add' %}" title="Create a report">generate a report</a> for a customized view.</p>
+        {% else %}
+            <p class="bottom-nomargin">There are no orders to display.</p>
+        {% endif %}
+    {% else %}
+        <p class="bottom-nomargin">Select a current organization above to view recent orders.</p>
+    {% endif %}
+</div>
+
+<h3 class="dashhead">Recent events</h3>
+<div class="dashpanel">
+    {% if current_org %}
+        {% if entries_list %}
+        <table class="bottom-nomargin">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries_list %}
+                <tr>
+                    <td><a href="{% url 'events:client_events_detail' entry.slug %}" title="View this event">{{ entry }}</a></td>
+                    <td>{{ entry.date|date:"Y-m-d" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="bottom-nomargin">View <a href="{% url 'events:client_events_index' %}" title="Events">more recent events</a>.</p>
+        {% else %}
+            <p class="bottom-nomargin">There are no recent news events to display.</p>
+        {% endif %}
+    {% else %}
+        <p class="bottom-nomargin">Select a current organization above to view recent events.</p>
+    {% endif %}
+</div>
+
+<h3 class="dashhead">Downloads</h3>
+<div class="dashpanel">
+    {% if not current_org %}
+        <p>Select a current organization above to view recent downloads.</p>
+    {% else %}
+        {% if downloads %}
+            {% load file_ext %}
+            <ul class="docs bottom-margin">
+            {% for download in downloads %}
+            <!--<li><img src="{% static 'img/''{% get_filetype download %}''.png' %}" alt="" height="16" width="16"> <a href="{{ download.file.url }}" title="Download this file">{{ download }}</a> <em>{{ download.file.size|filesizeformat }}, uploaded {{ download.date_added|date:"F j Y \a\t H:i" }}</em></li>-->
+            <li><img src="{% static 'img/'%}{% get_filetype download %}.png" alt="" height="16" width="16"> <a href="downloads/{{ download.file.url }}" target="_blank" title="Download this file">{{ download }}</a> <em>{{ download.file.size|filesizeformat }}, uploaded {{ download.date_added|date:"F j Y \a\t H:i" }}</em></li>
+            {% endfor %}
+            </ul>
+         {% else %}
+         <p>Big cool nothing</p>
+        {% endif %}
+    {% endif %}
+
+    <!--
+    <ul class="docs">
+        <li><img src="{{ MEDIA_URL }}img/page_white_acrobat.png" alt=""> <a href="{{ MEDIA_URL }}docs/OOS_user-manual.pdf" title="Mimic Online Ordering System - User Manual">User Manual</a> <em>250k</em></li>
+        <li><img src="{{ MEDIA_URL }}img/page_white_acrobat.png" alt=""> <a href="{{ MEDIA_URL }}docs/OOS_ordering-quickstart-guide.pdf" title="Mimic Online Ordering System - Ordering Quickstart Guide">Ordering Quickstart Guide</a> <em>100k</em></li>
+        -->
+    </ul>
+</div>
+{% endblock %}
