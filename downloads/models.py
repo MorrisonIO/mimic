@@ -9,7 +9,7 @@ class Download(models.Model):
         Typically used to deliver proofs instead of making them visit an FTP site.
     """
     name = models.CharField(max_length=200)
-    file = models.FileField(upload_to='downloads')
+    file = models.FileField(upload_to='downloads/files')
     org = models.ForeignKey(Org, blank=True, null=True)
     comments = models.TextField(blank=True, help_text="HTML is allowed.")
     is_deletable = models.BooleanField(

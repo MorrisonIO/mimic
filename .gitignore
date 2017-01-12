@@ -2,6 +2,7 @@ env_django19/
 addresses/migrations/*
 ddresses/migrations/*
 downloads/migrations/*
+downloads/files/*
 events/migrations/*
 orders/migrations/*
 orgs/migrations/*

@@ -133,14 +133,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-SITE_ID = 1 
+SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/oos/setorg/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
+                    ('downloads', os.path.join(BASE_DIR, "downloads")),]
+                    
 STATIC_URL = '/static/'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
@@ -155,4 +156,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 # ADMIN_MEDIA_PREFIX = '/media/admin/'
-
