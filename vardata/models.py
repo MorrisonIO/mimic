@@ -61,10 +61,18 @@ class MimicBc(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'First name: %s\nLast name: %s\nEmail: %s\nCell: %s\nExtension: %s' % (self.first_name, self.last_name, self.email, self.cell, self.extension)
+        return u'First name: %s\nLast name: %s\nEmail: %s\nCell: %s\nExtension: %s' \
+                % (self.first_name, self.last_name, self.email, self.cell, self.extension)
 
     def as_list(self):
-        return (('First name', self.first_name), ('Last name', self.last_name), ('Email', self.email), ('Cell', self.cell), ('Extension', self.extension))
+        return (
+            ('First name', self.first_name),
+            ('Last name', self.last_name),
+            ('Email', self.email),
+            ('Cell', self.cell),
+            ('Extension', self.extension)
+            )
+
 
 class MimicBcForm(ModelForm):
     class Meta:
@@ -74,6 +82,7 @@ class MimicBcForm(ModelForm):
             'product'
         )
 
+
 class TlaBc(models.Model):
     """
     TLA business cards
@@ -81,16 +90,25 @@ class TlaBc(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     title = models.CharField(max_length=50)
-    email = models.CharField(help_text="@tlacorp.com", max_length=50) # we are programmatically adding the domain, so we don't want to validate against an EmailField
+    # we are programmatically adding the domain, so we don't want to validate against an EmailField
+    email = models.CharField(help_text="@tlacorp.com", max_length=50)
     cell = models.CharField(help_text='Include area code. Will be automatically formatted to <em>(nnn) nnn-nnnn</em>.', max_length=50)
     ordereditem = models.ForeignKey(OrderedItem)
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'First name: %s\nLast name: %s\nTitle: %s\nEmail: %s\nCell: %s\n' % (self.first_name, self.last_name, self.title, self.email, self.cell)
+        return u'First name: %s\nLast name: %s\nTitle: %s\nEmail: %s\nCell: %s\n' \
+                % (self.first_name, self.last_name, self.title, self.email, self.cell)
 
     def as_list(self):
-        return (('First name', self.first_name), ('Last name', self.last_name), ('Title', self.title), ('Email', self.email), ('Cell', self.cell))
+        return (
+            ('First name', self.first_name),
+            ('Last name', self.last_name),
+            ('Title', self.title),
+            ('Email', self.email),
+            ('Cell', self.cell)
+            )
+
 
 class TlaBcForm(ModelForm):
     class Meta:
@@ -100,6 +118,7 @@ class TlaBcForm(ModelForm):
             'product',
         )
 
+
 class HarrisCertificate(models.Model):
     """
     Harris training certificates
@@ -108,7 +127,7 @@ class HarrisCertificate(models.Model):
         ('Robert Amoroso', 'Robert Amoroso'),
         ('David Armstrong', 'David Armstrong'),
         ('Jay Burdsal', 'Jay Burdsal'),
-        ('GC', 'GC'), #### TODO ####
+        ('GC', 'GC'),  #### TODO ####
         ('Connie C Gordon', 'Connie C Gordon'),
         ('Geoff Howells', 'Geoff Howells'),
         ('Harry Johnson', 'Harry Johnson'),
@@ -120,17 +139,25 @@ class HarrisCertificate(models.Model):
     )
     name = models.CharField(max_length=200)
     course = models.CharField(max_length=500)
-#    date = models.DateField() # don't use DateField for now, as there's no nice way of giving text hints to users so that makes validation annoying
+    #    date = models.DateField() # don't use DateField for now,
+    # as there's no nice way of giving text hints to users so that makes validation annoying
     date = models.CharField(max_length=200)
     instructor = models.CharField(max_length=200, choices=INSTRUCTORS)
     ordereditem = models.ForeignKey(OrderedItem)
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nCourse: %s\nDate: %s\nInstructor: %s' % (self.name, self.course, self.date, self.instructor)
+        return u'Name: %s\nCourse: %s\nDate: %s\nInstructor: %s' \
+                % (self.name, self.course, self.date, self.instructor)
 
     def as_list(self):
-        return (('Name', self.name), ('Course', self.course), ('Date', self.date), ('Instructor', self.instructor))
+        return (
+            ('Name', self.name),
+            ('Course', self.course),
+            ('Date', self.date),
+            ('Instructor', self.instructor)
+            )
+
 
 class HarrisCertificateForm(ModelForm):
     class Meta:
@@ -139,6 +166,7 @@ class HarrisCertificateForm(ModelForm):
             'ordereditem',
             'product'
         )
+
 
 class DrAsiaPacificBc(models.Model):
     """
@@ -153,10 +181,18 @@ class DrAsiaPacificBc(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nMobile: %s' % (self.name, self.title1, self.title2, self.email, self.mobile)
+        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nMobile: %s' \
+                % (self.name, self.title1, self.title2, self.email, self.mobile)
 
     def as_list(self):
-        return (('Name', self.name), ('Title 1', self.title1), ('Title 2', self.title2), ('Email', '%s@digitalrapids.com' % self.email), ('Mobile', self.mobile))
+        return (
+            ('Name', self.name),
+            ('Title 1', self.title1),
+            ('Title 2', self.title2),
+            ('Email', '%s@digitalrapids.com' % self.email),
+            ('Mobile', self.mobile)
+            )
+
 
 class DrAsiaPacificBcForm(ModelForm):
     class Meta:
@@ -165,6 +201,7 @@ class DrAsiaPacificBcForm(ModelForm):
             'ordereditem',
             'product'
         )
+
 
 class DrMarkhamBc(models.Model):
     """
@@ -180,10 +217,19 @@ class DrMarkhamBc(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nExtension: %s\nCell: %s' % (self.name, self.title1, self.title2, self.email, self.extension, self.cell)
+        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nExtension: %s\nCell: %s' \
+                % (self.name, self.title1, self.title2, self.email, self.extension, self.cell)
 
     def as_list(self):
-        return (('Name', self.name), ('Title 1', self.title1), ('Title 2', self.title2), ('Email', '%s@digitalrapids.com' % self.email), ('Extension', self.extension), ('Cell', self.cell))
+        return (
+            ('Name', self.name),
+            ('Title 1', self.title1),
+            ('Title 2', self.title2),
+            ('Email', '%s@digitalrapids.com' % self.email),
+            ('Extension', self.extension),
+            ('Cell', self.cell)
+            )
+
 
 class DrMarkhamBcForm(ModelForm):
     class Meta:
@@ -192,6 +238,7 @@ class DrMarkhamBcForm(ModelForm):
             'ordereditem',
             'product'
         )
+
 
 class DrUkBc(models.Model):
     """
@@ -206,10 +253,18 @@ class DrUkBc(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nMobile: %s' % (self.name, self.title1, self.title2, self.email, self.mobile)
+        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nMobile: %s'\
+                % (self.name, self.title1, self.title2, self.email, self.mobile)
 
     def as_list(self):
-        return (('Name', self.name), ('Title 1', self.title1), ('Title 2', self.title2), ('Email', '%s@digitalrapids.com' % self.email), ('Mobile', self.mobile))
+        return (
+            ('Name', self.name),
+            ('Title 1', self.title1),
+            ('Title 2', self.title2),
+            ('Email', '%s@digitalrapids.com' % self.email),
+            ('Mobile', self.mobile)
+            )
+
 
 class DrUkBcForm(ModelForm):
     class Meta:
@@ -218,6 +273,7 @@ class DrUkBcForm(ModelForm):
             'ordereditem',
             'product'
         )
+
 
 class DrRemoteBc(models.Model):
     """
@@ -235,10 +291,21 @@ class DrRemoteBc(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nCity: %s\nState: %s\nTel: %s\nCell: %s' % (self.name, self.title1, self.title2, self.email, self.city, self.state, self.tel, self.cell)
+        return u'Name: %s\nTitle1: %s\nTitle2: %s\nEmail: %s@digitalrapids.com\nCity: %s\nState: %s\nTel: %s\nCell: %s'\
+                % (self.name, self.title1, self.title2, self.email, self.city, self.state, self.tel, self.cell)
 
     def as_list(self):
-        return (('Name', self.name), ('Title 1', self.title1), ('Title 2', self.title2), ('Email', '%s@digitalrapids.com' % self.email), ('City', self.city), ('State', self.state), ('Tel', self.tel), ('Cell', self.cell))
+        return (
+            ('Name', self.name),
+            ('Title 1', self.title1),
+            ('Title 2', self.title2),
+            ('Email', '%s@digitalrapids.com' % self.email),
+            ('City', self.city),
+            ('State', self.state),
+            ('Tel', self.tel),
+            ('Cell', self.cell)
+            )
+
 
 class DrRemoteBcForm(ModelForm):
     class Meta:
@@ -254,6 +321,7 @@ CATECH_LABEL_CHOICES = (
     ('DIRECT', 'DIRECT'),
 )
 
+
 class CaTechTorontoBc(models.Model):
     """
     CaTECH business cards - Toronto
@@ -262,14 +330,17 @@ class CaTechTorontoBc(models.Model):
     initials = models.CharField(max_length=50, blank=True, help_text="Use for degrees, credentials, etc.")
     title = models.CharField(max_length=50)
     email = models.CharField(help_text="@catech-systems.com", max_length=50)
-    cell = models.CharField(help_text='Will be automatically formatted.', max_length=50, blank=True)
-    cell_label = models.CharField(help_text="Used to label cell number", max_length=50, choices=CATECH_LABEL_CHOICES, default='CELL', blank=True)
+    cell = models.CharField(help_text='Will be automatically formatted.', 
+                            max_length=50, blank=True)
+    cell_label = models.CharField(help_text="Used to label cell number", 
+                                  max_length=50, choices=CATECH_LABEL_CHOICES, default='CELL', blank=True)
     fax = models.CharField(max_length=4, help_text="Enter only the last 4 digits. The area code and first three digits will be automatically added.")
     ordereditem = models.ForeignKey(OrderedItem)
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nTitle: %s\nEmail: %s\nCell: %s\nFax: %s' % (self.name, self.title, self.email, self.cell, self.fax)
+        return u'Name: %s\nTitle: %s\nEmail: %s\nCell: %s\nFax: %s' \
+                % (self.name, self.title, self.email, self.cell, self.fax)
 
     def as_list(self):
         return (('Name', self.name), ('Title', self.title), ('Email', '%s@catech-systems.com' % self.email), ('Cell', self.cell), ('Fax', self.fax))
@@ -637,7 +708,8 @@ class RexallBc(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return u'Name: %s\nTitle: %s\nExt: %s\nAddress: %s\nCity: %s\nProvince: %s\nZip: %s\n' % (self.name, self.title, self.ext, self.address, self.city, self.province, self.zip)
+        return u'Name: %s\nTitle: %s\nExt: %s\nAddress: %s\nCity: %s\nProvince: %s\nZip: %s\n'\
+                % (self.name, self.title, self.ext, self.address, self.city, self.province, self.zip)
 
     def as_list(self):
         return (
