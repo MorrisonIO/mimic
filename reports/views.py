@@ -1,21 +1,14 @@
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, Http404, HttpResponseServerError
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
-from django.template import RequestContext, loader, Context
-from django import forms
-from django.forms import widgets, extras
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from reports.models import Report
 from reports.forms import ReportForm
-from orgs.models import Org, UserProfile
-from products.models import Category, Product
-from orders.models import Order, OrderedItem
-import datetime
+from orders.models import OrderedItem
 from helpers.reporter import ReportFormatter
-from dateutil.relativedelta import relativedelta
+
 
 @login_required
 @permission_required('reports.change_report')
@@ -28,11 +21,13 @@ def report_list(request):
         'reports': reports,
     })
 
+
 @login_required
 @permission_required('reports.change_report')
 def show_report(request, report_id, download=None, page=None):
     """
-    Shows the result of an individual report -- this runs the database query and displays the matching orders.
+    Shows the result of an individual report -
+    - this runs the database query and displays the matching orders.
     """
     report = get_object_or_404(Report, pk=report_id, owner=request.user)
     # Now set up constraints to filter the Orders based on the report's
@@ -43,14 +38,16 @@ def show_report(request, report_id, download=None, page=None):
 
     if download:
         reporter = make_report(all_orders)
-        response = HttpResponse(reporter.save(None), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % (str(report),) # force save as dialog
+        response = HttpResponse(reporter.save(None),
+                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' \
+                                          % (str(report),)  # force save as dialog
         return response
 
     p = Paginator(all_orders, 20)
     try:
         if page:
-            this_page = int(page.replace('page',''))
+            this_page = int(page.replace('page', ''))
         else:
             this_page = 1
         page = p.page(this_page)
@@ -66,7 +63,7 @@ def show_report(request, report_id, download=None, page=None):
         'next_page': this_page + 1,
         'previous_page': this_page - 1,
         'total_pages': p.num_pages,
-        'start_date': str(report.current_start_date).split(' ')[0], # don't need to show user the time part
+        'start_date': str(report.current_start_date).split(' ')[0],  # don't need to show user the time part
         'end_date': str(report.current_end_date).split(' ')[0],
         'orders': page.object_list,
         'orgs': report.reported_orgs,
@@ -75,6 +72,7 @@ def show_report(request, report_id, download=None, page=None):
         'categories': report.reported_categories,
         'num_orders': all_orders.count(),
     })
+
 
 def make_report(orders):
     """
@@ -107,6 +105,7 @@ def make_report(orders):
         reporter.grand_total()
 
     return reporter
+
 
 @login_required
 @permission_required('reports.change_report')

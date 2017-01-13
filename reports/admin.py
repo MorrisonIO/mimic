@@ -3,6 +3,7 @@ from models import Report
 from orders.models import Order
 from django import forms
 
+
 class ReportAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReportAdminForm, self).__init__(*args, **kwargs)
@@ -13,6 +14,7 @@ class ReportAdminForm(forms.ModelForm):
         if not data:
             raise forms.ValidationError('States required')
         return data
+
 
 class ReportAdmin(admin.ModelAdmin):
     form = ReportAdminForm

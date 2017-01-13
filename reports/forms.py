@@ -1,11 +1,11 @@
 from django import forms
-from django.forms import widgets, ModelForm
-from django.contrib.auth.models import User
+from django.forms import widgets
 from orgs.models import Org, UserProfile
 from products.models import Product, Category
 from orders.models import Order
 from reports.models import Report
 import re
+
 
 class ReportForm(forms.ModelForm):
     """
@@ -62,8 +62,8 @@ class ReportForm(forms.ModelForm):
         """
         If viewing a quarterly-based date range, the quarter start date is required.
         """
-        if (self.cleaned_data['daterange_type'] == 'tq' or \
-        self.cleaned_data['daterange_type'] == 'lq') and not self.cleaned_data['quarter_start']:
+        if (self.cleaned_data['daterange_type'] == 'tq' or
+                self.cleaned_data['daterange_type'] == 'lq') and not self.cleaned_data['quarter_start']:
             raise forms.ValidationError('Enter when your first fiscal quarter starts.')
         else:
             return self.cleaned_data['quarter_start']
@@ -88,12 +88,13 @@ class ReportForm(forms.ModelForm):
 
     def clean_end_date(self):
         """
-        If viewing orders between fixed dates, end date is required. End date must also be further ahead in time than start date.
+        If viewing orders between fixed dates, end date is required.
+        End date must also be further ahead in time than start date.
         """
         if self.cleaned_data['daterange_type'] == 'fd' and not self.cleaned_data['end_date']:
             raise forms.ValidationError('Enter the end date.')
         elif self.cleaned_data['daterange_type'] == 'fd' and \
-        (self.cleaned_data['end_date'] < self.cleaned_data['start_date']):
+                (self.cleaned_data['end_date'] < self.cleaned_data['start_date']):
             raise forms.ValidationError('End date must be later than start date.')
         else:
             return self.cleaned_data['end_date']

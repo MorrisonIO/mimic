@@ -3,9 +3,9 @@ import csv, StringIO
 class UnicodeWriter(object):
     """
     Like UnicodeDictWriter, but takes lists rather than dictionaries.
-    
+
     Usage example:
-    
+
     fp = open('my-file.csv', 'wb')
     writer = UnicodeWriter(fp)
     writer.writerows([
@@ -23,7 +23,7 @@ class UnicodeWriter(object):
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoding = encoding
-    
+
     def writerow(self, row):
         # Modified from original: now using unicode(s) to deal with e.g. ints
         self.writer.writerow([unicode(s).encode("utf-8") for s in row])
@@ -36,7 +36,7 @@ class UnicodeWriter(object):
         self.stream.write(data)
         # empty queue
         self.queue.truncate(0)
-    
+
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)

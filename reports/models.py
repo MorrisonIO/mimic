@@ -126,7 +126,8 @@ class SerializedArrayField(models.CharField):
 
 class Report(models.Model):
     """
-    A report is a set of constraints used to build a database query so that the user may view a subset of existing orders.
+    A report is a set of constraints used to build a database query
+    so that the user may view a subset of existing orders.
     """
 
     DEFAULT_STATES = [x[0] for x in Order.STATUS_CHOICES]
@@ -157,22 +158,22 @@ class Report(models.Model):
     def _calc_dates(self):
         now = datetime.datetime.now()
 
-        if self.daterange_type == 'tm': # this month
+        if self.daterange_type == 'tm':  # this month
             start_date = datetime.datetime(now.year, now.month, 1, 0, 0, 0, 0)
             end_date = now
 
-        elif self.daterange_type == 'lm': # last month
+        elif self.daterange_type == 'lm':  # last month
             start_date = get_prev_month(now.year, now.month)
             end_date = datetime.datetime(now.year, now.month, 1, 23, 59, 59, 0) - datetime.timedelta(days=1)
 
         elif (self.daterange_type == 'tq') or (self.daterange_type == 'lq'):
-            quarters = get_quarter_starts(int(self.quarter_start)) # find out when quarters start
-            quarter = get_which_quarter(quarters) # which quarter we're currently in
+            quarters = get_quarter_starts(int(self.quarter_start))  # find out when quarters start
+            quarter = get_which_quarter(quarters)  # which quarter we're currently in
             if self.daterange_type == 'lq':
-                quarter -= 1 # show last quarter instead
-            if quarter == 0: # we're in q1 and showing last quarter
+                quarter -= 1  # show last quarter instead
+            if quarter == 0:  # we're in q1 and showing last quarter
                 q = quarters[3]
-                start_date = datetime.datetime(q.year - 1, q.month, 1, 0,0,0,0)
+                start_date = datetime.datetime(q.year - 1, q.month, 1, 0, 0, 0, 0)
                 end_date = quarters[0]
             if quarter == 1:
                 start_date = quarters[0]
@@ -183,19 +184,20 @@ class Report(models.Model):
             if quarter == 3:
                 start_date = quarters[2]
                 end_date = quarters[3]
-            if quarter == 4: # only reach this if we are showing this quarter
+            if quarter == 4:  # only reach this if we are showing this quarter
                 q = quarters[0]
                 start_date = quarters[3]
-                end_date = datetime.datetime(q.year + 1, q.month, 1, 23,59,59,0)
+                end_date = datetime.datetime(q.year + 1, q.month, 1, 23, 59, 59, 0)
 
         elif self.daterange_type == 'fd':
-            s = self.start_date # date object
+            s = self.start_date  # date object
             e = self.end_date
-            start_date = datetime.datetime(s.year, s.month, s.day, 0,0,0,0)
-            end_date = datetime.datetime(e.year, e.month, e.day, 23,59,59,0)
+            start_date = datetime.datetime(s.year, s.month, s.day, 0, 0, 0, 0)
+            end_date = datetime.datetime(e.year, e.month, e.day, 23, 59, 59, 0)
 
-        else: # all orders, or fixed number
-            start_date = datetime.datetime(1900, 1, 1, 0, 0, 0, 0) # shouldn't be any orders earlier than 1900 (I hope!)
+        else:  # all orders, or fixed number
+            # shouldn't be any orders earlier than 1900 (I hope!)
+            start_date = datetime.datetime(1900, 1, 1, 0, 0, 0, 0)
             end_date = now
 
         self._current_start_date = start_date
@@ -215,7 +217,7 @@ class Report(models.Model):
 
         return self._current_end_date
 
-    def orders(self, download = False, user = None):
+    def orders(self, download=False, user=None):
         # Filter by org:
         orgs = self.orgs.all()
         if not orgs:
@@ -251,12 +253,12 @@ class Report(models.Model):
 
         # Now get the orders from the db
         result = Order.objects.filter(
-                    due_date__range=(self.current_start_date, self.current_end_date),
-                    org__in=orgs,
-                    placed_by__userprofile__in=userprofiles,
-                    ordereditem__inventory_history__product__in=prods,
-                    status__in=self.states
-                ).order_by(*sorter).distinct()
+            due_date__range=(self.current_start_date, self.current_end_date),
+            org__in=orgs,
+            placed_by__userprofile__in=userprofiles,
+            ordereditem__inventory_history__product__in=prods,
+            status__in=self.states
+            ).order_by(*sorter).distinct()
 
         # Filter by fixed number:
         if self.last_orders:

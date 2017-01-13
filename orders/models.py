@@ -238,7 +238,7 @@ class InventoryHistory(models.Model):
          You may enter negative numbers. \
          For example, if you are adding 100 pieces of stock,\
          enter 100; if physical inventory is 25 less\
-         than what it should be, enter -25.")\
+         than what it should be, enter -25.")
     modified_by = models.ForeignKey(User)
     notes = models.CharField(max_length=200, help_text="Enter a short note describing what this change is.")
     date = models.DateTimeField()
