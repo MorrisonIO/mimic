@@ -1,19 +1,13 @@
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, Http404, HttpResponseServerError
-from django.shortcuts import render, get_object_or_404
-from django.template import RequestContext, loader, Context
-from django import forms
-from django.forms import widgets, extras
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required, permission_required
+import datetime
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from reports.models import Report
-from products.models import Category, Product
-from orders.models import Order, OrderedItem
+from products.models import Product
+from orders.models import OrderedItem
 from orgs.models import Org
-from .forms import ProductChartForm, UserChartForm, OrgChartForm
-import datetime
 from dateutil.relativedelta import relativedelta
+from .forms import ProductChartForm, UserChartForm, OrgChartForm
 
 
 @login_required
@@ -27,13 +21,17 @@ def index(request):
 def datetime_to_ms(dt):
     from time import mktime
     return 1000*mktime(dt.timetuple())
-    
+
 
 def assemble_data_string(ordered_items, item):
     """
-    Assembles a data string for passing to flot. `ordered_items` is a queryset of OrderedItems filtered according to which chart the user is building. `item` is either a Product, User or Org. 
+    Assembles a data string for passing to flot.
+    `ordered_items` is a queryset of OrderedItems filtered
+    according to which chart the user is building.
+    `item` is either a Product, User or Org.
     """
-    start_date = datetime.datetime(2007, 10, 1, 0, 0, 0) # Oct 2007 is when OOS went online
+    # Oct 2007 is when OOS went online
+    start_date = datetime.datetime(2007, 10, 1, 0, 0, 0)
     end_date = datetime.datetime.now()
     delta = relativedelta(months=+1)
     date_counter = start_date
@@ -41,17 +39,19 @@ def assemble_data_string(ordered_items, item):
 
     while date_counter <= end_date:
         total_ordered = 0
-        this_months_items = ordered_items.filter(inventory_history__date__month=date_counter.month, inventory_history__date__year=date_counter.year)
+        this_months_items = ordered_items.filter(inventory_history__date__month=date_counter.month,
+                                                 inventory_history__date__year=date_counter.year)
         for i in this_months_items:
             total_ordered += i.inventory_history.amount
-        month_total = '[ %s, %s ], ' % (datetime_to_ms(date_counter), total_ordered) 
+        month_total = '[ %s, %s ], ' % (datetime_to_ms(date_counter), total_ordered)
         data_points += month_total
         date_counter += delta
     try:
-        label = item.get_full_name() # use full name for users
+        label = item.get_full_name()  # use full name for users
     except AttributeError:
         label = item
-    prod_string = """ "%s": { label: "%s", data: [ %s ] }, """ % (label, label, data_points[:-2]) # strip off last comma for IE
+    # strip off last comma for IE
+    prod_string = """ "%s": { label: "%s", data: [ %s ] }, """ % (label, label, data_points[:-2])
 
     return prod_string
 
@@ -59,7 +59,9 @@ def assemble_data_string(ordered_items, item):
 @login_required
 def make_chart(request, chart):
     """
-    This view displays the appropriate form for creating a chart, and then compiles a data string to pass back to the template, which is rendered with flot.
+    This view displays the appropriate form for creating a chart,
+    and then compiles a data string to pass back to the template,
+    which is rendered with flot.
 
     Flot needs its data string in the format:
         var datasets = {
@@ -71,7 +73,7 @@ def make_chart(request, chart):
                 label: "Bar Document",
                 data: [[ 149, 19 ], [ 130, 8 ]]
             }
-        }; 
+        };
     """
     data, data_string = '', ''
     if request.method == 'POST':
@@ -79,28 +81,30 @@ def make_chart(request, chart):
             form = ProductChartForm(request.POST, request=request)
         elif chart == 'users':
             form = UserChartForm(request.POST, request=request)
-        else: # orgs
+        else:  # orgs
             form = OrgChartForm(request.POST, request=request)
 
         if form.is_valid():
             if chart == 'products':
                 for p in form.cleaned_data['products']:
                     product = Product.objects.get(pk=p)
-                    ordered_items = OrderedItem.objects.filter(inventory_history__product=product) 
+                    ordered_items = OrderedItem.objects.filter(inventory_history__product=product)
                     data_string += assemble_data_string(ordered_items, product)
             elif chart == 'users':
                 product = Product.objects.get(pk=form.cleaned_data['product'])
                 for u in form.cleaned_data['users']:
                     user = User.objects.get(pk=u)
-                    ordered_items = OrderedItem.objects.filter(inventory_history__product=product, inventory_history__order__placed_by=user) 
+                    ordered_items = OrderedItem.objects.filter(inventory_history__product=product,
+                                                               inventory_history__order__placed_by=user)
                     data_string += assemble_data_string(ordered_items, user)
-            else: # orgs
+            else:  # orgs
                 product = Product.objects.get(pk=form.cleaned_data['product'])
                 for o in form.cleaned_data['orgs']:
                     org = Org.objects.get(pk=o)
-                    ordered_items = OrderedItem.objects.filter(inventory_history__product=product, inventory_history__order__org=org) 
+                    ordered_items = OrderedItem.objects.filter(inventory_history__product=product,
+                                                               inventory_history__order__org=org)
                     data_string += assemble_data_string(ordered_items, org)
-            data = "{" + data_string[:-2] + "}" # strip off last comma for IE
+            data = "{" + data_string[:-2] + "}"  # strip off last comma for IE
 
         else:
             messages.warning(request, "e|There was a problem with your submission.\
@@ -110,7 +114,7 @@ def make_chart(request, chart):
             form = ProductChartForm(request=request)
         elif chart == 'users':
             form = UserChartForm(request=request)
-        else: # orgs
+        else:  # orgs
             form = OrgChartForm(request=request)
 
     return render(request, 'charts/chart_detail.html', {

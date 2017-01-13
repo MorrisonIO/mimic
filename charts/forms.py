@@ -1,13 +1,14 @@
 from django import forms
-from django.forms import BaseForm
-from django.contrib.auth.models import User
 from django.forms import widgets
+
 from orgs.models import UserProfile
 from products.models import Product, Category
 
+
 class ProductChartForm(forms.Form):
     """
-    Form for creating a chart depicting the amount of product ordered, for a set of a particular product(s) over time. 
+    Form for creating a chart depicting the amount of product ordered,
+    for a set of a particular product(s) over time.
     """
     # Add in the dynamic choices which depend on the user.
     # For this chart we need which products to display -- all products
@@ -21,19 +22,24 @@ class ProductChartForm(forms.Form):
         profiles = UserProfile.objects.filter(user__exact=request.user)
 
         prod_choices = []
-        for up in profiles:
-            cats = Category.objects.filter(org=up.org)
+        for profile in profiles:
+            cats = Category.objects.filter(org=profile.org)
             prods = Product.objects.filter(categories__in=cats)
             for p in prods:
-                name_str = '%s [%s]' % (p.name, up.org)
+                name_str = '%s [%s]' % (p.name, profile.org)
                 prod_choices.append((p.id, name_str))
         self.fields['products'].choices = prod_choices
 
-    products = forms.MultipleChoiceField(choices=(), required=True, widget=widgets.SelectMultiple(attrs={'size': '20'}))
+    products = forms.MultipleChoiceField(choices=(),
+                                         required=True,
+                                         widget=widgets.SelectMultiple(attrs={'size': '20'})
+                                        )
+
 
 class OrgChartForm(forms.Form):
     """
-    Form for creating a chart depicting the amount of a single product ordered, for comparing multiple orgs, over time. 
+    Form for creating a chart depicting the amount of a single product ordered,
+    for comparing multiple orgs, over time.
     """
     def __init__(self, data=None, request=None, *args, **kwargs):
         if request is None:
@@ -43,18 +49,22 @@ class OrgChartForm(forms.Form):
         profiles = UserProfile.objects.filter(user__exact=request.user)
 
         prod_choices, org_choices = [], []
-        for up in profiles:
-            cats = Category.objects.filter(org=up.org)
-            org_choices.append((up.org.id, up.org))
+        for profile in profiles:
+            cats = Category.objects.filter(org=profile.org)
+            org_choices.append((profile.org.id, profile.org))
             prods = Product.objects.filter(categories__in=cats)
             for p in prods:
-                name_str = '%s [%s]' % (p.name, up.org)
+                name_str = '%s [%s]' % (p.name, profile.org)
                 prod_choices.append((p.id, name_str))
         self.fields['product'].choices = prod_choices
         self.fields['orgs'].choices = org_choices
 
     product = forms.ChoiceField(choices=(), required=True)
-    orgs = forms.MultipleChoiceField(choices=(), required=True, widget=widgets.SelectMultiple(attrs={'size': '20'}))
+    orgs = forms.MultipleChoiceField(choices=(),
+                                     required=True,
+                                     widget=widgets.SelectMultiple(attrs={'size': '20'})
+                                    )
+
 
 class UserChartForm(forms.Form):
     """
@@ -65,22 +75,28 @@ class UserChartForm(forms.Form):
             raise TypeError("Keyword argument 'request' must be supplied.")
         super(UserChartForm, self).__init__(data, *args, **kwargs)
         self.request = request
-        profiles = UserProfile.objects.filter(user__exact=request.user) 
-        orgs = [ p.org for p in profiles ]
-        other_users = UserProfile.objects.filter(org__in=orgs, user__is_staff=False) # no staff, otherwise user's chart could include InventoryHistory events which are mimic internal adjustments
-        
+        profiles = UserProfile.objects.filter(user__exact=request.user)
+        orgs = [profile.org for profile in profiles]
+        # no staff, otherwise user's chart could include InventoryHistory events
+        # which are mimic internal adjustments
+        other_users = UserProfile.objects.filter(org__in=orgs, user__is_staff=False)
+
         prod_choices, user_choices = [], []
-        for up in other_users:
-            if not (up.user.id, up.user.get_full_name()) in user_choices: # make unique user list
-                user_choices.append((up.user.id, up.user.get_full_name())) 
-        for o in orgs:
-            cats = Category.objects.filter(org=o)
+        for profile in other_users:
+            # make unique user list
+            if (profile.user.id, profile.user.get_full_name()) not in user_choices:
+                user_choices.append((profile.user.id, profile.user.get_full_name()))
+        for org in orgs:
+            cats = Category.objects.filter(org=org)
             prods = Product.objects.filter(categories__in=cats)
-            for p in prods:
-                name_str = '%s [%s]' % (p.name, o)
-                prod_choices.append((p.id, name_str))
+            for product in prods:
+                name_str = '%s [%s]' % (product.name, org)
+                prod_choices.append((product.id, name_str))
         self.fields['product'].choices = prod_choices
         self.fields['users'].choices = user_choices
 
     product = forms.ChoiceField(choices=(), required=True)
-    users = forms.MultipleChoiceField(choices=(), required=True, widget=widgets.SelectMultiple(attrs={'size': '20'}))
+    users = forms.MultipleChoiceField(choices=(),
+                                      required=True,
+                                      widget=widgets.SelectMultiple(attrs={'size': '20'})
+                                     )
