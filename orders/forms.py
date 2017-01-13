@@ -103,7 +103,9 @@ class ShipToField(forms.Field):
 
 class FastOrderForm(forms.Form):
     """
-    Form for adding a FastOrder. Data we need to get from user: due_date*, org*, ship_to*, po_number, additional_info,products + quantities (at least one required). All other fields of the Order model are either not relevant, or can by filled in dynamically.
+    Form for adding a FastOrder. Data we need to get from user: due_date*, org*,
+    ship_to*, po_number, additional_info,products + quantities (at least one required).
+    All other fields of the Order model are either not relevant, or can by filled in dynamically.
     """
     org_choices = [('', '---------'),]
     product_choices = [('', '---------'),]

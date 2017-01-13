@@ -31,7 +31,9 @@ from vardata.models import *
 @current_org_required
 def process_products(request):
     """
-    Process each item requested for ordering: if the item is a variable data item, add it to a session variable list of products the user must provide data for; otherwise add it to the cart.
+    Process each item requested for ordering: if the item is a variable data item,
+    add it to a session variable list of products the user must provide data for;
+    otherwise add it to the cart.
     """
     if not request.session.get('data_to_get', None):
         request.session['data_to_get'] = []
@@ -44,7 +46,7 @@ def process_products(request):
                 quantity = request.POST[p]
                 quantity = re.sub(r'[^0-9]', '', quantity)
                 quantity = int(quantity) if quantity else 0
-                if quantity: # product was ordered
+                if quantity:  # product was ordered
                     u_field = 'u_%s' % product_id
                     unique_id = request.POST.get(u_field, None)
                     o_field = 'o_%s' % product_id
@@ -58,12 +60,21 @@ def process_products(request):
                                 if item['unique_id'] == unique_id:
                                     approved = True
                         if not approved:
-                            item = {'product_id': product_id, 'unique_id': unique_id, 'quantity': quantity}
-                            request.session['data_to_get'].append(item) # product added to cart only after the user supplies data and approves it
+                            item = {'product_id': product_id,
+                                    'unique_id': unique_id,
+                                    'quantity': quantity
+                                    }
+                            # product added to cart only after the user supplies data and approves it
+                            request.session['data_to_get'].append(item)
 
                     if not product.is_variable or approved:
                         overwrite = request.POST.get('cart_modify', None)
-                        products.append({'product_id': product.id, 'unique_id': unique_id, 'orderer': int(orderer), 'quantity': quantity, 'overwrite': overwrite})
+                        products.append({'product_id': product.id,
+                                         'unique_id': unique_id,
+                                         'orderer': int(orderer),
+                                         'quantity': quantity,
+                                         'overwrite': overwrite
+                                         })
 
         ordered_products = sorted(products, key=lambda k: k['orderer'])
         for item in ordered_products:
@@ -71,13 +82,16 @@ def process_products(request):
             put_in_cart(request, product, item['unique_id'], item['quantity'], item['overwrite'])
 
         return HttpResponseRedirect(reverse('orders:vardata_input'))
-    else: # shouldn't arrive at this view except via POST
+    else:  # shouldn't arrive at this view except via POST
         return HttpResponseRedirect(reverse('products:product_list'))
 
 
 def put_in_cart(request, product, unique_id, quantity, overwrite=False):
     """
-    Puts the specified product into the cart. If the product is already in the cart and it's not variable, the amount ordered is incremented. Overwrite allows the user to directly set the ordered amount from the cart summary.
+    Puts the specified product into the cart.
+    If the product is already in the cart and it's not variable,
+    the amount ordered is incremented. Overwrite allows the user
+    to directly set the ordered amount from the cart summary.
     """
     user = request.user
     org = request.session['current_org']
@@ -86,22 +100,26 @@ def put_in_cart(request, product, unique_id, quantity, overwrite=False):
 
     # make sure amount ordered was not lower than any min set
     if product.min_order_qty and quantity < product.min_order_qty and not unrestricted_qtys:
-        messages.warning(request, 'w|The amount of "%s" ordered was updated to reflect minimum quantity restrictions.' % product)
+        message = 'w|The amount of "%s" ordered was updated to reflect minimum quantity restrictions.' % product
+        messages.warning(request, message)
         quantity = product.min_order_qty
 
     # update cart
     cart = request.session.get('cart', None) or Cart()
     already_ordered = cart.has_item(product)
-    if already_ordered and not product.is_variable and not overwrite: # increment it
+    # increment it
+    if already_ordered and not product.is_variable and not overwrite:
         # make sure new amount does not violate any fixed ordering quantities
         if product.fixed_order_qtys and not unrestricted_qtys:
             fixed_qtys = re.sub(r'[^0-9,]', '', product.fixed_order_qtys).split(',')
             new_qty = already_ordered.quantity + quantity
             if unicode(new_qty) not in fixed_qtys:
-                messages.warning(request, 'w|The total amount of "%s" ordered was not in the allowable range of values.' % product)
+                message = 'w|The total amount of "%s" ordered was not in the allowable range of values.' % product
+                messages.warning(request, message)
                 quantity = 0
         cart.incr_item(product, quantity)
-    else: # add it
+    # add it
+    else:
         cart.add_item(product, unique_id, quantity)
     request.session['cart'] = cart
 
@@ -109,39 +127,49 @@ def put_in_cart(request, product, unique_id, quantity, overwrite=False):
 @login_required
 def vardata_remodify(request, unique_id):
     """
-    Allows user to remodify an ordered variable data item from the cart summary. This view merely handles managing the various session variables, and then returns to the data input form.
+    Allows user to remodify an ordered variable data item from the cart summary.
+    This view merely handles managing the various session variables,
+    and then returns to the data input form.
     """
     for item in request.session['data_approved']:
         if item['unique_id'] == unique_id:
-            request.session['data_approved'].remove(item) # remove it from approved list
-            request.session['data_to_get'].append({ # add back to list of outstanding items
+            request.session['data_approved'].remove(item)  # remove it from approved list
+            request.session['data_to_get'].append({        # add back to list of outstanding items
                 'product_id': item['product_id'],
                 'unique_id': item['unique_id'],
                 'quantity': item['quantity']
             })
-            request.session['form_data'] = item # repopulate form w/user info
+            request.session['form_data'] = item            # repopulate form w/user info
     return HttpResponseRedirect(reverse('vardata_input'))
 
 
 @login_required
 def vardata_input(request):
     """
-    If there is a session variable list of remaining ordered items to get data from the user for, this view shows the input form for the first item on the list (including validating and redisplaying with errors); otherwise redirects to the cart summary.
+    If there is a session variable list of remaining ordered items
+    to get data from the user for,
+    this view shows the input form for the first item on the list
+    (including validating and redisplaying with errors);
+    otherwise redirects to the cart summary.
     """
-    if request.session.get('data_to_get', None): # there is at least one outstanding item to get data for
+    # there is at least one outstanding item to get data for
+    if request.session.get('data_to_get', None):
         product_id = request.session['data_to_get'][0]['product_id']
         product = get_object_or_404(Product, pk=product_id)
         var_form = eval(product.var_form)
-        if not var_form: return HttpResponseServerError('Missing form') # TODO proper one
+        if not var_form:
+            return HttpResponseServerError('Missing form')  # TODO proper one
 
         if request.method == 'POST':
             form = var_form(request.POST)
             if form.is_valid():
                 request.session['form_data'] = form.cleaned_data
                 url = "%s%s/" % (reverse('vardata_prefix'), product.var_form)
-                return HttpResponseRedirect(url) # create preview images
+                # create preview images
+                return HttpResponseRedirect(url)
             else:
-                messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
+                messages.warning(request, "e|There was a problem with your submission.\
+                                           Refer to the messages below and try again.")
         else:
             if request.session.get('form_data', None):
                 form = var_form(request.session['form_data'])
@@ -153,7 +181,8 @@ def vardata_input(request):
             'product': product,
         })
 
-    else: # no outstanding items, show cart
+    # no outstanding items, show cart
+    else:
         return HttpResponseRedirect(reverse('orders:cart_summary'))
 
 
@@ -161,7 +190,10 @@ def vardata_input(request):
 @current_org_required
 def vardata_preview(request):
     """
-    Creates and shows the preview image of a variable item after the user has inputted data. If the user says the preview is ok, this view reloads and that data is saved and the item is added to the cart. Otherwise the user is return to the input form to make corrections.
+    Creates and shows the preview image of a variable item
+    after the user has inputted data. If the user says the preview is ok,
+    this view reloads and that data is saved and the item is added to the cart.
+    Otherwise the user is return to the input form to make corrections.
     """
     if request.POST.get('preview_ok', None):
         # save approved data to session var for saving later
@@ -178,14 +210,16 @@ def vardata_preview(request):
         product = Product.objects.get(pk=product_id)
         put_in_cart(request, product, unique_id, quantity)
 
-        del request.session['data_to_get'][0] # delete product from list of outstanding items
-        del request.session['form_data'] # delete saved form info
+        del request.session['data_to_get'][0]  # delete product from list of outstanding items
+        del request.session['form_data']       # delete saved form info
 
-        # redirect back to vardata_input to see if there are any more items to get data for
+        # redirect back to vardata_input to see
+        # if there are any more items to get data for
         return HttpResponseRedirect(reverse('vardata_input'))
 
     else:
-        filename_prefix = request.session.get('filename_prefix', None) # session var set in the vardata view
+        # session var set in the vardata view
+        filename_prefix = request.session.get('filename_prefix', None)
         pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_URL, filename_prefix)
         img_file = "%spreviews/%s.gif" % (settings.MEDIA_URL, filename_prefix)
 
@@ -215,8 +249,12 @@ def cart_summary(request):
 
 def delete_order_session_vars(request):
     """
-    Deletes all the order session variables. Used both when cancellling an order, and after an order has been successfully submitted to clean up afterwards.
+    Deletes all the order session variables.
+    Used both when cancellling an order,
+    and after an order has been successfully submitted
+    to clean up afterwards.
     """
+
     keys = [
         'shipto_address',
         'cart',
@@ -239,7 +277,8 @@ def delete_order_session_vars(request):
 @login_required
 def cancel_order(request):
     """
-    Cancels an order in progress. This completely trashes the cart session variables.
+    Cancels an order in progress.
+    This completely trashes the cart session variables.
     """
     delete_order_session_vars(request)
     messages.warning(request, "s|Your order has been cancelled.")
@@ -268,22 +307,30 @@ def delete_from_cart(request, unique_id):
 @login_required
 def provide_shipto(request):
     """
-    Allows the user to provide a shipto address for an order, either by selecting one from an address book, or by entering a new one manually. Once provided, a shipto_address session variable is created -- if that is present this view shows the destination address and the continue button allowing the user to proceed to the next ordering step.
+    Allows the user to provide a shipto address for an order,
+    either by selecting one from an address book,
+    or by entering a new one manually. Once provided,
+    a shipto_address session variable is created -
+    - if that is present this view shows the destination address
+    and the continue button allowing the user to proceed
+    to the next ordering step.
     """
     addresses = Address.objects.filter(owners__in=[request.user])
-    if request.method == 'POST': # address selected from dropdown or new address being entered
-        if not request.POST.get('shipto_address', None): # addr from AB not selected, validate new address form
+    # address selected from dropdown or new address being entered
+    if request.method == 'POST':
+        # addr from AB not selected, validate new address form
+        if not request.POST.get('shipto_address', None):
             form = AddressForm(request.POST)
             if form.is_valid():
                 new_addr = form.save()
                 if request.POST.get('add_to_ab', None):
                     new_addr.owners.add(request.user)
                     messages.success(request, "s|The address was added to your Address Book.")
-                    print("addr was added")
                     new_addr.save()
                 request.session['shipto_address'] = new_addr
             else:
-                messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
+                messages.warning(request, "e|There was a problem with your submission. \
+                                           Refer to the messages below and try again.")
 
         else:
             form = AddressForm()
@@ -305,7 +352,7 @@ def provide_addinfo(request):
     """
     if request.method == 'POST':
         form = OrderForm(data=request.POST, request=request)
-        if form.is_valid(): # set session vars
+        if form.is_valid():  # set session vars
             request.session['due_date'] = request.POST.get('due_date', None)
             request.session['po_number'] = request.POST.get('po_number', None)
             request.session['additional_info'] = request.POST.get('additional_info', None)
@@ -313,7 +360,8 @@ def provide_addinfo(request):
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
             return HttpResponseRedirect(reverse('orders:confirm_order'))
         else:
-            messages.warning(request, "e|There was a problem with your submission. Refer to the messages below and try again.")
+            messages.warning(request, "e|There was a problem with your submission. \
+                                       Refer to the messages below and try again.")
 
     else:
         form = OrderForm(request=request)
@@ -325,7 +373,8 @@ def provide_addinfo(request):
 @login_required
 def confirm_order(request):
     """
-    Final step in the ordering process: shows the user a final order summary, allows them to confirm and save/place the order.
+    Final step in the ordering process: shows the user a final order summary,
+    allows them to confirm and save/place the order.
     """
     return render(request, 'orders/confirm_order.html', {})
 
@@ -334,7 +383,9 @@ def confirm_order(request):
 @current_org_required
 def order_list(request):
     """
-    If the user is a regular user, shows a list of orders placed by that user. If the user is a manager, shows a list of all orders placed by members of the active organization.
+    If the user is a regular user, shows a list of orders placed by that user.
+    If the user is a manager, shows a list of all orders placed by members
+    of the active organization.
     """
     org = request.session['current_org']
     user_is_approval_manager = org.approval_manager == request.user
@@ -354,7 +405,8 @@ def order_list(request):
 @login_required
 def show_order(request, order_id, confirm=False):
     """
-    Shows an individual order (ie., one that's already been placed). Also used for the confirmation page after submitting an order.
+    Shows an individual order (ie., one that's already been placed).
+    Also used for the confirmation page after submitting an order.
     """
     profiles = UserProfile.objects.filter(user=request.user)
     valid_orgs = [p.org for p in profiles]
@@ -377,10 +429,15 @@ def show_order(request, order_id, confirm=False):
 @login_required
 def process_order(request):
     """
-    Performs the steps necessary to save a new order: creates and saves an order and any variable info, subtracts inventory, send emails, clean up afterwards.
+    Performs the steps necessary to save a new order:
+    creates and saves an order and any variable info,
+    subtracts inventory, send emails, clean up afterwards.
     """
-    # TODO more sanity checking: duplicate orders, reverse db saves if one of the steps doesn't complete successfully, etc
-    if not request.session.get('cart', None) or not request.session.get('shipto_address', None) or not request.session.get('due_date', None):
+    # TODO more sanity checking: duplicate orders,
+    # reverse db saves if one of the steps doesn't complete successfully, etc
+    if not request.session.get('cart', None) \
+       or not request.session.get('shipto_address', None) \
+       or not request.session.get('due_date', None):
         return HttpResponseRedirect(reverse('orders:confirm_order'))
     order = save_new_order(request)
     save_ordered_items(request, order)
@@ -393,21 +450,25 @@ def process_order(request):
 
 def save_new_order(request):
     """
-    Saves a new order. Note this does not handle saving OrderedItems or InventoryHistory events. All necessary pieces of the order should exist as session variables.
+    Saves a new order.
+    Note this does not handle saving OrderedItemsor InventoryHistory events.
+    All necessary pieces of the order should exist as session variables.
     """
     order = Order()
     order.name = order.make_name()
     order.placed_by = request.user
     order.org = request.session['current_org']
-    order.status = 'ac' # active
+    order.status = 'ac'  # active
     order.date = datetime.datetime.now()
     due_date_parts = request.session['due_date'].split("-")
-    order.due_date = datetime.date(int(due_date_parts[0]), int(due_date_parts[1]), int(due_date_parts[2]))
+    order.due_date = datetime.date(int(due_date_parts[0]),
+                                   int(due_date_parts[1]),
+                                   int(due_date_parts[2])
+                                  )
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
     order.user_notes = request.session['user_notes']
-    print "request s",dir(request.session)
     order.save()
     return order
 
@@ -423,9 +484,15 @@ def save_ordered_items(request, order):
         if product.approval_required and not profile.ignore_pa:
             order.status = 'pa'
             order.save()
-        oi = subtract_inventory(product=product, order=order, amount=item.quantity, modified_by=order.placed_by, notes="Online order", date=order.date)
+        oi = subtract_inventory(product=product,
+                                order=order,
+                                amount=item.quantity,
+                                modified_by=order.placed_by,
+                                notes="Online order", date=order.date
+                               )
 
-        # also save variable info, if there is a set of data matching this item's unique id
+        # also save variable info, if there is a set
+        # of data matching this item's unique id
         try:
             for data in request.session['data_approved']:
                 if item.unique_id in data.values():
@@ -441,20 +508,38 @@ def save_ordered_items(request, order):
 
 def subtract_inventory(product, order, amount, modified_by, notes, date):
     """
-    Manages saving InventoryHistory and OrderedItem events for a product, including recursively descending into components. Returns the OrderedItem for the product that was ordered, since we need the PK to possibly save variable info.
+    Manages saving InventoryHistory and OrderedItem events for a product,
+    ncluding recursively descending into components.
+    Returns the OrderedItem for the product that was ordered,
+    since we need the PK to possibly save variable info.
     """
-    ih = InventoryHistory(product=product, order=order, amount=amount, modified_by=modified_by, notes=notes, date=date)
+    ih = InventoryHistory(product=product,
+                          order=order,
+                          amount=amount,
+                          modified_by=modified_by,
+                          notes=notes,
+                          date=date
+                         )
     ih.save()
-    if product.ratios.all(): # there are components to this product
+    # there are components to this product
+    if product.ratios.all():
         import math
         for r in product.ratios.all():
-            amt = math.ceil(amount * float(r.ratio)) # round up to nearest whole number
+            # round up to nearest whole number
+            amt = math.ceil(amount * float(r.ratio))
             if r.component.track_inventory:
                 notes = "Consumed as component of '%s'" % product
-                subtract_inventory(product=r.component, order=order, amount=amt, modified_by=modified_by, notes=notes, date=date)
-    else: # base case of recursion -- a product with no components (eg a raw material like paper)
+                subtract_inventory(product=r.component,
+                                   order=order,
+                                   amount=amt,
+                                   modified_by=modified_by,
+                                   notes=notes,
+                                   date=date
+                                  )
+    else:  # base case of recursion -- a product with no components (eg a raw material like paper)
         pass
-    if not product.is_component: # the product that was ordered
+    # the product that was ordered
+    if not product.is_component: 
         oi = OrderedItem(order=order, inventory_history=ih)
         oi.save()
         return oi
@@ -463,8 +548,11 @@ def subtract_inventory(product, order, amount, modified_by, notes, date):
 def send_order_emails(request, order):
     """
     Sends out the various emails when an order is placed:
-        * Client: If approval is required, email goes to orderer and approval manager; otherwise just to orderer
-        * Mimic: For all orders, emails go to production@ and the mimic account reps
+        * Client: If approval is required,
+          email goes to orderer and approval manager;
+          otherwise just to orderer
+        * Mimic: For all orders, emails go to production@
+          and the mimic account reps
     """
     site = Site.objects.get_current()
     user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)
@@ -483,7 +571,9 @@ def send_order_emails(request, order):
 
     if order.status == 'pa':
         if order.org.approval_manager:
-            approval_manager = '%s <%s>' % (order.org.approval_manager.get_full_name(), order.org.approval_manager.email)
+            fullname = order.org.approval_manager.get_full_name()
+            manager_email = order.org.approval_manager.email
+            approval_manager = '%s <%s>' % (fullname, manager_email)
             user_list.append(approval_manager)
         email = 'emails/order_approvalrequired.txt'
         mimic_email = 'emails/mimic_order_approvalrequired.txt'
@@ -517,15 +607,17 @@ def send_order_emails(request, order):
     mimic_body = mimic_template.render(c)
 #    print "\n==========\nSending mail to users...\nTo: %s\nSubject: %s\n%s" % ([u for u in user_list], subject, body)
 #    print "\n==========\nSending mail to Mimic...\nTo: %s\nSubject: %s\n%s" % ([u for u in mimic_list], subject, mimic_body)
-    send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False) # notify user
-    send_mail(subject, mimic_body, 'orders@mimicprint.com', mimic_list, fail_silently=False) # notify mimic
+    send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
+    send_mail(subject, mimic_body, 'orders@mimicprint.com', mimic_list, fail_silently=False)  # notify mimic
 
 
 @login_required
 @current_org_required
 def approve_order(request):
     """
-    Sets the status of an Order to active. This allows managers to give the go-ahead via the orders list form or an order detail page.
+    Sets the status of an Order to active.
+    This allows managers to give the go-ahead
+    via the orders list form or an order detail page.
     """
     org = request.session['current_org']
     site = Site.objects.get_current()
@@ -569,7 +661,8 @@ def search(request):
     query_string, found_orders = '', ''
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
-        order_query = get_query(query_string, ['name', 'po_number', 'invoice_number', 'additional_info', 'user_notes'])
+        search_fields = ['name', 'po_number', 'invoice_number', 'additional_info', 'user_notes']
+        order_query = get_query(query_string, search_fields)
         if request.user.has_perm('orders.change_order'):
             found_orders = Order.objects.filter(order_query).filter(org=request.session['current_org']).order_by('-date')
         else:

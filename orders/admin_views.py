@@ -1,18 +1,18 @@
-from django.http import HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import render, get_object_or_404
-from django import forms
-from django.forms import widgets
+import datetime
+
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
-from django.template import RequestContext, loader, Context
 from django.contrib.auth.models import User
 from django.contrib import messages
-from orgs.models import Org, UserProfile
+
+from orgs.models import Org
 from addresses.models import Address
 from products.models import Product
+
 from .forms import FastOrderForm
 from .views import subtract_inventory
-from .models import Cart, Order, InventoryHistory, OrderedItem, WorkNote
-import datetime
+from .models import Cart, Order, OrderedItem, WorkNote  #InventoryHistory
 
 
 @staff_member_required
@@ -28,6 +28,7 @@ def products_ordered(request, order_id):
         'ordered_items': ordered_items,
     })
 
+
 @staff_member_required
 def create_docket(request, order_id):
     """
@@ -40,16 +41,19 @@ def create_docket(request, order_id):
         'ordered_items': ordered_items,
     })
 
+
 @staff_member_required
 def save_invnum(request):
     """
-        Saves an invoice number to an order (accessed directly from a column on the orders change_list page).
+        Saves an invoice number to an order
+        (accessed directly from a column on the orders change_list page).
 
         Note that we do *no* checking on the invoice number: whether it matches a certain pattern,
         whether it is unique, etc. We trust the user (and it can be edited afterwards if necessary).
     """
     if request.POST['invoice_number'] == '':
-        return HttpResponseRedirect('/admin/orders/order/') # just return, don't save a blank value
+        # just return, don't save a blank value
+        return HttpResponseRedirect('/admin/orders/order/')
     order_id = request.POST['order_id']
     order = Order.objects.get(pk=order_id)
     order.invoice_number = request.POST['invoice_number']
@@ -57,6 +61,7 @@ def save_invnum(request):
     order.save()
     messages.success(request, "The invoice number was saved successfully.")
     return HttpResponseRedirect('/admin/orders/order/')
+
 
 @staff_member_required
 def create_packingslip(request, order_id):
@@ -86,6 +91,7 @@ def create_packingslip(request, order_id):
         'ordered_items': ordered_items,
     })
 
+
 @staff_member_required
 def create_label(request, order_id):
     """
@@ -112,6 +118,7 @@ def create_label(request, order_id):
         'contents': contents,
     })
 
+
 @staff_member_required
 def create_comm_inv(request, order_id):
     """
@@ -134,14 +141,14 @@ def create_comm_inv(request, order_id):
         else:
             ship_to = order.ship_to
         for item in ordered_items:
-            p = item.inventory_history.product
+            product = item.inventory_history.product
             exclude = "exclude_%s" % p.id
             if not request.POST.get(exclude):
-                qty = "qty_%s" % p.id
-                name = "item_%s" % p.id
-                desc = "desc_%s" % p.id
-                hs = "hs_num_%s" % p.id
-                val = "value_%s" % p.id
+                qty = "qty_%s" % product.id
+                desc = "desc_%s" % product.id
+                name = "item_%s" % product.id
+                hs = "hs_num_%s" % product.id
+                val = "value_%s" % product.id
                 try:
                     total += float(request.POST.get(val))
                 except ValueError:
@@ -163,6 +170,7 @@ def create_comm_inv(request, order_id):
         'item_dict': item_dict,
     })
 
+
 def worknote_format(notes):
     import re
     notes = re.sub('(/DL|/ET|/DC|/LA|/LD|/LC|/OO|/CB|/AM|/KA|/DS|/NEW)', '</span>', notes)
@@ -175,6 +183,7 @@ def worknote_format(notes):
     notes = notes.replace('NEW', '<span class="new">')
     return notes
 
+
 @staff_member_required
 def worknote_view(request, worknote_id):
     """
@@ -186,16 +195,20 @@ def worknote_view(request, worknote_id):
         'notes': worknote_format(worknote.notes),
     })
 
+
 @staff_member_required
 def fastorder_add(request):
     """
-    A fastorder is an Order that's added by Mimic staff manually via the admin pages, used for orders that do *not* come in via the website. We need this to avoid having to deal with OrderedItems and InventoryHistory, adding Products on the fly, and entering fields we know already to present an easier UI.
+    A fastorder is an Order that's added by Mimic staff manually via the admin pages,
+    used for orders that do *not* come in via the website.
+    We need this to avoid having to deal with OrderedItems and InventoryHistory,
+    adding Products on the fly, and entering fields we know already to present an easier UI.
     """
 # Does not work: putting choices for dropdowns in FastOrderForm (as choices= in the field definition). We can the show the dropdown in the template with {{ form.job1_product }}, but if you add a new product via the + javascript, it fails validation because it's not part of the originally specified choices ("Select a valid choice. That choice is not one of the available choices.")
 # Does not work: specify choices here in the view, pass them into the template, and construct the <select>s manually. Same error as above.
 # Too complicated for me: creating a Field subclass in the form and manually doing Field.clean(). New items created with the + are displayed ok and then pass validation, but if some other validation fails and the page reloads, the new item we created is not in the dropdown.
     errors = ''
-    if request.method == "POST": # validate and save
+    if request.method == "POST":  # validate and save
         form = FastOrderForm(request.POST)
         if form.is_valid():
             # generate and save order
@@ -215,7 +228,7 @@ def fastorder_add(request):
             o.save()
 
             # handle subtracting inventory and generating InventoryHistory & OrderedItems
-            for n in range(1,6): # jobs 1 - 5
+            for n in range(1, 6):  # jobs 1 - 5
                 prod_str = 'job%s_product' % n
                 qty_str = 'job%s_qty' % n
                 pid = request.POST.get(prod_str, None)
@@ -228,7 +241,7 @@ def fastorder_add(request):
             return HttpResponseRedirect('/admin/orders/order/')
         else:
             errors = form.errors
-    else: # show form
+    else:  # show form
         form = FastOrderForm()
 
     return render(request, 'admin/orders/order/fastorder.html', {
