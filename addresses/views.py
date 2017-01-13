@@ -65,8 +65,9 @@ def delete(request, address_id):
         address.save()
         t_str = '%s%s-%s' % (request.user.username, request.user.id, address.id)
         token = base64.b64encode(t_str)
-        messages.success(request, 's|The address was successfully deleted. <a href="%s" title="Restore address back to your Address Book">Undo</a>'\
-         % reverse('addresses:address_undo_delete', args=[token]))
+        html_code = '<a href="{}" title="Restore address back to your Address Book">Undo</a>'\
+                    .format(reverse('addresses:address_undo_delete', args=[token]))
+        messages.success(request, 's|The address was successfully deleted. {}'.format(html_code))
         return HttpResponseRedirect(reverse('addresses:address_index'))
     else:
         return render(request, 'addresses/delete_confirm.html', {
@@ -87,7 +88,7 @@ def undo_delete(request, token):
     address = get_object_or_404(Address, pk=address_id)
     address.owners.add(request.user)
     address.save()
-    messages.success(request ,'s|The address was successfully restored.')
+    messages.success(request, 's|The address was successfully restored.')
     return HttpResponseRedirect(reverse('addresses:address_index'))
 
 

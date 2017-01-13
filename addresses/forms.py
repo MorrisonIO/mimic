@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django.forms.utils import ErrorList
 from .models import Address
 
+
 class AddressForm(ModelForm):
     class Meta:
         model = Address
