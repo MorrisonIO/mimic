@@ -1,14 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django import forms
-from django.forms import widgets
 from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from decorators import current_org_required
 from .models import Download
+
 
 @login_required
 @current_org_required
@@ -18,8 +15,8 @@ def index(request):
     """
     org = request.session['current_org']
     downloads = Download.objects.filter(org=org).order_by("-date_added")
-    return render(request,'downloads/download_list.html', {
-        'downloads': downloads, 
+    return render(request, 'downloads/download_list.html', {
+        'downloads': downloads,
     })
 
 
@@ -38,7 +35,8 @@ def detail(request, download_id):
 @current_org_required
 def delete(request, download_id):
     """
-    Deletes a file. This merely unassigns which Org this Download belongs to; thus it no longer appears to the user, but it can be undeleted. 
+    Deletes a file. This merely unassigns which Org this Download belongs to;
+    thus it no longer appears to the user, but it can be undeleted.
     """
     org = request.session['current_org']
     download = get_object_or_404(Download, pk=download_id, org=org)
@@ -65,7 +63,7 @@ def undo_delete(request, download_id):
     Reassigns an owner back to a Download, allowing the user to undelete it.
     """
     org = request.session['current_org']
-    download = get_object_or_404(Download, pk=download_id, org=0) 
+    download = get_object_or_404(Download, pk=download_id, org=0)
     download.org = org
     download.save()
     messages.success(request, 's|The file was successfully restored.')
