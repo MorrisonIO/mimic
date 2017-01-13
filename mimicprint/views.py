@@ -26,6 +26,7 @@ def page(request):
     """    Render test page    """
     return render(request, 'page.html', {})
 
+
 @login_required
 def dashboard(request):
     """
@@ -33,13 +34,13 @@ def dashboard(request):
     to display the user's recent activity, current org info, etc.
     """
     current_org = request.session['current_org'] if 'current_org' in request.session.keys() \
-                                                else '' # requires python 2.5
+                                                 else ''  # requires python 2.5
     entries_list = Entry.objects.filter(status__exact='public')
     if current_org:
         if request.user.has_perm('orders.change_order'):
             order_list = Order.objects.filter(org=current_org)[:5]
             entries_list = Entry.objects.filter(org=current_org, status__exact='client') \
-                            .order_by('-date_created')[:5]
+                                                .order_by('-date_created')[:5]
         else:
             order_list = Order.objects.filter(placed_by__exact=request.user)[:5]
         downloads = Download.objects.filter(org=current_org).order_by('-date_added')[:5]
@@ -53,6 +54,7 @@ def dashboard(request):
         'downloads': downloads,
     })
 
+
 @login_required
 def setorg(request):
     """
@@ -65,15 +67,15 @@ def setorg(request):
     or when a user manually selects from a menu.
     """
     delete_order_session_vars(request)
-    if request.POST.get('org_id', ''): # user changing manually
+    if request.POST.get('org_id', ''):  # user changing manually
         org_id = request.POST.get('org_id', '')
         org = Org.objects.get(pk=org_id)
         request.session['current_org'] = org
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    else: # just logged in
+    else:  # just logged in
         request.session['current_org'] = ''
         profiles = UserProfile.objects.filter(user=request.user)
-        if not profiles.count(): # admin forgot to create a UserProfile
+        if not profiles.count():  # admin forgot to create a UserProfile
             t = loader.get_template('emails/no_userprofile.txt')
             c = Context({'user': request.user})
             mail_admins("[Mimic OOS] Alert! Missing user profile", t.render(c), fail_silently=False)
@@ -99,7 +101,7 @@ def logout_user(request):
     if 'HTTP_X_FORWARDED_HOST' in request.META and 'podrexall' in request.META['HTTP_X_FORWARDED_HOST']:
         next_page = 'http://www.podrexall.com/loggedout.html'
 
-    return logout(request, next_page)# @login_required
+    return logout(request, next_page)
 
 
 def profile(request):
@@ -113,18 +115,18 @@ def profile(request):
         user_profile = UserProfile.objects.get(user=request.user, org=current_org)
         profile_form = ProfileForm(instance=user_profile)
     if request.method == 'POST':
-        if 'password' in request.POST: # changing password
+        if 'password' in request.POST:  # changing password
             password_form = SetPasswordForm(request.user, request.POST)
             if password_form.is_valid():
                 password_form.save()
-                messages.success(request ,message="s|Your password was successfully changed.")
+                messages.success(request, message="s|Your password was successfully changed.")
                 return HttpResponseRedirect(reverse('profile'))
             else:
                 msg = "e|There was a problem with your submission.\
                 Refer to the messages below and try again."
                 messages.error(request, msg)
 
-        elif 'profile' in request.POST: # changing prefs
+        elif 'profile' in request.POST:  # changing prefs
             profile_form = ProfileForm(request.POST, instance=user_profile)
             if profile_form.is_valid():
                 profile_form.save()

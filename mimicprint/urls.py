@@ -43,12 +43,12 @@ urlpatterns = [
     # url(r'^accounts/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
 
     url(r'^oos/$',
-        view = 'mimicprint.views.dashboard',
-        name = 'dashboard',
+        view='mimicprint.views.dashboard',
+        name='dashboard',
     ),
     url(r'^oos/setorg/$',
-        view = 'mimicprint.views.setorg',
-        name = 'setorg',
+        view='mimicprint.views.setorg',
+        name='setorg',
     ),
     url(r'^oos/addresses/', include('addresses.urls')),
     url(r'^oos/products/', include('products.urls')),
@@ -61,11 +61,13 @@ urlpatterns = [
     url(r'^upload/', include('uploads.urls')),
 
     url(r'^oos/feedback/$', ContactFormView.as_view(form_class=FeedbackForm),
-            # {
-            #     'form_class': FeedbackForm,
-            #     'success_url': '/oos/feedback/sent/',
-            # },
-            name='contact_form'),
-    url(r'^oos/feedback/sent/$', TemplateView.as_view(template_name='contact_form/contact_form_sent.html'), name='contact_form_sent'),
+        # {
+        #     'form_class': FeedbackForm,
+        #     'success_url': '/oos/feedback/sent/',
+        # },
+        name='contact_form'),
+    url(r'^oos/feedback/sent/$',
+        TemplateView.as_view(template_name='contact_form/contact_form_sent.html'),
+        name='contact_form_sent'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
