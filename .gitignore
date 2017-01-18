@@ -8,7 +8,6 @@ orgs/migrations/*
 products/migrations/*
 reports/migrations/*
 vardata/migrations/*
-templates/templatetags/
 *.pyc
 *.swp
 .DS_Store
