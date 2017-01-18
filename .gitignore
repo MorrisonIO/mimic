@@ -1,6 +1,5 @@
 env_django19/
 addresses/migrations/*
-ddresses/migrations/*
 downloads/migrations/*
 downloads/files/*
 events/migrations/*
@@ -9,7 +8,6 @@ orgs/migrations/*
 products/migrations/*
 reports/migrations/*
 vardata/migrations/*
-fonts/
 templates/templatetags/
 *.pyc
 *.swp
