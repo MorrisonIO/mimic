@@ -1,0 +1,64 @@
+{% load staticfiles %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+    <title>Mimic Print & Media Services: Server Error</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Corporate printing and related services in Markham, Canada.">
+    <meta name="keywords" content="mimic print media services manual document colour corporate business cards letterhead variable data">
+    <meta name="author" content="webmaster@mimicprint.com">
+
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}" media="all" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/public/screen_public.css' %}" media="all" type="text/css">
+    
+</head>
+
+<body id="">
+<div id="container">
+    <a name="top"></a>
+    <div id="top_links">
+        <p class="skip"><a href="#main_content" title="Click to skip directly to content">Jump to content</a></p>
+        <p class="client_login">&nbsp;</p>
+    </div><!--top_links-->
+
+    <div id="header">
+        <h1><img src="{% static 'img/public/logo.gif' %}" alt="Mimic"></h1>
+    </div><!--header-->
+
+    <div id="nav">
+        <ul>
+            <li><a href="/" title="Mimic home page" id="n-home">Home</a></li>
+            <li><a href="/services/" title="About our services" id="n-services">Services</a></li>
+            <li class="last"><a href="/contact/" title="How to contact us" id="n-contact">Contact</a></li>
+        </ul>
+        <hr>
+    </div><!--nav-->
+
+    <div id="banner">
+        <img src="{% static 'img/public/pencils.jpg' %}" alt="(Image of pencil tips) Corporate printing done properly. Get the point?" width="750" height="270">
+    </div><!--banner-->
+
+    <div id="main_content">
+        <h2 class="error">Error 500: Server Error</h2>
+        <p>We apologize, but the server encountered an error and your request could not be processed. Please use your browser's "back" button, or the navigation links in the menu above, to proceed from here.</p>
+
+        <p>If you wish to notify us of this error so that we may correct it, please feel free to <a href="/contact/" title='How to reach us'>contact us</a>. Your assistance is greatly appreciated.</p>
+    </div><!--main_content-->
+
+    <div id="footer">
+        <hr>
+        <p>
+        <a href="#top">Top</a> || 
+        <a href="/" title="Mimic home page">Home</a> | 
+        <a href="/services/" title="About our services">Services</a> | 
+        <a href="/contact/" title="How to contact us">Contact</a></p>
+        <p>&copy; 2007 Mimic Print &amp; Media Services Inc.<br> 
+    </div><!--footer-->
+</div><!--container-->
+
+</body>
+</html>
