@@ -44,6 +44,9 @@
 
     <div id="main_content">
         <h2 class="error">Error 500: Server Error</h2>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
         <p>We apologize, but the server encountered an error and your request could not be processed. Please use your browser's "back" button, or the navigation links in the menu above, to proceed from here.</p>
 
         <p>If you wish to notify us of this error so that we may correct it, please feel free to <a href="/contact/" title='How to reach us'>contact us</a>. Your assistance is greatly appreciated.</p>

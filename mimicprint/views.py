@@ -80,7 +80,7 @@ def setorg(request):
             c = Context({'user': request.user})
             mail_admins("[Mimic OOS] Alert! Missing user profile", t.render(c), fail_silently=False)
             t = loader.get_template('500.html')
-            c = Context({})
+            c = Context({'error': '[Mimic OOS] Missing user profile'})
             return HttpResponseServerError(t.render(c))
         else:
             if profiles.count() == 1:

@@ -25,7 +25,7 @@ SECRET_KEY = 'vu#4*=7&4=aim*5onndd6f%!_j)%g^%onu+19x13rjx3w(jh@*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -135,7 +135,7 @@ USE_TZ = True
 
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/oos/setorg/'
+LOGIN_REDIRECT_URL = '/oos/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
