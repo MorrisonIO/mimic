@@ -156,3 +156,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 # ADMIN_MEDIA_PREFIX = '/media/admin/'
+
+# Overwrite prior settings with settings_local.py if exists
+try:
+    from settings_local import *
+except ImportError:
+    pass
