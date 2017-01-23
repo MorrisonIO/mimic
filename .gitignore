@@ -11,6 +11,7 @@ vardata/migrations/*
 *.pyc
 *.swp
 .DS_Store
+tenv/
 db.sqlite3.sqlite
 static/uploads
 settings.json
