@@ -1,0 +1,65 @@
+.preview-page {
+  width: 300px !important;
+  height: 424px;
+  border: 1px solid #333;
+  border-radius: 5px;
+}
+.preview-paragraph{
+  position: relative;
+  width: 100%;
+  float: left;
+  text-align: justify;
+}
+.preview-images {
+  width: 120px;
+  height: 170px;
+  
+  margin: 7px 7px 7px 7px;
+  border: 1px solid #333;
+  border-radius: 5px;
+}
+#img1 {
+  float:left; /* Выравнивание по левому краю */
+  
+}
+#img2 {
+  float:right;
+}
+
+
+.page {
+  width: 100%;
+  float: left;
+  border: 1px solid #333;
+  border-radius: 5px;
+
+}
+.paragraph{
+  position: relative;
+  width: 100%;
+  text-align: justify;
+  float: left;
+}
+img {
+  max-width: 70%;
+  height: auto;
+  
+  margin: 7px 7px 7px 7px;
+  border: 1px solid #333;
+  border-radius: 5px;
+}
+.image1 {
+  float:left; /* Выравнивание по левому краю */
+  
+}
+.image2 {
+  float: right;
+/*   position: absolute;
+  bottom: 0;
+  right: 0; */
+}
+label {
+  text-align: justify;
+  display: block;
+}
+

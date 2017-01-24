@@ -107,4 +107,3 @@ def upload_progress(request):
         return HttpResponse(json)
     else:
         return HttpResponseServerError('Server Error: You must provide X-Progress-ID header or query param.')
-

@@ -10,10 +10,19 @@ from addresses.models import Address
 from products.models import Product
 from orders.models import Order
 
+class OrderPDFForm(forms.Form):
+    """
+    Class to create PDF from user's files
+    """
+    title = forms.CharField(max_length=50)
+    file1 = forms.FileField()
+    file2 = forms.FileField()
+
 
 class OrderForm(forms.ModelForm):
     """
-    A form to handle the other info needed when ordering apart from the products and shipto: due date, additional info, etc.
+    A form to handle the other info needed when ordering apart
+    from the products and shipto: due date, additional info, etc.
     """
     def __init__(self, request=None, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
@@ -101,6 +110,7 @@ class ShipToField(forms.Field):
             raise forms.ValidationError('That address does not exist.')
         return value
 
+
 class FastOrderForm(forms.Form):
     """
     Form for adding a FastOrder. Data we need to get from user: due_date*, org*,
@@ -117,8 +127,8 @@ class FastOrderForm(forms.Form):
 
     org = forms.ChoiceField(required=True, choices=org_choices, widget=forms.Select(attrs={'class': 'required'}))
     due_date = forms.DateField(required=True, widget=forms.TextInput(attrs={'class': 'vDateField required', 'size': '12'}))
-#    ship_to = forms.ChoiceField(required=True, choices=shipto_choices, widget=forms.Select(attrs={'class': 'required'}))
-#    ship_to = forms.ChoiceField(required=True, widget=forms.Select(attrs={'class': 'required'}))
+    #    ship_to = forms.ChoiceField(required=True, choices=shipto_choices, widget=forms.Select(attrs={'class': 'required'}))
+    #    ship_to = forms.ChoiceField(required=True, widget=forms.Select(attrs={'class': 'required'}))
     ship_to = ShipToField()
     po_number = forms.CharField(max_length=50, widget=forms.TextInput(), required=False)
     additional_info = forms.CharField(widget=forms.Textarea(), required=False)

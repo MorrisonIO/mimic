@@ -1,0 +1,20 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+</head>
+<body>
+    <div class="page">
+        <p class="paragraph" >
+            <img class="image1" src="{{file1}}" />
+            {{firstTextBox}}
+        </p>  
+        <p class="paragraph">
+            <img class="image2" src="{{file2}}"/>
+            {{secondTextBox}}
+        </p>
+    </div>
+</body>
+</html>

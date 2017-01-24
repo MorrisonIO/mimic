@@ -21,6 +21,7 @@ reportlab==3.3.0
 roman==2.0.0
 simplejson==3.10.0
 six==1.10.0
+WeasyPrint
 sqlparse==0.2.2
 svg2rlg==0.3
 WeasyPrint==0.34

@@ -11,7 +11,8 @@ vardata/migrations/*
 *.pyc
 *.swp
 .DS_Store
-tenv/
+_env_django19
+tenv/*
 db.sqlite3.sqlite
 static/uploads
 settings.json
