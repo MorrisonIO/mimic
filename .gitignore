@@ -15,5 +15,6 @@ _env_django19
 tenv/*
 db.sqlite3.sqlite
 static/uploads
+static/pdf
 settings.json
 settings_local.py

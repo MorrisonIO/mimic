@@ -80,19 +80,12 @@ def create_pdf(request):
         preview = {}
         if form.is_valid():  # set session vars
             for file_key, file_val in request.FILES.iteritems():
-                print('file_k', file_key)
-                print('file_v', file_val)
                 path = handle_uploaded_file(file_val)
                 preview[file_key] = path
-                print('path', path)
-            preview['firstTextBox'] = request.POST.get('title', None)
+            preview['firstTextBox'] = request.POST.get('firstTextBox', None)
             preview['secondTextBox'] = request.POST.get('secondTextBox', None)
-            # preview['report_name'] = request.POST.get('report_name', None)
-
+            preview['report_name'] = request.POST.get('report_name', None)
             createPreviewFromFiles(request, preview)
-            # return render(request, 'orders/create_pdf.html', {
-            #     'preview': preview
-            # })
         else:
             print('form.errors', form.errors)
             warning_msg = "e|There was a problem with your submission. Fields:{} required" \
@@ -103,17 +96,23 @@ def create_pdf(request):
 
 def createPreviewFromFiles(request, files):
     from weasyprint import HTML
-
     html_template = get_template('pdf/temp_1.html')
     context = Context(files)
-    print('files',files)
     rendered_template = html_template.render(context)
-    print('rendered_template',rendered_template)
-    pdf_file = HTML(string=rendered_template, base_url=request.build_absolute_uri()).write_pdf('report.pdf')
-    print('pdf',pdf_file)
+
+    if settings.STATIC_ROOT:
+        target = '{0}/pdf/{1}.pdf'.format(settings.STATIC_ROOT, files['report_name'])
+    else:
+        target = '{0}/static/pdf/{1}.pdf'.format(settings.BASE_DIR, files['report_name'])
+        
+
+    pdf_file = HTML(string=rendered_template, base_url=request.build_absolute_uri()).write_pdf(target)
+
+
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
-    messages.success(request, "s|The PDF successully created")
+    messages.success(request, "s|The PDF successully created: \
+                    <a href='{0}{1}.pdf' target='_blank'>Download</a>".format('/static/pdf/', files['report_name']))
     return response
 
 

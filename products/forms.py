@@ -7,7 +7,7 @@ class ProductsPDFForm(forms.Form):
     """
     Class to create PDF from user's files
     """
-    title = forms.CharField(max_length=50)
+    report_name = forms.CharField()
     file1 = forms.FileField()
     file2 = forms.FileField()
 
