@@ -15,21 +15,24 @@
             </thead>
             <tbody>
                 {% for download in downloads %}
-                    <tr class="{% cycle odd,even %}">
                     {% load file_ext %}
-                    <td><img src="{% static 'img/'%}{% get_filetype download %}.png" alt="" height="16" width="16">  <strong>{{ download }}</strong>{% if download.comments %}<em>: {{ download.comments }}</em>{% endif %}</td>
-                    <td>{{ download.date_added|date:"l, F j, Y \a\t H:i" }}</td>
-                    <td class="actions">
-                        {{ download.file.size|filesizeformat }}
-                    </td>
-                    <td class="actions">
-                        <a href="{{ download.file.url }}" target="_blank" title="Download this file"><img src="{% static 'img/arrow_270.png' %}" alt="Download" height="16" width="16"></a>
-                        {% if download.is_deletable %}
-                            <a href="{% url 'downloads:download_delete' download.id %}" title="Delete this file" rel="dialog"><img src="{% static 'img/cross.png' %}" alt="Delete" height="16" width="16"></a>
-                        {% else %}
-                            <img src="{% static 'img/cross_gray.png' %}" alt="Delete" title="This file has been marked as non-deletable" height="16" width="16">
-                        {% endif %}
-                    </td></tr>
+                    {% checkexistfile download as dwnld %}
+                    {% if dwnld %}
+                        <tr class="{% cycle odd,even %}">
+                        <td><img src="{% static 'img/'%}{% get_filetype download %}.png" alt="" height="16" width="16">  <strong>{{ dwnld }}</strong>{% if dwnld.comments %}<em>: {{ dwnld.comments }}</em>{% endif %}</td>
+                        <td>{{ dwnld.date_added|date:"l, F j, Y \a\t H:i" }}</td>
+                        <td class="actions">
+                            {{ dwnld.file.size|filesizeformat }}
+                        </td>
+                        <td class="actions">
+                            <a href="{{ download.file.url }}" target="_blank" title="Download this file"><img src="{% static 'img/arrow_270.png' %}" alt="Download" height="16" width="16"></a>
+                            {% if dwnld.is_deletable %}
+                                <a href="{% url 'downloads:download_delete' download.id %}" title="Delete this file" rel="dialog"><img src="{% static 'img/cross.png' %}" alt="Delete" height="16" width="16"></a>
+                            {% else %}
+                                <img src="{% static 'img/cross_gray.png' %}" alt="Delete" title="This file has been marked as non-deletable" height="16" width="16">
+                            {% endif %}
+                        </td></tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
