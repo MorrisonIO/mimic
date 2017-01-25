@@ -93,8 +93,11 @@
             {% load file_ext %}
             <ul class="docs bottom-margin">
             {% for download in downloads %}
-            <!--<li><img src="{% static 'img/''{% get_filetype download %}''.png' %}" alt="" height="16" width="16"> <a href="{{ download.file.url }}" title="Download this file">{{ download }}</a> <em>{{ download.file.size|filesizeformat }}, uploaded {{ download.date_added|date:"F j Y \a\t H:i" }}</em></li>-->
-            <li><img src="{% static 'img/'%}{% get_filetype download %}.png" alt="" height="16" width="16"> <a href="downloads/{{ download.file.url }}" target="_blank" title="Download this file">{{ download }}</a> <em>{{ download.file.size|filesizeformat }}, uploaded {{ download.date_added|date:"F j Y \a\t H:i" }}</em></li>
+            {#<!--<li><img src="{% static 'img/''{% get_filetype download %}''.png' %}" alt="" height="16" width="16"> <a href="{{ download.file.url }}" title="Download this file">{{ download }}</a> <em>{{ download.file.size|filesizeformat }}, uploaded {{ download.date_added|date:"F j Y \a\t H:i" }}</em></li>-->#}
+                {% checkexistfile download as dwnld %}
+                {% if dwnld %}
+                    <li><img src="{% static 'img/'%}{% get_filetype dwnld %}.png" alt="" height="16" width="16"> <a href="downloads/{{ dwnld.file.url }}" target="_blank" title="Download this file">{{ dwnld }}</a> <em>{{ dwnld.file.size|filesizeformat }}, uploaded {{ dwnld.date_added|date:"F j Y \a\t H:i" }}</em></li>
+                {% endif %}
             {% endfor %}
             </ul>
          {% else %}

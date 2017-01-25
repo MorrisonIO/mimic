@@ -1,4 +1,5 @@
 from django import template
+import os.path
 register = template.Library()
 
 @register.inclusion_tag('templatetags/file_icon.html')
@@ -32,3 +33,10 @@ def get_filetype(file):
     return {
         'extension': extension
     }
+
+
+@register.assignment_tag(takes_context=True)
+def checkexistfile(context, file):
+    """ Check download file for existing """
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.isfile(os.path.join(BASE_DIR, file.file.name))
