@@ -82,7 +82,7 @@
 /*   padding: 10px; */
   margin-left: -1px;
   padding: 10px;
-  width: 30%;
+  width: 33%;
   height: 180px;
   box-sizing: border-box;
   font-size: 14px;
@@ -116,7 +116,7 @@
 .tmp-item-wrapper img {
     display: block;
     position: relative;
-    height: 100%;
+    width: 100%;
 }
 .tmp-item-wrapper h2 {
     text-transform: uppercase;

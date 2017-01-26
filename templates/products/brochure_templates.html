@@ -1,11 +1,34 @@
 {% extends "products/base_product.html" %}
 {% load staticfiles %}
 
+{% block body_class %}onecol{% endblock %}
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
 <script type="text/javascript">
     $(document).ready(function(){
+        var modal = $("#theModal")
+        // Get the button that opens the modal
+        var btn = $(".showModalBtn");
 
+        // Get the <span> element that closes the modal
+        var span = $(".close");
+
+        // When the user clicks the button, open the modal 
+        btn.click(function() {
+            modal.show(200);
+        })
+
+        // When the user clicks on <span> (x), close the modal
+        span.click(function() {
+            modal.hide(300)
+        })
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.hide(300)
+            }
+        }
     });
 </script>
 {% endblock %}
@@ -22,6 +45,7 @@
                     <h2>{{ template.title }}</h2>  
                     <p>{{ template.description }}</p>  
                     <a href="{% url 'products:create_pdf' %}" class="info">Open template</a>  
+                    <a href="#" class="info showModalBtn">Show smth</a>  
                 </div>  
             </div>
         </div>
