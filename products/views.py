@@ -14,6 +14,7 @@ from orgs.models import UserProfile
 from decorators import current_org_required
 from helpers.views import get_query
 from products.forms import ProductsPDFForm
+from itertools import repeat
 
 
 @login_required
@@ -85,7 +86,7 @@ def create_pdf(request):
             preview['firstTextBox'] = request.POST.get('firstTextBox', None)
             preview['secondTextBox'] = request.POST.get('secondTextBox', None)
             preview['report_name'] = request.POST.get('report_name', None)
-            createPreviewFromFiles(request, preview)
+            return createPreviewFromFiles(request, preview)
         else:
             print('form.errors', form.errors)
             warning_msg = "e|There was a problem with your submission. Fields:{} required" \
@@ -95,7 +96,11 @@ def create_pdf(request):
     return render(request, 'products/create_pdf.html', {})
 
 def createPreviewFromFiles(request, files):
+    """
+    Create pdf from form data
+    """
     from weasyprint import HTML
+
     html_template = get_template('pdf/temp_1.html')
     context = Context(files)
     rendered_template = html_template.render(context)
@@ -104,16 +109,28 @@ def createPreviewFromFiles(request, files):
         target = '{0}/pdf/{1}.pdf'.format(settings.STATIC_ROOT, files['report_name'])
     else:
         target = '{0}/static/pdf/{1}.pdf'.format(settings.BASE_DIR, files['report_name'])
-        
 
     pdf_file = HTML(string=rendered_template, base_url=request.build_absolute_uri()).write_pdf(target)
-
 
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
     messages.success(request, "s|The PDF successully created: \
                     <a href='{0}{1}.pdf' target='_blank'>Download</a>".format('/static/pdf/', files['report_name']))
-    return response
+    return render(request, 'products/create_pdf.html', {
+        'preview': files
+    })
+
+
+@login_required
+def brochures(request):
+    br_template = {
+        'title': 'Title',
+        'decription': 'Amazing brochure template',
+        'image': 'img/brochure.jpg'
+    }
+    templates = list(repeat(br_template, 10))
+    return render(request, 'products/brochure_templates.html', {'templates': templates})
+
 
 
 def handle_uploaded_file(f):

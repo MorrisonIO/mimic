@@ -1,0 +1,31 @@
+{% extends "products/base_product.html" %}
+{% load staticfiles %}
+
+{% block custom_head %}
+<link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+<script type="text/javascript">
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}
+{% block title %}Choose template{% endblock %}
+{% block page_title %}Choose template{% endblock %}
+
+{% block content %}
+    <div class="wrapper">
+    {% for template in templates %}
+        <div class="template-item">
+            <div class="tmp-item-wrapper">
+                <img src="{% static ''%}{{template.image}}" alt="" />
+                <div class="tmp-item-box">  
+                    <h2>{{ template.title }}</h2>  
+                    <p>{{ template.description }}</p>  
+                    <a href="{% url 'products:create_pdf' %}" class="info">Open template</a>  
+                </div>  
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+       
+{% endblock %}
