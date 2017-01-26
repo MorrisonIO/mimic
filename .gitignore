@@ -15,7 +15,7 @@ uploads/migrations/*
 _env_django19
 tenv/*
 *.sqlite
-*.sqlite
+*.sql
 db.sqlite3.sqlite
 static/uploads
 static/pdf
