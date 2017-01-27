@@ -1,4 +1,4 @@
-{% extends "products/base_product.html" %}
+{% extends "brochures/base_brochure.html" %}
 {% load staticfiles %}
 
 {% block body_class %}onecol{% endblock %}
@@ -44,7 +44,7 @@
                 <div class="tmp-item-box">  
                     <h2>{{ template.title }}</h2>  
                     <p>{{ template.description }}</p>  
-                    <a href="{% url 'products:create_pdf' %}" class="info">Open template</a>  
+                    <a href="{% url 'brochures:create_pdf' %}" class="info">Open template</a>  
                     <a href="#" class="info showModalBtn">Show smth</a>  
                 </div>  
             </div>

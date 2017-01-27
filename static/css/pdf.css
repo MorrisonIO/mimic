@@ -10,7 +10,7 @@
   float: left;
   text-align: justify;
   font-size: 7px;
-    line-height: 10px !important;
+  line-height: 10px !important;
 }
 .preview-images {
   width: 120px;
@@ -73,6 +73,8 @@
 /* end template 1*/
 
 
+
+/*  Brochure's list  */
 .wrapper {
   font-size: 0;
 }
@@ -191,3 +193,5 @@
 .tmp-item-wrapper:hover a.info {
     transition-delay: 0.2s;
 }
+
+/*  end Brochure's list  */
