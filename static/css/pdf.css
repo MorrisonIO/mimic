@@ -1,3 +1,6 @@
+.included-template {
+  margin: 0px 0px 25px 0;
+}
 .preview-page {
   width: 300px !important;
   height: 424px;
@@ -72,9 +75,102 @@
 }
 /* end template 1*/
 
+.temp-img {
+  color: #fff;
+  text-align: center;
+  line-height: 220px;
+}
+
+/*********** TEMPLATE 2 *************/
+@page { 
+  size: landscape;
+}
+.temp2-page {
+  background: #117f46;
+  height: 21cm;
+  width: 29.7cm;
+  page-break-after: always;
+}
+.temp2-main-photo {
+  width: 100%;
+  height: 16cm;
+  line-height: 16cm;
+}
+.temp2-footer {
+  height: 5cm;
+  background: #191b16;
+}
+.temp2-creds {
+  float: right;
+  height: 100%;
+}
+.temp2-footer-text {
+  height: 100%;
+  vertical-align:top;
+  margin-top: 25px;
+  margin-right: 20px;
+}
+.temp2-creds > * {
+    display: inline-block;
+    font-size:0;
+}
+.temp2-logo {
+  border-left: 1px solid #fff;
+  height: 80%;
+  margin-top:7%;
+}
+.temp2-name, .temp2-surname {
+  color: #fff;
+  font-size: 25px;
+  font-family: fantasy;
+}
+
+.temp2-content {
+  height: 16cm;
+}
+.temp2-content > div {
+/*   display: inline-block; */
+  float: left;
+}
+.temp2-photos-grid {
+  height: 100%;
+  width: 70%;
+  position: relative;
+}
+.temp2-one, .temp2-two, .temp2-three, .temp2-four {
+  padding: 15px;
+  position: absolute;
+}
+
+.temp2-one {
+  width: 9cm;
+  height: 8cm;
+  top: 5px;
+  left: 5px;
+}
+.temp2-two {
+  top: 5px;
+  left: 9.7cm;
+  width: 9cm;
+  height: 40%;
+}
+.temp2-three {
+  top: 8.7cm;
+  left: 5px;
+  width: 9cm;
+  height: 6cm;
+}
+.temp2-four {
+  top: 7cm;
+  left: 9.7cm;
+  width: 9cm;
+  height: 7.7cm;
+}
+/*********** END TEMPLATE 2 ********/
 
 
-/*  Brochure's list  */
+
+/******  Brochure's list  *******/
 .wrapper {
   font-size: 0;
 }
@@ -85,7 +181,7 @@
   margin-left: -1px;
   padding: 10px;
   width: 33%;
-  height: 180px;
+  height: 220px;
   box-sizing: border-box;
   font-size: 14px;
 }
@@ -194,4 +290,4 @@
     transition-delay: 0.2s;
 }
 
-/*  end Brochure's list  */
+/*******  end Brochure's list  ********/

@@ -675,52 +675,6 @@ def search(request):
         'order_list': found_orders
     })
 
-@login_required
-def create_pdf(request):
-    print "CREATE PDF!"
-    if request.method == 'POST':
-        # print('request', request.__dict__)
-        # print('request.FILES', dir(request.FILES))
-        form = OrderPDFForm(request.POST, request.FILES)
-        preview = {}
-        if form.is_valid():  # set session vars
-            for file_key, file_val in request.FILES.iteritems():
-                print('file_k', file_key)
-                print('file_v', file_val)
-                path = handle_uploaded_file(file_val)
-                preview[file_key] = path
-                print('path', path)
-            preview['firstTextBox'] = request.POST.get('title', None)
-            preview['secondTextBox'] = request.POST.get('secondTextBox', None)
-            # preview['report_name'] = request.POST.get('report_name', None)
-            
-            createPreviewFromFiles(request, preview)
-            # return render(request, 'orders/create_pdf.html', {
-            #     'preview': preview
-            # })
-        else:
-            print('form.errors', form.errors)
-            warning_msg = "e|There was a problem with your submission. Fields:{} required" \
-                          .format(', '.join(list(key for key, value in form.errors.iteritems())))
-            messages.warning(request, warning_msg)
-
-    return render(request, 'orders/create_pdf.html', {})
-
-def createPreviewFromFiles(request, files):
-    from weasyprint import HTML
-
-    html_template = get_template('pdf/temp_1.html')
-    context = Context(files)
-    print('files',files)
-    rendered_template = html_template.render(context)
-    print('rendered_template',rendered_template)
-    pdf_file = HTML(string=rendered_template, base_url=request.build_absolute_uri()).write_pdf('report.pdf')
-    print('pdf',pdf_file)
-    response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="temp_1.pdf"'
-    messages.success(request, "s|The PDF successully created")
-    return response
-
 
 def handle_uploaded_file(f):
     """

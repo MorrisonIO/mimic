@@ -5,5 +5,5 @@ app_name = 'brochures'
 
 urlpatterns = [
     url(r'^$',  views.index, name='brochures'),
-    url(r'^create_pdf/$', views.create_pdf, name='create_pdf'),
+    url(r'^create_pdf/(?P<template_name>.*)/$', views.create_pdf, name='create_pdf'),
 ]

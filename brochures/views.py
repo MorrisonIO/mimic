@@ -2,14 +2,15 @@ import random
 import re
 
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context
 from django.template.loader import get_template
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import BrochuresPDFForm
+from forms import BrochuresPDFForm
+from models import Brochure
 from itertools import repeat
 
 
@@ -18,50 +19,59 @@ def index(request):
     """
     Shows the list of Brochures:
     """
-    br_template = {
-        'title': 'Title',
-        'decription': 'Amazing brochure template',
-        'image': 'img/brochure.jpg',
-        'linkToOpen': '#',
-        'linkToMoreInfo': '#',
-    }
-    templates = list(repeat(br_template, 10))
+    templates = Brochure.objects.all()
     return render(request, 'brochures/brochures_list.html', {'templates': templates})
 
 
 @login_required
-def create_pdf(request):
+def create_pdf(request, template_name):
     """
     CREATE PDF
+    * GET  query: get brochure object and drow it's template
+      formated_template_name is path to brochure template what will be included on page
+    * POST query: get query params and put them to pdf fields
     """
+    messages.warning(request, '')
     if request.method == 'POST':
         # print('request', request.__dict__)
-        # print('request.FILES', dir(request.FILES))
         form = BrochuresPDFForm(request.POST, request.FILES)
         preview = {}
-        if form.is_valid():  # set session vars
+        if form.is_valid():
             for file_key, file_val in request.FILES.iteritems():
                 path = handle_uploaded_file(file_val)
                 preview[file_key] = path
-            preview['firstTextBox'] = request.POST.get('firstTextBox', None)
-            preview['secondTextBox'] = request.POST.get('secondTextBox', None)
-            preview['report_name'] = request.POST.get('report_name', None)
-            return createPreviewFromFiles(request, preview)
+            for key, val in request._post.iteritems():
+                if key.startswith('text'):
+                    preview[key] = request.POST.get(key, None)
+            if request.POST.get('report_name', None):
+                preview['report_name'] = request.POST.get('report_name', None)
+            else:
+                preview['report_name'] = 'Report'
+            return create_preview_from_files(request, preview, template_name)
         else:
             print('form.errors', form.errors)
             warning_msg = "e|There was a problem with your submission. Fields:{} required" \
                           .format(', '.join(list(key for key, value in form.errors.iteritems())))
             messages.warning(request, warning_msg)
 
-    return render(request, 'brochures/create_pdf.html', {})
+    template = get_object_or_404(Brochure, template=template_name)
+    formated_template_name = 'pdf/{}.html'.format(template_name)
 
-def createPreviewFromFiles(request, files):
+    return render(request,
+                  'brochures/create_pdf.html', {
+                      'formated_template_name': formated_template_name,
+                      'template': template
+                  }
+                 )
+
+
+def create_preview_from_files(request, files, template_name):
     """
     Create pdf from form data
     """
     from weasyprint import HTML
 
-    html_template = get_template('pdf/temp_1.html')
+    html_template = get_template('pdf/{}.html'.format(template_name))
     context = Context(files)
     rendered_template = html_template.render(context)
 
@@ -76,7 +86,13 @@ def createPreviewFromFiles(request, files):
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
     messages.success(request, "s|The PDF successully created: \
                     <a href='{0}{1}.pdf' target='_blank'>Download</a>".format('/static/pdf/', files['report_name']))
+
+    template = get_object_or_404(Brochure, template=template_name)
+    formated_template_name = 'pdf/{}.html'.format(template_name)
+
     return render(request, 'brochures/create_pdf.html', {
+        'formated_template_name': formated_template_name,
+        'template': template,
         'preview': files
     })
 
@@ -103,7 +119,7 @@ def handle_uploaded_file(f):
 def sanitize_filename(name):
     """
     Given a filename string:
-        * Adds a 4-letter random string at the beginning. 
+        * Adds a 4-letter random string at the beginning.
           This in theory makes the file harder to find for a malicious user,
           but also allows legit users to upload a file more than once
           (eg perhaps revisions) without overwriting it each time.

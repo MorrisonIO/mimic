@@ -39,53 +39,39 @@
 {% block page_title %}Your orders{% endblock %}
 
 {% block content %}
-    <div class="preview-page">
-        {% if preview %}
-        <p class='preview-paragraph'>
-            <img id='img1' src="{{preview.file1}}" class="preview-images" />
-            {{preview.firstTextBox}}
-        </p>  
-        <p class='preview-paragraph'>
-            <img id='img2' src="{{preview.file2}}" class="preview-images" />
-            {{preview.secondTextBox}}
-        </p>
-        {% else %}
-        <p class='preview-paragraph text-empty'>
-            <img id='img1' class="preview-images preview-images-empty " src=""/>
-            some text 1
-        </p>  
-        <p class='preview-paragraph text-empty'>
-            <img id='img2' class="preview-images preview-images-empty" />
-            some text 2
-        </p>
-        {% endif %}
+    <div class="included-template">
+        {% include formated_template_name %}
     </div>
     <form id="dataForm" method="post" enctype="multipart/form-data">{% csrf_token %}
         <fieldset>
-            <p>
-                <label for="report_name" style="display: inline; padding-right: 1em;">Report name</label>
-                <textarea type="text" id="report_name" name="report_name"></textarea>
-            </p>
-            <p>
-                <label for="firstTextBox" style="display: inline; padding-right: 1em;">Some text 1</label>
-                <textarea type="text" id="firstTextBox" name="firstTextBox"></textarea>
-            </p>
-            <p>
-                <label for="secondTextBox" style="display: inline; padding-right: 1em;">Some text 1</label>
-                <textarea type="text" id="secondTextBox" name="secondTextBox"></textarea>
-            </p>
-            <p>
-                <label for="main_file" class="required" style="display: inline; padding-right: 1em;">File main</label>
-                <input id="main_file" name="file1" type="file">
-            </p>
-            <p>
-                <label for="slave_file" class="required" style="display: inline; padding-right: 1em;">File additional</label>
-                <input id="slave_file" name="file2" type="file">
+            {% load tag_helper %}
+
+            {% for img_n in template.num_of_images|times %}
+                {% if img_n == 1 %}
+                <p>
+                    <label for="main_photo" class="required" style="display: inline; padding-right: 1em;">Main photo</label>
+                    <input id="main_photo" name="main_photo" type="file">
+                </p>
+                {% endif %}
+                <p>
+                    <label for="file{{img_n}}" class="required" style="display: inline; padding-right: 1em;">Image {{img_n}}</label>
+                    <input id="file{{img_n}}" name="file{{img_n}}" type="file">
+                </p>
+            {% endfor %}
+                <p>
+                    <label for="report_name" style="display: inline; padding-right: 1em;">Report name</label>
+                    <textarea type="text" id="report_name" name="report_name"></textarea>
+                </p>
+            {% for text_n in template.num_of_textfields|times %}
+                <p>
+                    <label for="secondTextBox" style="display: inline; padding-right: 1em;">Some text {{text_n}}</label>
+                    <textarea type="text" id="text{{text_n}}" name="text{{text_n}}"></textarea>
+                </p>
+            {% endfor %}
                 <!--<button type="button" class="positive">
                     <a href="{}"
                     <img src="{% static 'img/tick_circle.png' %}" alt="">
                     Approve selected order(s) -->
-            </p>
         </fieldset>
         <div class="submit">
             <div class="buttons nolabel center">

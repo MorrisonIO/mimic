@@ -54,3 +54,11 @@ register.simple_tag(js_tag)
 register.simple_tag(css_tag)
 
 
+@register.filter(name='times')
+def times(number):
+    """
+    Trasform number to list with len equals number.
+    List starts from 1, not from 0.
+    Uses for loops
+    """
+    return range(1, number + 1)
