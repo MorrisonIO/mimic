@@ -1,5 +1,6 @@
 env_django19/
 addresses/migrations/*
+brochures/migrations/*
 downloads/migrations/*
 downloads/files/*
 events/migrations/*
