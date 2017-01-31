@@ -91,17 +91,35 @@
   width: 29.7cm;
   page-break-after: always;
 }
+@media print {
+  html, body {
+    width: 297mm;
+    height: 210mm;
+    margin: 0;
+    padding: 0;
+  }
+  * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+  .temp2-page {
+    size: landscape;
+    page-break-after: always;
+  }
+}
 .temp2-main-photo {
   width: 100%;
   height: 16cm;
   line-height: 16cm;
+  display: block;
 }
 .temp2-footer {
   height: 5cm;
   background: #191b16;
 }
 .temp2-creds {
-  float: right;
+  /*float: right;*/
+  position: relative;
   height: 100%;
 }
 .temp2-footer-text {
@@ -111,13 +129,19 @@
   margin-right: 20px;
 }
 .temp2-creds > * {
-    display: inline-block;
+    position: absolute;
     font-size:0;
+}
+.temp2-textos {
+    top: 25px;
+    right: 220px;
+    position: absolute;
 }
 .temp2-logo {
   border-left: 1px solid #fff;
   height: 80%;
-  margin-top:7%;
+  right: 0;
+  top: 17px;
 }
 .temp2-name, .temp2-surname {
   color: #fff;
