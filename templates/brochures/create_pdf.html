@@ -1,6 +1,7 @@
 {% extends "brochures/base_brochure.html" %}
 {% load staticfiles %}
 
+{% block body_class %}onecol{% endblock %}
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
 <script type="text/javascript">
@@ -40,7 +41,7 @@
 
 {% block content %}
     <div class="included-template">
-        {% include formated_template_name %}
+        <iframe id="encoder_iframe" height=500px width="100%" src="{% url 'brochures:render_including_template' template.template %}"></iframe>
     </div>
     <form id="dataForm" method="post" enctype="multipart/form-data">{% csrf_token %}
         <fieldset>

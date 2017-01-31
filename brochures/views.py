@@ -72,7 +72,7 @@ def create_preview_from_files(request, files, template_name):
     from weasyprint import HTML
 
     html_template = get_template('pdf/{}.html'.format(template_name))
-    context = Context(files)
+    context = Context({'context':files})
     rendered_template = html_template.render(context)
 
     if settings.STATIC_ROOT:
@@ -96,6 +96,18 @@ def create_preview_from_files(request, files, template_name):
         'preview': files
     })
 
+
+def render_view(request, template_name):
+    """
+    Render single template.
+    Uses to render template within create_pdf page 
+    """
+    print('template_name', template_name)
+    return render(request, 'pdf/{}.html'.format(template_name), {
+        # 'formated_template_name': formated_template_name,
+        # 'template': template,
+        # 'preview': files
+    })
 
 def handle_uploaded_file(f):
     """

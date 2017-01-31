@@ -6,15 +6,26 @@
     <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
 </head>
 <body>
-    <div class="page">
-        <p class="paragraph" >
-            <img class="image1" src="{{file1}}" />
-            {{firstTextBox}}
-        </p>  
-        <p class="paragraph">
-            <img class="image2" src="{{file2}}"/>
-            {{secondTextBox}}
-        </p>
-    </div>
+     {% if context %}
+     <div class="page">
+         <p class='preview-paragraph'>
+             <img id='img1' src="{{context.file1}}" class="preview-images" />
+             {{context.text1}}
+         </p>  
+         <p class='preview-paragraph'>
+             <img id='img2' src="{{context.file2}}" class="preview-images" />
+             {{context.text2}}
+         </p>
+    {% else %}
+     <div class="preview-page">
+         <p class='preview-paragraph'>
+             <img id='img1' class="preview-images" src=""/>
+             some text 1
+         </p>  
+         <p class='preview-paragraph'>
+             <img id='img2' class="preview-images" />
+             some text 2
+         </p>
+    {% endif %}
 </body>
 </html>
