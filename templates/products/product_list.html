@@ -24,8 +24,9 @@
 <p>Your search for <strong>"{{ query_string }}"</strong> found {% if products.count %}<strong>{{ products.count }} result{{ products|pluralize }}</strong>{% else %} no results{% endif %}. {% if products %}To place an order, enter the quantit{{ products|pluralize:"y,ies" }} you require, or <a href="{% url 'products:product_list' %}" title="Product list">return to the full product list</a>.{% endif %}</p>
 {% else %}
     {% if products %}
-        <p>Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title. Also you can create a brochure. Also you can <a href="{% url 'brochures:brochures' %}">make pdf</a> </p>
+        <p>Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title. Also you can create a brochure. </p>
     {% endif %}
+        <p>You can <a href="{% url 'brochures:brochures' %}">make pdf</a> </p>
 {% endif %}
 
 {% if products %}

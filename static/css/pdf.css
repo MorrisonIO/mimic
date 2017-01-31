@@ -247,6 +247,7 @@
     position: relative;
     font-size: 17px;
     padding: 10px;
+    opacity: 1;
     background: rgba(0, 0, 0, 0.8);
     margin: 20px 0 0 0
 }
@@ -276,14 +277,8 @@
     transition: all 0.2s linear;
 }
 .tmp-item-wrapper .tmp-item-box {
-    opacity: 0;
-    background-color: rgba(219,127,8, 0.7); 
+    opacity: 1;
     transition: all 0.4s ease-in-out;
-}
-.tmp-item-wrapper h2 {
-    transform: translateY(-100px);
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
 }
 .tmp-item-wrapper p { 
     transform: translateY(100px);
@@ -300,8 +295,8 @@
 } 
 .tmp-item-wrapper:hover .tmp-item-box { 
 	opacity: 1;
+  background-color: rgba(219,127,8, 0.7); 
 }
-.tmp-item-wrapper:hover h2,
 .tmp-item-wrapper:hover p,
 .tmp-item-wrapper:hover a.info {
     opacity: 1;
