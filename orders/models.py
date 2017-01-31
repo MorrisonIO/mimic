@@ -122,7 +122,7 @@ class Order(models.Model):
     additional_info = models.TextField(blank=True, help_text="Any additional details Mimic might require to complete this order.", null=True)
     invoice_number = models.CharField(max_length=200, blank=True, null=True)
     user_notes = models.TextField("Your notes", blank=True, help_text="Any information you wish to save with this order for your own records.", null=True)
-    # saved = models.BooleanField(blank=True, default=False) # field might be DEPRECATED
+    saved = models.BooleanField(blank=True, default=False) # field might be DEPRECATED
 
     def __unicode__(self):
         return u'%s' % self.name
