@@ -149,7 +149,8 @@ LOGIN_REDIRECT_URL = '/oos/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
-                    ('downloads', os.path.join(BASE_DIR, "downloads")),]
+                    ('downloads', os.path.join(BASE_DIR, "downloads")),
+                    os.path.join(BASE_DIR, 'logos'),]
                     
 STATIC_URL = '/static/'
 

@@ -62,3 +62,13 @@ def times(number):
     Uses for loops
     """
     return range(1, number + 1)
+
+
+@register.filter
+def get_name(img_path):
+    """
+    Gets image path and returns name with extension
+    """
+    if not img_path:
+        return ''
+    return img_path.split('/')[-1]
