@@ -110,6 +110,8 @@ ul.bulletted {
     border-right: 1px solid #999;
     border-bottom: 1px solid #999;
 	overflow: hidden;
+    box-shadow: 0 1px 10px 0px rgba(0, 0, 0, 0.6), 
+                0 0 202px 1px rgba(255, 255, 255, 0.5);
 }
 .content_wrapper {
     padding: 15px;
@@ -157,6 +159,14 @@ body.twocol_even .sidebar {
     width: 45%;
     float: right;
 }
+body.twocol-context-right .content{
+    float: right;
+}
+body.twocol-context-right .sidebar{
+    width: 350px;
+    float: left;
+}
+
 
 /*}}}*/
 /* {{{ =Header
