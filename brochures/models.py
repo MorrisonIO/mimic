@@ -13,6 +13,7 @@ class Brochure(models.Model):
     preview_image = models.CharField(max_length=250, default="img/brochure.jpg")
     num_of_images = models.PositiveSmallIntegerField(default=0)
     num_of_textfields = models.PositiveSmallIntegerField(default=0)
+    feature_prop = models.CharField(max_length=128, default="Single Property")
 
     def __str__(self):
         return self.name

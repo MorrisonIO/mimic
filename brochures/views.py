@@ -5,6 +5,7 @@ from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core import serializers
 from django.template import Context
 from django.template.loader import get_template
 from django.contrib import messages
@@ -15,12 +16,43 @@ from itertools import repeat
 
 
 @login_required
+def create_menu_elems(request):
+    """
+    Gets: templates from DB and count all fields
+    Returns: dict with counted fields
+    """
+    import json
+    templates = Brochure.objects.all()
+    elems = {}
+    elems['feature_prop'] = {'title': 'Feature Properties'}
+    elems['num_of_images'] = {'title': 'Number of photos'}
+    try:
+        temps = serializers.serialize('json', templates)
+        for temp in templates:
+            if temp.feature_prop.encode('utf-8') in elems['feature_prop']:
+                elems['feature_prop'][temp.feature_prop.encode('utf-8')] += 1
+            else:
+                elems['feature_prop'][temp.feature_prop.encode('utf-8')] = 1
+
+            if temp.num_of_images in elems['num_of_images']:
+                elems['num_of_images']['{} {}'.format(temp.num_of_images, 'photos')] += 1
+            else:
+                elems['num_of_images']['{} {}'.format(temp.num_of_images, 'photos')] = 1
+        return HttpResponse(json.dumps(elems))
+    except Exception as ex:
+        return HttpResponse(ex, status_code=500)
+
+
+@login_required
 def index(request):
     """
     Shows the list of Brochures:
     """
     templates = Brochure.objects.all()
-    return render(request, 'brochures/brochures_list.html', {'templates': templates})
+
+    return render(request, 'brochures/brochures_list.html', {
+        'templates': templates
+        })
 
 
 @login_required

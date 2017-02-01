@@ -1,42 +1,117 @@
 {% extends "brochures/base_brochure.html" %}
 {% load staticfiles %}
 
-{% block body_class %}onecol{% endblock %}
+{% block body_class %}twocol-context-right{% endblock %}
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
 <script type="text/javascript">
     $(document).ready(function(){
         var modal = $("#theModal")
         // Get the button that opens the modal
         var btn = $(".showModalBtn");
-
         // Get the <span> element that closes the modal
         var span = $(".close");
-
         // When the user clicks the button, open the modal 
         btn.click(function() {
             modal.show(200);
         })
-
         // When the user clicks on <span> (x), close the modal
         span.click(function() {
             modal.hide(300)
         })
-
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.hide(300)
             }
         }
+        
+        $.ajax({
+            url: 'get_menu_data',
+            success: function(response){
+                console.log("response", response)
+                drawMenu(JSON.parse(response))
+            },
+            error: function(err){
+                console.log('err',err)
+            }
+        })
+
+        
+        function drawMenu(data){
+            var html= '<ul>';
+            for(category in data){
+                var li_tag = '<li><h3><span class="icon-dashboard"></span>'+ data[category]['title'] +'</h3><ul>'
+                for (row in data[category]){
+                    if (row.toLowerCase() == 'title') continue;
+
+                    li_tag += '<li><a href="#">' + row + '</a></li>';
+                }
+                li_tag += '</ul></li>'
+                html += li_tag
+            }
+            html += '</ul>'
+            $('#accordian').html(html)
+
+            $("#accordian h3").click(function(){
+                // slide up/down all the link lists
+                // slide down the link list below the h3 clicked - only if its closed
+                if(!$(this).next().is(":visible")) {
+                    $(this).next().slideDown();
+                } else {
+                    $(this).next().slideUp();
+                }
+            })
+        }
+
     });
 </script>
 {% endblock %}
 {% block title %}Choose template{% endblock %}
 {% block page_title %}Choose template{% endblock %}
+{% block sidebar %}
+<div id="accordian">
+	<!--<ul>
+		<li>
+			<h3><span class="icon-dashboard"></span>Dashboard</h3>
+			<ul>
+				<li><a href="#">Reports</a></li>
+				<li><a href="#">Search</a></li>
+				<li><a href="#">Settings</a></li>
+			</ul>
+		</li>
+		<!-- we will keep this LI open by default - ->
+		<li class="active">
+			<h3><span class="icon-tasks"></span>Tasks</h3>
+			<ul>
+				<li><a href="#">Today's tasks</a></li>
+				<li><a href="#">Recurring</a></li>
+				<li><a href="#">Settings</a></li>
+			</ul>
+		</li>
+		<li>
+			<h3><span class="icon-calendar"></span>Calendar</h3>
+			<ul>
+				<li><a href="#">Current Month</a></li>
+				<li><a href="#">Current Week</a></li>
+				<li><a href="#">Previous Month</a></li>
+				<li><a href="#">Previous Week</a></li>
 
+			</ul>
+		</li>
+		<li>
+			<h3><span class="icon-heart"></span>Favourites</h3>
+			<ul>
+				<li><a href="#">Global favs</a></li>
+				<li><a href="#">My favs</a></li>
+			</ul>
+		</li>
+	</ul>-->
+</div>
+
+{% endblock %}
 {% block content %}
-    <div class="wrapper">
     {% for template in templates %}
         <div class="template-item">
             <div class="tmp-item-wrapper">
@@ -50,6 +125,5 @@
             </div>
         </div>
     {% endfor %}
-    </div>
        
 {% endblock %}
