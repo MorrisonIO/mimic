@@ -153,7 +153,8 @@ def handle_uploaded_file(f):
     """
     filename = sanitize_filename(f.name)
     path = '/uploads/%s' % filename
-    destination = open('{0}{1}'.format(settings.STATICFILES_DIRS[0].encode('utf8'), path), 'wb+')
+    folder_path = settings.STATIC_ROOT if settings.STATIC_ROOT else settings.STATICFILES_DIRS[0]
+    destination = open('{0}{1}'.format(folder_path.encode('utf8'), path), 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
     url = '%s%s' % (settings.STATIC_URL, path)
