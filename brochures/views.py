@@ -35,9 +35,9 @@ def create_menu_elems(request):
                 elems['feature_prop'][temp.feature_prop.encode('utf-8')] = 1
 
             if temp.num_of_images in elems['num_of_images']:
-                elems['num_of_images']['{} {}'.format(temp.num_of_images, 'photos')] += 1
+                elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] += 1
             else:
-                elems['num_of_images']['{} {}'.format(temp.num_of_images, 'photos')] = 1
+                elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] = 1
         return HttpResponse(json.dumps(elems))
     except Exception as ex:
         return HttpResponse(ex, status_code=500)

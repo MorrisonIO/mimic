@@ -5,6 +5,7 @@
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
+<script type="text/javascript" src="{% static 'js/side-menu.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         var modal = $("#theModal")
@@ -27,43 +28,7 @@
             }
         }
         
-        $.ajax({
-            url: 'get_menu_data',
-            success: function(response){
-                console.log("response", response)
-                drawMenu(JSON.parse(response))
-            },
-            error: function(err){
-                console.log('err',err)
-            }
-        })
-
-        
-        function drawMenu(data){
-            var html= '<ul>';
-            for(category in data){
-                var li_tag = '<li><h3><span class="icon-dashboard"></span>'+ data[category]['title'] +'</h3><ul>'
-                for (row in data[category]){
-                    if (row.toLowerCase() == 'title') continue;
-
-                    li_tag += '<li><a href="#">' + row + '</a></li>';
-                }
-                li_tag += '</ul></li>'
-                html += li_tag
-            }
-            html += '</ul>'
-            $('#accordian').html(html)
-
-            $("#accordian h3").click(function(){
-                // slide up/down all the link lists
-                // slide down the link list below the h3 clicked - only if its closed
-                if(!$(this).next().is(":visible")) {
-                    $(this).next().slideDown();
-                } else {
-                    $(this).next().slideUp();
-                }
-            })
-        }
+        buildmenu();
 
     });
 </script>
@@ -75,10 +40,19 @@
 	<!--<ul>
 		<li>
 			<h3><span class="icon-dashboard"></span>Dashboard</h3>
-			<ul>
-				<li><a href="#">Reports</a></li>
-				<li><a href="#">Search</a></li>
-				<li><a href="#">Settings</a></li>
+			<ul class="filters-category">
+				<li>
+                    <input class="filter" data-filter=".check1" type="checkbox" id="checkbox1">
+                    <label class="checkbox-label" for="checkbox1">Option 1</label>
+                </li>
+				<li>
+                    <input class="filter" data-filter=".check2" type="checkbox" id="checkbox2">
+                    <label class="checkbox-label" for="checkbox2">Option 2</label>
+                </li>
+				<li>
+                    <input class="filter" data-filter=".check1" type="checkbox" id="checkbox3">
+                    <label class="checkbox-label" for="checkbox3">Option 3</label>
+                </li>
 			</ul>
 		</li>
 		<!-- we will keep this LI open by default - ->
@@ -111,9 +85,10 @@
 </div>
 
 {% endblock %}
+{% load tag_helper %}
 {% block content %}
     {% for template in templates %}
-        <div class="template-item">
+        <div class="template-item photos-{{template.num_of_images}} feature-{{template.feature_prop | to_one_word}} filterable">
             <div class="tmp-item-wrapper">
                 <img src="{% static ''%}{{template.preview_image}}" alt="" />
                 <div class="tmp-item-box">  

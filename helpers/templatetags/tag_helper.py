@@ -72,3 +72,13 @@ def get_name(img_path):
     if not img_path:
         return ''
     return img_path.split('/')[-1]
+
+
+@register.filter
+def to_one_word(text):
+    """
+    Gets text and returns all words joined by '-'
+    Example: for 'One two' returns 'One-two'
+    """
+    return '-'.join(text.split(' '))
+
