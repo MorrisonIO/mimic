@@ -75,7 +75,9 @@ jQuery.fn.labelify = function(settings) {
     };
     
     $(this).parents("form").submit(removeValuesOnExit);
-    $(window).unload(removeValuesOnExit);
+    // $(window).unload(removeValuesOnExit);
+    $(window).on("unload", removeValuesOnExit)
+
     
     if (this.value !== this.defaultValue) {
       // user already started typing; don't overwrite their work!
