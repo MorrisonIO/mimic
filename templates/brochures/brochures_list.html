@@ -75,50 +75,6 @@
             </li>    
         {% endfor %}
     </ul>
-		<!--<li>
-			<h3><span class="icon-dashboard"></span>Dashboard</h3>
-			<ul class="filters-category">
-				<li>
-                    <input class="filter" data-filter=".check1" type="checkbox" id="checkbox1">
-                    <label class="checkbox-label" for="checkbox1">Option 1</label>
-                </li>
-				<li>
-                    <input class="filter" data-filter=".check2" type="checkbox" id="checkbox2">
-                    <label class="checkbox-label" for="checkbox2">Option 2</label>
-                </li>
-				<li>
-                    <input class="filter" data-filter=".check1" type="checkbox" id="checkbox3">
-                    <label class="checkbox-label" for="checkbox3">Option 3</label>
-                </li>
-			</ul>
-		</li>
-		<!- - we will keep this LI open by default - ->
-		<li class="active">
-			<h3><span class="icon-tasks"></span>Tasks</h3>
-			<ul>
-				<li><a href="#">Today's tasks</a></li>
-				<li><a href="#">Recurring</a></li>
-				<li><a href="#">Settings</a></li>
-			</ul>
-		</li>
-		<li>
-			<h3><span class="icon-calendar"></span>Calendar</h3>
-			<ul>
-				<li><a href="#">Current Month</a></li>
-				<li><a href="#">Current Week</a></li>
-				<li><a href="#">Previous Month</a></li>
-				<li><a href="#">Previous Week</a></li>
-
-			</ul>
-		</li>
-		<li>
-			<h3><span class="icon-heart"></span>Favourites</h3>
-			<ul>
-				<li><a href="#">Global favs</a></li>
-				<li><a href="#">My favs</a></li>
-			</ul>
-		</li>
-	</ul>-->
 </div>
 
 {% endblock %}
@@ -130,7 +86,7 @@
                 <div class="tmp-item-box">  
                     <h2>{{ template.title }}</h2>  
                     <p>{{ template.description }}</p>  
-                    <a href="{% url 'brochures:create_pdf' template.template %}" class="info">Open template</a>
+                    <a href="{% url 'brochures:create_pdf' template.template template.id %}" class="info">Open template</a>
                     <a href="#" class="info showModalBtn1" onclick="showDesc({{template.id}})">Show description</a>  
                 </div>  
             </div>

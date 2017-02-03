@@ -62,7 +62,7 @@ def index(request):
 
 
 @login_required
-def create_pdf(request, template_name):
+def create_pdf(request, template_name, template_id):
     """
     CREATE PDF
     * GET  query: get brochure object and drow it's template
@@ -92,7 +92,7 @@ def create_pdf(request, template_name):
                           .format(', '.join(list(key for key, value in form.errors.iteritems())))
             messages.warning(request, warning_msg)
 
-    template = get_object_or_404(Brochure, template=template_name)
+    template = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
 
     return render(request,
@@ -125,7 +125,7 @@ def create_preview_from_files(request, files, template_name):
     messages.success(request, "s|The PDF successully created: \
                     <a href='{0}{1}.pdf' target='_blank'>Download</a>".format('/static/pdf/', files['report_name']))
 
-    template = get_object_or_404(Brochure, template=template_name)
+    template = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
 
     return render(request, 'brochures/create_pdf.html', {
