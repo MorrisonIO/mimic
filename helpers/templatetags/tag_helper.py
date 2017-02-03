@@ -82,3 +82,10 @@ def to_one_word(text):
     """
     return '-'.join(text.split(' '))
 
+
+@register.filter
+def get_value_by_key(obj, key):
+    """
+    Get object and return value for key
+    """
+    return obj.get(key, None)

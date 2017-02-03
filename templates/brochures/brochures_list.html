@@ -7,38 +7,75 @@
 <link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
 <script type="text/javascript" src="{% static 'js/side-menu.js' %}"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        var modal = $("#theModal")
-        // Get the button that opens the modal
-        var btn = $(".showModalBtn");
-        // Get the <span> element that closes the modal
-        var span = $(".close");
-        // When the user clicks the button, open the modal 
-        btn.click(function() {
-            modal.show(200);
-        })
-        // When the user clicks on <span> (x), close the modal
-        span.click(function() {
-            modal.hide(300)
-        })
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.hide(300)
-            }
+    $(document).ready(function(e){
+        function closeModal(){
+           $(".modal").removeClass("active");
         }
-        
-        buildmenu();
 
+        $(".close, .modal").on("click", function(){
+            closeModal();
+        });
+
+        // pressing escape
+        if (e.keyCode == 27) {
+            closeModal();
+        }
+        buildmenu();
+        
     });
+    function showDesc(id){
+        $.ajax({
+            url: 'get_brochure_modal_data',
+            data: {'id': id},
+            success: function(response){
+                var modal = $("#theModal")
+                $(".modal-content p").text(JSON.parse(response).description)
+                // modal.show(200);
+                 $(".modal").addClass("active");
+            },
+            error: function(err){
+                console.log('err',err)
+            }
+        })
+    }
 </script>
 {% endblock %}
 {% block title %}Choose template{% endblock %}
 {% block page_title %}Choose template{% endblock %}
 {% block sidebar %}
+{% load tag_helper %}
 <div id="accordian">
-	<!--<ul>
-		<li>
+	<ul>
+        {% for category in menu_data %}
+            <li>
+                <h3>{{menu_data|get_value_by_key:category|get_value_by_key:'title'}}</h3>
+                <ul class="filters-category">
+                {% for row in menu_data|get_value_by_key:category %}
+                    {% if row != 'title' %}
+                        {% if category == 'num_of_images' %}
+                        <li>
+                            <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                        </li>
+                        {% elif category == 'feature_prop' %}
+                        <li>
+                            <input class="filter" data-filter=".feature-{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                        </li>
+                        {% else %}
+                        <li>
+                            <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                        </li>
+                        {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </li>    
+        {% endfor %}
+    </ul>
+		<!--<li>
 			<h3><span class="icon-dashboard"></span>Dashboard</h3>
 			<ul class="filters-category">
 				<li>
@@ -55,7 +92,7 @@
                 </li>
 			</ul>
 		</li>
-		<!-- we will keep this LI open by default - ->
+		<!- - we will keep this LI open by default - ->
 		<li class="active">
 			<h3><span class="icon-tasks"></span>Tasks</h3>
 			<ul>
@@ -85,7 +122,6 @@
 </div>
 
 {% endblock %}
-{% load tag_helper %}
 {% block content %}
     {% for template in templates %}
         <div class="template-item photos-{{template.num_of_images}} feature-{{template.feature_prop | to_one_word}} filterable">
@@ -93,9 +129,9 @@
                 <img src="{% static ''%}{{template.preview_image}}" alt="" />
                 <div class="tmp-item-box">  
                     <h2>{{ template.title }}</h2>  
-                    <p>{{ template.description }} {{template.linkToOpen}}</p>  
+                    <p>{{ template.description }}</p>  
                     <a href="{% url 'brochures:create_pdf' template.template %}" class="info">Open template</a>
-                    <a href="#" class="info showModalBtn">Show smth</a>  
+                    <a href="#" class="info showModalBtn1" onclick="showDesc({{template.id}})">Show description</a>  
                 </div>  
             </div>
         </div>

@@ -14,13 +14,7 @@ from forms import BrochuresPDFForm
 from models import Brochure
 from itertools import repeat
 
-
-@login_required
-def create_menu_elems(request):
-    """
-    Gets: templates from DB and count all fields
-    Returns: dict with counted fields
-    """
+def make_cool():
     import json
     templates = Brochure.objects.all()
     elems = {}
@@ -38,7 +32,17 @@ def create_menu_elems(request):
                 elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] += 1
             else:
                 elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] = 1
-        return HttpResponse(json.dumps(elems))
+    finally:
+        return elems
+
+@login_required
+def create_menu_elems(request):
+    """
+    Gets: templates from DB and count all fields
+    Returns: dict with counted fields
+    """
+    try:
+        return HttpResponse(json.dumps(make_cool()))
     except Exception as ex:
         return HttpResponse(ex, status_code=500)
 
@@ -49,9 +53,11 @@ def index(request):
     Shows the list of Brochures:
     """
     templates = Brochure.objects.all()
-
+    elems = make_cool()
+    print ('templates', templates[0].__dict__)
     return render(request, 'brochures/brochures_list.html', {
-        'templates': templates
+        'templates': templates,
+        'menu_data': elems
         })
 
 
@@ -127,6 +133,16 @@ def create_preview_from_files(request, files, template_name):
         'template': template,
         'preview': files
     })
+
+
+@login_required
+def get_brochure_modal_data(request):
+    # print("request", request.__dict__)
+    import json
+    template_id = request.GET.get('id')
+    template = Brochure.objects.get(pk=template_id)
+    description = template.description if template else ''
+    return HttpResponse(json.dumps({'description': description}))
 
 
 def render_view(request, template_name):

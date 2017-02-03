@@ -1,57 +1,58 @@
 function buildmenu(){
-    $.ajax({
-        url: 'get_menu_data',
-        success: function(response){
-            // console.log("response", response)
-            drawMenu(JSON.parse(response))
-        },
-        error: function(err){
-            console.log('err',err)
-        }
-    })
+    // $.ajax({
+    //     url: 'get_menu_data',
+    //     success: function(response){
+    //         // console.log("response", response)
+    //         drawMenu(JSON.parse(response))
+    //     },
+    //     error: function(err){
+    //         console.log('err',err)
+    //     }
+    // })
 
-    function toOneWord(text){
-        return text.split(' ').join('-');
-    }
+    // function toOneWord(text){
+    //     return text.split(' ').join('-');
+    // }
 
-    function drawMenu(data){
-        // return
-        var html= '<ul>';
-        var index = 0;
-        for(category in data){
-            var li_tag = '<li><h3><span class="icon-dashboard"></span>'+ data[category]['title'] +'</h3><ul class="filters-category">'
-            for (row in data[category]){
-                if (row.toLowerCase() == 'title') continue;
-                index++;
-                if(category.toLowerCase() == 'num_of_images'){
-                    li_tag += '<li> <input class="filter" data-filter=".'+ toOneWord(row) +'" type="checkbox" id="checkbox'+index+'">'+
-                          '<label class="checkbox-label" for="checkbox' + index + '">' + row + '</label></li>';
-                } else if(category.toLowerCase() == 'feature_prop'){
-                    li_tag += '<li> <input class="filter" data-filter=".feature-' + toOneWord(row) + '" type="checkbox" id="checkbox'+index+'">'+
-                          '<label class="checkbox-label" for="checkbox' + index + '">' + row  + '</label></li>';
-                } else {
-                    li_tag += '<li> <input class="filter" data-filter=".'+ '' +'" type="checkbox" id="checkbox'+index+'">'+
-                            '<label class="checkbox-label" for="checkbox' + index + '">' + row + '</label></li>';                }
+    // function drawMenu(data){
+    //     return
+    //     var html= '<ul>';
+    //     var index = 0;
+    //     for(category in data){
+    //         var li_tag = '<li><h3><span class="icon-dashboard"></span>'+ data[category]['title'] +'</h3><ul class="filters-category">'
+    //         for (row in data[category]){
+    //             if (row.toLowerCase() == 'title') continue;
+    //             index++;
+    //             if(category.toLowerCase() == 'num_of_images'){
+    //                 li_tag += '<li> <input class="filter" data-filter=".'+ toOneWord(row) +'" type="checkbox" id="checkbox'+index+'">'+
+    //                       '<label class="checkbox-label" for="checkbox' + index + '">' + row + '</label></li>';
+    //             } else if(category.toLowerCase() == 'feature_prop'){
+    //                 li_tag += '<li> <input class="filter" data-filter=".feature-' + toOneWord(row) + '" type="checkbox" id="checkbox'+index+'">'+
+    //                       '<label class="checkbox-label" for="checkbox' + index + '">' + row  + '</label></li>';
+    //             } else {
+    //                 li_tag += '<li> <input class="filter" data-filter=".'+ '' +'" type="checkbox" id="checkbox'+index+'">'+
+    //                         '<label class="checkbox-label" for="checkbox' + index + '">' + row + '</label></li>';                }
 
-            }
-            li_tag += '</ul></li>'
-            html += li_tag
-        }
-        html += '</ul>'
-        $('#accordian').html(html)
-        $('#accordian > ul > li').first().addClass('active')
+    //         }
+    //         li_tag += '</ul></li>'
+    //         html += li_tag
+    //     }
+    //     html += '</ul>'
+    //     $('#accordian').html(html)
 
-        $("#accordian h3").click(function(){
-            // slide up/down all the link lists
-            // slide down the link list below the h3 clicked - only if its closed
-            if(!$(this).next().is(":visible")) {
-                $(this).next().slideDown();
-            } else {
-                $(this).next().slideUp();
-            }
-        })
-        buttonFilter.init();
-    }
+    //     buttonFilter.init();
+    // }
+	$('#accordian > ul > li').first().addClass('active')
+	$("#accordian h3").click(function(){
+		// slide up/down all the link lists
+		// slide down the link list below the h3 clicked - only if its closed
+		if(!$(this).next().is(":visible")) {
+			$(this).next().slideDown();
+		} else {
+			$(this).next().slideUp();
+		}
+	})
+	buttonFilter.init();
 }
     
 var buttonFilter = {
