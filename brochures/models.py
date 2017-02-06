@@ -17,3 +17,20 @@ class Brochure(models.Model):
 
     def __str__(self):
         return self.name
+
+class PersonalInfo(models.Model):
+    """
+    Model describes step in brochure ordering
+    """
+    first_name = models.CharField(max_length=200)
+    middle_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True)
+    email = models.EmailField(max_length=50, blank=True)
+    website = models.CharField(max_length=200, blank=True)
+    phone1 = models.CharField(max_length=50, blank=True)
+    phone2 = models.CharField(max_length=50, blank=True)
+
+    smart_search = models.CharField(max_length=50, blank=True)
+    def __str__(self):
+        return self.first_name

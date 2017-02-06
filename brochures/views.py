@@ -14,8 +14,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from forms import BrochuresPDFForm
 from models import Brochure
 from itertools import repeat
+from forms import PersonalInfoForm
 
-def make_cool():
+def collect_menu_data():
     import json
     templates = Brochure.objects.all()
     elems = {}
@@ -43,7 +44,7 @@ def create_menu_elems(request):
     Returns: dict with counted fields
     """
     try:
-        return HttpResponse(json.dumps(make_cool()))
+        return HttpResponse(json.dumps(collect_menu_data()))
     except Exception as ex:
         return HttpResponse(ex, status_code=500)
 
@@ -54,7 +55,7 @@ def index(request):
     Shows the list of Brochures:
     """
     templates = Brochure.objects.all()
-    elems = make_cool()
+    elems = collect_menu_data()
     print ('templates', templates[0].__dict__)
     return render(request, 'brochures/brochures_list.html', {
         'templates': templates,
@@ -164,13 +165,23 @@ def personal_info(request):
     """
     Repsonal Info
     """
-    if request.method == 'GET':
-        return render(request, 'brochures/personal_info.html', {})
+    if request.method == 'POST':
+        form = PersonalInfoForm(data=request.POST)
+        if form.is_valid():
+            request.session['first_name'] = request.POST.get('first_name', None)
+            request.session['last_name'] = request.POST.get('last_name', None)
+            request.session['title'] = request.POST.get('title', None)
+            request.session['email'] = request.POST.get('email', None)
+            request.session['website'] = request.POST.get('website', None)
+            request.session['phone1'] = request.POST.get('phone1', None)
+            request.session['phone2'] = request.POST.get('phone2', None)
+            return HttpResponseRedirect(reverse('brochures:property_info'))
+        else:
+            print("form.errors", form.errors)
     else:
-        return HttpResponseRedirect(reverse('brochures:property_info'))
+        form = PersonalInfoForm()
 
-
-
+    return render(request, 'brochures/personal_info.html', {'form': form})
 
 
 def property_info(request):
@@ -178,6 +189,7 @@ def property_info(request):
     property info
     """
     if request.method == 'GET':
+        print('session', request.session['first_name'])
         return render(request, 'brochures/property_info.html', {})
     else:
         return HttpResponseRedirect(reverse('brochures:detail'))

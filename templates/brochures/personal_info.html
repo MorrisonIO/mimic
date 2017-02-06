@@ -7,7 +7,44 @@
 {% block content %}
 {% load order_progress %}{% show_creation_progress request "persinal_info" %}
 <p>Personal Information</p>
+<img src="" alt />
+<p>Your personal information will not be updated permanently to reflect any changes made on this page.
+To make permanent changes to your personal information, please visit Account Profile and choose Personal Profile above.</p>
+<p>If you would like to include your license number or other locally required information
+you can insert it in place of a title, email or web address.</p>
 <form action="." method="post">{% csrf_token %}
+    <fieldset>
+        <div class="form_row{% if form.errors.first_name %} error_field{% endif %}{% if form.first_name.field.required %} required{% endif %}">
+            <label for="id_first_name">{{ form.first_name.label }}</label>
+            {{ form.first_name }}{% if form.errors.first_name %}{{ form.errors.first_name }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.last_name %} error_field{% endif %}{% if form.last_name.field.required %} required{% endif %}">
+            <label for="id_last_name">{{ form.last_name.label }}</label>
+            {{ form.last_name }}{% if form.errors.last_name %}{{ form.errors.last_name }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.title %} error_field{% endif %}{% if form.title.field.required %} required{% endif %}">
+            <label for="id_title">{{ form.title.label }}</label>
+            {{ form.title }}{% if form.errors.title %}{{ form.errors.title }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.email %} error_field{% endif %}{% if form.email.field.required %} required{% endif %}">
+            <label for="id_email">{{ form.email.label }}</label>
+            {{ form.email }}{% if form.errors.email %}{{ form.errors.email }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.website %} error_field{% endif %}{% if form.website.field.required %} required{% endif %}">
+            <label for="id_website">{{ form.website.label }}</label>
+            {{ form.website }}{% if form.errors.website %}{{ form.errors.website }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.phone1 %} error_field{% endif %}{% if form.phone1.field.required %} required{% endif %}">
+            <label for="id_phone1">{{ form.phone1.label }}</label>
+            {{ form.phone1 }}{% if form.errors.phone1 %}{{ form.errors.phone1 }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.phone2 %} error_field{% endif %}{% if form.phone2.field.required %} required{% endif %}">
+            <label for="id_phone2">{{ form.phone2.label }}</label>
+            {{ form.phone2 }}{% if form.errors.phone2 %}{{ form.errors.phone2 }}{% endif %}
+        </div>
+    </fieldset>
+
+
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
