@@ -1,0 +1,22 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Detail{% endblock %}
+{% block page_title %}Detail{% endblock %}
+
+{% block content %}
+{% load order_progress %}{% show_creation_progress request "detail" %}
+<p>Detail Page</p>
+<form action="." method="post">{% csrf_token %}
+    <div class="submit" id="continue">
+        <div class="center">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="submit" class="">
+                <img src="{% static 'img/arrow.png' %}" alt="">
+                Continue
+            </button>
+        </div>
+    </div>   
+</form>
+{% endblock %}
+

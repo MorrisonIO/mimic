@@ -87,6 +87,7 @@
                     <h2>{{ template.title }}</h2>  
                     <p>{{ template.description }}</p>  
                     <a href="{% url 'brochures:create_pdf' template.template template.id %}" class="info">Open template</a>
+                    <a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>
                     <a href="#" class="info showModalBtn1" onclick="showDesc({{template.id}})">Show description</a>  
                 </div>  
             </div>

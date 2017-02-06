@@ -5,11 +5,12 @@ from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.template import Context
 from django.template.loader import get_template
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from forms import BrochuresPDFForm
 from models import Brochure
 from itertools import repeat
@@ -145,6 +146,7 @@ def get_brochure_modal_data(request):
     return HttpResponse(json.dumps({'description': description}))
 
 
+
 def render_view(request, template_name):
     """
     Render single template.
@@ -156,6 +158,61 @@ def render_view(request, template_name):
         # 'template': template,
         # 'preview': files
     })
+
+
+def personal_info(request):
+    """
+    Repsonal Info
+    """
+    if request.method == 'GET':
+        return render(request, 'brochures/personal_info.html', {})
+    else:
+        return HttpResponseRedirect(reverse('brochures:property_info'))
+
+
+
+
+
+def property_info(request):
+    """
+    property info
+    """
+    if request.method == 'GET':
+        return render(request, 'brochures/property_info.html', {})
+    else:
+        return HttpResponseRedirect(reverse('brochures:detail'))
+
+
+def detail(request):
+    """
+    property info
+    """
+    if request.method == 'GET':
+        return render(request, 'brochures/detail.html', {})
+    else:
+        return HttpResponseRedirect(reverse('brochures:preview'))
+
+
+def preview(request):
+    """
+    property info
+    """
+    if request.method == 'GET':
+        return render(request, 'brochures/preview.html', {})
+    else:
+        return HttpResponseRedirect(reverse('brochures:ship_and_mail'))
+
+
+def ship_and_mail(request):
+    """
+    property info
+    """
+    if request.method == 'GET':
+        return render(request, 'brochures/shipping.html', {})
+    else:
+        return HttpResponseRedirect(reverse('brochures:brochures'))
+
+
 
 def handle_uploaded_file(f):
     """
