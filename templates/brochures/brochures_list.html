@@ -84,9 +84,9 @@
             <div class="tmp-item-wrapper">
                 <img src="{% static ''%}{{template.preview_image}}" alt="" />
                 <div class="tmp-item-box">  
-                    <h2>{{ template.title }}</h2>  
+                    <a href="{% url 'brochures:create_pdf' template.template template.id %}" class="title"><h2>{{ template.title }}</h2>  </a>
                     <p>{{ template.description }}</p>  
-                    <a href="{% url 'brochures:create_pdf' template.template template.id %}" class="info">Open template</a>
+                    
                     <a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>
                     <a href="#" class="info showModalBtn1" onclick="showDesc({{template.id}})">Show description</a>  
                 </div>  
