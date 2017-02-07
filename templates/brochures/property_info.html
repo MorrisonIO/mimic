@@ -7,7 +7,47 @@
 {% block content %}
 {% load order_progress %}{% show_creation_progress request "property_info" %}
 <p>Property Information</p>
+<p>Distinctive properties demand distinctive brochures. 
+    Printed in full-color on 120# cover stock this brochure features dominant
+    cover photo and 2 additional property photos on the second side. 
+    Choose from either matte finish or high gloss coating. 8.5 x 11. 
+    Order by 4pm CT for same day shipping.</p>
+
+<h5><strong>PROPERTY INFORMATION TO YOUR PRODUCT:</strong></h5>
+<h6><strong>Profiles</strong></h6>
+<p>A property profile may be selected below to add property information to your product. 
+    Creating a property profile is recommended if you intend to use the information 
+    and photos on additional marketing materials.</p>
+
 <form action="." method="post">{% csrf_token %}
+    <fieldset>
+        <div class="form_row{% if form.errors.property_address1 %} error_field{% endif %}{% if form.property_address1.field.required %} required{% endif %}">
+            <label for="id_property_address1">{{ form.property_address1.label }}</label>
+            {{ form.property_address1 }}{% if form.errors.property_address1 %}{{ form.errors.property_address1 }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.property_address2 %} error_field{% endif %}{% if form.property_address2.field.required %} required{% endif %}">
+            <label for="id_property_address2">{{ form.property_address2.label }}</label>
+            {{ form.property_address2 }}{% if form.errors.property_address2 %}{{ form.errors.property_address2 }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.property_city %} error_field{% endif %}{% if form.property_city.field.required %} required{% endif %}">
+            <label for="id_property_city">{{ form.property_city.label }}</label>
+            {{ form.property_city }}{% if form.errors.property_city %}{{ form.errors.property_city }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.property_state %} error_field{% endif %}{% if form.property_state.field.required %} required{% endif %}">
+            <label for="id_property_state">{{ form.property_state.label }}</label>
+            {{ form.property_state }}{% if form.errors.property_state %}{{ form.errors.property_state }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.property_code %} error_field{% endif %}{% if form.property_code.field.required %} required{% endif %}">
+            <label for="id_property_code">{{ form.property_code.label }}</label>
+            {{ form.property_code }}{% if form.errors.property_code %}{{ form.errors.property_code }}{% endif %}
+        </div>
+        <div class="form_row{% if form.errors.property_price %} error_field{% endif %}{% if form.property_price.field.required %} required{% endif %}">
+            <label for="id_property_price">{{ form.property_price.label }}</label>
+            {{ form.property_price }}{% if form.errors.property_price %}{{ form.errors.property_price }}{% endif %}
+        </div>
+        
+    </fieldset>
+
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">

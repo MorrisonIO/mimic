@@ -20,7 +20,7 @@ class Brochure(models.Model):
 
 class PersonalInfo(models.Model):
     """
-    Model describes step in brochure ordering
+    Model describes personal info step in brochure ordering
     """
     first_name = models.CharField(max_length=200)
     middle_name = models.CharField(max_length=200, blank=True)
@@ -32,5 +32,17 @@ class PersonalInfo(models.Model):
     phone2 = models.CharField(max_length=50, blank=True)
 
     smart_search = models.CharField(max_length=50, blank=True)
+
     def __str__(self):
         return self.first_name
+
+class PropertyInfo(models.Model):
+    """
+    Model describes property info step in brochure ordering
+    """
+    property_address1 = models.CharField(max_length=200, blank=True)
+    property_address2 = models.CharField(max_length=200, blank=True)
+    property_city = models.CharField(max_length=100, blank=True)
+    property_state = models.CharField(max_length=100, blank=True)
+    property_code = models.CharField(max_length=50, blank=True)
+    property_price = models.CharField(max_length=50, blank=True)

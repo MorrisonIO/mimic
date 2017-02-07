@@ -38,6 +38,19 @@
             }
         })
     }
+    function startOrdering(url, template_id){
+        // need to save template id in session 
+        $.ajax({
+            url: url,
+            data: {'template_id': template_id},
+            success: function(response){
+                console.log("startOrdering:", response)
+            },
+            error: function(err){
+                console.log('err',err)
+            }
+        })
+    }
 </script>
 {% endblock %}
 {% block title %}Choose template{% endblock %}
@@ -87,7 +100,7 @@
                     <a href="{% url 'brochures:create_pdf' template.template template.id %}" class="title"><h2>{{ template.title }}</h2>  </a>
                     <p>{{ template.description }}</p>  
                     
-                    <a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>
+                    <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{template.id}})" class="info">Order brochure</a>
                     <a href="#" class="info showModalBtn1" onclick="showDesc({{template.id}})">Show description</a>  
                 </div>  
             </div>

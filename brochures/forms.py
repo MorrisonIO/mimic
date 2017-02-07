@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from models import PersonalInfo
+from models import PersonalInfo, PropertyInfo
 class BrochuresPDFForm(forms.Form):
     """
     Class to create PDF from user's files
@@ -17,4 +17,12 @@ class PersonalInfoForm(ModelForm):
     """
     class Meta:
         model = PersonalInfo
+        fields = '__all__'
+
+class PropertyInfoForm(ModelForm):
+    """
+    Personal Info model
+    """
+    class Meta:
+        model = PropertyInfo
         fields = '__all__'

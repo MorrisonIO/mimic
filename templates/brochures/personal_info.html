@@ -12,7 +12,7 @@
 To make permanent changes to your personal information, please visit Account Profile and choose Personal Profile above.</p>
 <p>If you would like to include your license number or other locally required information
 you can insert it in place of a title, email or web address.</p>
-<form action="." method="post">{% csrf_token %}
+<form action="{% url 'brochures:personal_info' %}" method="post">{% csrf_token %}
     <fieldset>
         <div class="form_row{% if form.errors.first_name %} error_field{% endif %}{% if form.first_name.field.required %} required{% endif %}">
             <label for="id_first_name">{{ form.first_name.label }}</label>

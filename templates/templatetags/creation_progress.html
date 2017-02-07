@@ -1,6 +1,6 @@
 <div id="order_progress">
 
-    <a class="step active-on-{% ifequal page "persinal_info" %}inactive{% else %}active{% endifequal %}" href="{% url 'orders:cart_summary' %}" title="Ordering">
+    <a class="step active-on-{% ifequal page "persinal_info" %}inactive{% else %}active{% endifequal %}" href="{% url 'brochures:personal_info' %}" title="Ordering">
         <span class="number">1</span>
         <span class="desc">Personal Information</span>
     </a>
@@ -13,7 +13,7 @@
     {% ifequal page "preview" %}active-on-active{% endifequal %}
     {% ifequal page "ship_and_mail" %}active-on-active{% endifequal %}
     "
-    {% if request.session.shipto_address %} href="{% url 'orders:provide_shipto' %}" title="Provide a shipping address"{% endif %} 
+    {% if request.session.shipto_address %} href="{% url 'brochures:property_info' %}" title="Provide a shipping address"{% endif %} 
     >
         <span class="number">2</span>
         <span class="desc">Property Information</span>
@@ -27,7 +27,7 @@
     {% ifequal page "preview" %}active-on-active{% endifequal %}
     {% ifequal page "ship_and_mail" %}active-on-active{% endifequal %}
     "
-    {% if request.session.due_date %} href="{% url 'orders:provide_addinfo' %}" title="Provide additional info"{% endif %} 
+    {% if request.session.due_date %} href="{% url 'brochures:detail' %}" title="Provide additional info"{% endif %} 
     >
         <span class="number">3</span>
         <span class="desc">Product Detail</span>
@@ -36,10 +36,10 @@
 
     <{% if request.session.due_date %}a{% else %}div{% endif %} 
     class="step 
-    {% ifequal page "preview" %}active-on-active{% endifequal %}
+    {% ifequal page "preview" %}active-on-inactive{% endifequal %}
     {% ifequal page "ship_and_mail" %}active-on-active{% endifequal %}
     "
-    {% if request.session.due_date %} href="{% url 'orders:provide_addinfo' %}" title="Provide additional info"{% endif %} 
+    {% if request.session.due_date %} href="{% url 'brochures:preview' %}" title="Provide additional info"{% endif %} 
     >
         <span class="number">4</span>
         <span class="desc">Product Preview</span>
@@ -48,7 +48,7 @@
 
     <{% if request.session.due_date %}a{% else %}div{% endif %} 
     class="step end {% ifequal page "ship_and_mail" %}end-active{% endifequal %}"
-    {% if request.session.due_date %} href="{% url 'orders:confirm_order' %}" title="Finalize this order"{% endif %} 
+    {% if request.session.due_date %} href="{% url 'brochures:ship_and_mail' %}" title="Finalize this order"{% endif %} 
     >
         <span class="number">5</span>
         <span class="desc">Shipping & Mailing</span>

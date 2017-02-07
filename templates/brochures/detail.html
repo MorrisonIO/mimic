@@ -6,8 +6,39 @@
 
 {% block content %}
 {% load order_progress %}{% show_creation_progress request "detail" %}
-<p>Detail Page</p>
-<form action="." method="post">{% csrf_token %}
+<h2>Detail Page</h2>
+
+
+<div class="included-template">
+    <iframe id="encoder_iframe" height=500px width="100%" src="{% url 'brochures:render_including_template' template.template %}"></iframe>
+</div>
+<form id="dataForm" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <fieldset>
+        {% load tag_helper %}
+
+        {% for img_n in template.num_of_images|times %}
+            {% if img_n == 1 %}
+            <p>
+                <label for="main_photo" class="required" style="display: inline; padding-right: 1em;">Main photo</label>
+                <input id="main_photo" name="main_photo" type="file">
+            </p>
+            {% endif %}
+            <p>
+                <label for="file{{img_n}}" class="required" style="display: inline; padding-right: 1em;">Image {{img_n}}</label>
+                <input id="file{{img_n}}" name="file{{img_n}}" type="file">
+            </p>
+        {% endfor %}
+            <p>
+                <label for="report_name" style="display: inline; padding-right: 1em;">Report name</label>
+                <textarea type="text" id="report_name" name="report_name"></textarea>
+            </p>
+        {% for text_n in template.num_of_textfields|times %}
+            <p>
+                <label for="secondTextBox" style="display: inline; padding-right: 1em;">Some text {{text_n}}</label>
+                <textarea type="text" id="text{{text_n}}" name="text{{text_n}}"></textarea>
+            </p>
+        {% endfor %}
+    </fieldset>
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">

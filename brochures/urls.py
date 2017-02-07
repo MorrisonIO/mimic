@@ -10,9 +10,9 @@ urlpatterns = [
     url(r'^get_menu_data/$', views.create_menu_elems, name='create_menu'),
     url(r'^get_brochure_modal_data/$', views.get_brochure_modal_data, name='create_brochure_modal'),
 
-    url(r'^personal/$', views.personal_info, name='personal_info'),
+    url(r'^personal$', views.personal_info, name='personal_info'),
     url(r'^property/$', views.property_info, name='property_info'),
-    url(r'^detail/$', views.detail, name='detail'),
-    url(r'^preview/$', views.preview, name='preview'),
+    url(r'^detail/$', views.detail_page, name='detail'),
+    url(r'^preview/$', views.preview_page, name='preview'),
     url(r'^shipping/$', views.ship_and_mail, name='ship_and_mail'),
 ]

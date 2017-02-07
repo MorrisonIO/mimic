@@ -14,7 +14,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from forms import BrochuresPDFForm
 from models import Brochure
 from itertools import repeat
-from forms import PersonalInfoForm
+from forms import PersonalInfoForm, PropertyInfoForm
+
 
 def collect_menu_data():
     import json
@@ -36,6 +37,7 @@ def collect_menu_data():
                 elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] = 1
     finally:
         return elems
+
 
 @login_required
 def create_menu_elems(request):
@@ -80,7 +82,7 @@ def create_pdf(request, template_name, template_id):
             for file_key, file_val in request.FILES.iteritems():
                 path = handle_uploaded_file(file_val)
                 preview[file_key] = path
-            for key, val in request._post.iteritems():
+            for key, _ in request._post.iteritems():
                 if key.startswith('text'):
                     preview[key] = request.POST.get(key, None)
             if request.POST.get('report_name', None):
@@ -105,12 +107,14 @@ def create_pdf(request, template_name, template_id):
                  )
 
 
-def create_preview_from_files(request, files, template_name):
+def create_preview_from_files(request, files, template):
     """
     Create pdf from form data
     """
     from weasyprint import HTML
 
+    template_name = template.template
+    template_id = template.id
     html_template = get_template('pdf/{}.html'.format(template_name))
     context = Context({'context':files})
     rendered_template = html_template.render(context)
@@ -130,11 +134,11 @@ def create_preview_from_files(request, files, template_name):
     template = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
 
-    return render(request, 'brochures/create_pdf.html', {
-        'formated_template_name': formated_template_name,
-        'template': template,
-        'preview': files
-    })
+    return HttpResponseRedirect(reverse('brochures:preview'), {
+                                            'formated_template_name': formated_template_name,
+                                            'template': template,
+                                            'preview': files
+                                        })
 
 
 @login_required
@@ -155,16 +159,16 @@ def render_view(request, template_name):
     """
     print('template_name', template_name)
     return render(request, 'pdf/{}.html'.format(template_name), {
-        # 'formated_template_name': formated_template_name,
-        # 'template': template,
-        # 'preview': files
     })
 
 
 def personal_info(request):
     """
-    Repsonal Info
+    Personal Info
     """
+    if request.is_ajax() and request.method == "POST":
+        request.session['template_id'] = request.GET['template_id']
+        return HttpResponse('200')
     if request.method == 'POST':
         form = PersonalInfoForm(data=request.POST)
         if form.is_valid():
@@ -188,24 +192,65 @@ def property_info(request):
     """
     property info
     """
-    if request.method == 'GET':
-        print('session', request.session['first_name'])
-        return render(request, 'brochures/property_info.html', {})
-    else:
+
+    if request.method == 'POST':
+        form = PropertyInfoForm(data=request.POST)
+        request.session['property_address1'] = request.POST.get('property_address1', None)
+        request.session['property_address2'] = request.POST.get('property_address2', None)
+        request.session['property_city'] = request.POST.get('property_city', None)
+        request.session['property_state'] = request.POST.get('property_state', None)
+        request.session['property_code'] = request.POST.get('property_code', None)
+        request.session['property_price'] = request.POST.get('property_price', None)
         return HttpResponseRedirect(reverse('brochures:detail'))
+    else:
+        form = PropertyInfoForm()
+
+    return render(request, 'brochures/property_info.html', {'form': form})
 
 
-def detail(request):
+def detail_page(request):
     """
     property info
     """
-    if request.method == 'GET':
-        return render(request, 'brochures/detail.html', {})
-    else:
-        return HttpResponseRedirect(reverse('brochures:preview'))
+    messages.warning(request, '')
+
+    template_id = request.session.get('template_id', None)
+    template = get_object_or_404(Brochure, id=template_id)
+    template_name = template.template
+    if request.method == 'POST':
+        form = PropertyInfoForm(data=request.POST)
+        preview = {}
+        if form.is_valid():
+            for file_key, file_val in request.FILES.iteritems():
+                path = handle_uploaded_file(file_val)
+                preview[file_key] = path
+            for key, _ in request._post.iteritems():
+                if key.startswith('text'):
+                    preview[key] = request.POST.get(key, None)
+            if request.POST.get('report_name', None):
+                preview['report_name'] = request.POST.get('report_name', None)
+            else:
+                preview['report_name'] = 'Report'
+
+            request.session['property_address1'] = request.POST.get('property_address1', None)
+            request.session['property_address2'] = request.POST.get('property_address2', None)
+            request.session['property_city'] = request.POST.get('property_city', None)
+            request.session['property_state'] = request.POST.get('property_state', None)
+            request.session['property_code'] = request.POST.get('property_code', None)
+            request.session['property_price'] = request.POST.get('property_price', None)
+            return create_preview_from_files(request, preview, template)
+
+    form = PropertyInfoForm()
+    formated_template_name = 'pdf/{}.html'.format(template_name)
+
+    return render(request, 'brochures/detail.html', {
+        'formated_template_name': formated_template_name,
+        'template': template,
+        'form': form
+        })
 
 
-def preview(request):
+def preview_page(request):
     """
     property info
     """
