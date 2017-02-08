@@ -1292,3 +1292,11 @@ p.entry_nav_text {
   opacity: 1;
   transform: translateY(0);
 }
+
+.checkbox-label {
+    float: none;
+}
+
+.show-list-style{
+    list-style: disc inside;
+}

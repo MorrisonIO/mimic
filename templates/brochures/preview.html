@@ -3,15 +3,78 @@
 
 {% block title %}Preview Page{% endblock %}
 {% block page_title %}Preview Page{% endblock %}
-
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(e){
+    $('#dataForm').submit(function(ev){
+        if(!$('#approval').prop('checked')){
+            $('.checkbox-label[for="approval"]').css('color', 'red')
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        } else {
+            $(this).css('margin-left', '0px'); 
+            var spinner = $(this).prev(); 
+            spinner.show(); 
+            var img = $(this).find("img");
+            $(this).addClass('processing');
+            $(this).html('<img src="' + img.attr('src') + '"> Processing...'); 
+        }
+    });
+});
+</script>
+{% endblock %}
 {% block content %}
 {% load order_progress %}{% show_creation_progress request "preview" %}
-<p>Preview Page</p>
-<form action="." method="post">{% csrf_token %}
+<form id="dataForm" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <h4>Step 1: Product Preview</h4>
+    <p>Preview the product you created to ensure that spelling, grammar, images, and layout appear the way you want.</p>
+    </br>
+    <p>Adobe Reader is required to view the preview and any other PDF files found throughout this site. </p>
+    <p>To obtain the latest version of the free Adobe Reader, please visit the <a href="http://www.adobe.com/">Adobe Web Site</a>.</p>
+    <p><a href="{{url_to_pdf}} target='_blank'">See PDF</a></p>
+    </br>
+    </br>
+
+
+    <h4>Step 2: High Gloss Coating</h4>
+    <input class="" type="checkbox" id="addCoating">
+    <label class="checkbox-label" for="addCoating">Yes, please add high-gloss coating to my brochures.</label>
+    </br>
+    </br>
+
+
+    <h4>Step 3: Product Approval</h4>
+    <p>When you have confirmed that the product is error-free, check the approval box to continue.</p>
+    <ul class="show-list-style">
+        <li>I have reviewed my text for spelling, accuracy and size, and I have verified the content.</li>
+        <li>I have confirmed that my photos are in the correct location and are cropped properly.</li>
+        <li>I have included my return address, as it is required by the USPS for all mailings.</li>
+        <li>I understand that the on-screen clior representations are not necessarily precise
+        representations of the actual cliors that will print, due to variances in monitor calibrations
+        and settings.</li>
+        <li>I have printed out my PDF proof at actual size for my records and final review.</li>
+        <li>If including a QR code on my product, I have printed the PDF proof at actual size and tested
+        the QR code to ensure it works properly.</li>
+        <li>I understand that my order will be printed exactly as it appears here. Reprints due to
+        typographical errors will be at my expense.</li>
+    </ul>
+    <p>California Agents: Make sure that your CalBRE # is included as per California State Law.</p>
+
+    <input class="" type="checkbox" id="approval">
+    <label class="checkbox-label" for="approval">APPROVAL: I agree with the above statements and I am approving this order to print.</label>
+    </br>
+    <label class="checkbox-label" for="approval">I understand it cannot be cancelled once I have approved it.</label>
+    </br>
+    </br>
+
+    <p>Once approved, your order cannot be cancelled; and you take full responsibility for its content.</p>
+    <p> Merrill Corporation is not liable for accuracy of the content you provide.</p>
+
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
-            <button type="submit" class="">
+            <button class="submit">
                 <img src="{% static 'img/arrow.png' %}" alt="">
                 Continue
             </button>

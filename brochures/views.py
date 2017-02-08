@@ -125,11 +125,11 @@ def create_preview_from_files(request, files, template):
         target = '{0}/static/pdf/{1}.pdf'.format(settings.BASE_DIR, files['report_name'])
 
     pdf_file = HTML(string=rendered_template, base_url=request.build_absolute_uri()).write_pdf(target)
-
+    url_to_pdf = '{0}{1}.pdf'.format('/static/pdf/', files['report_name'])
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
-    messages.success(request, "s|The PDF successully created: \
-                    <a href='{0}{1}.pdf' target='_blank'>Download</a>".format('/static/pdf/', files['report_name']))
+    # messages.success(request, "s|The PDF successully created: \
+    #                 <a href='{0}' target='_blank'>Download</a>".format(url_to_pdf))
 
     template = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
@@ -137,7 +137,8 @@ def create_preview_from_files(request, files, template):
     return HttpResponseRedirect(reverse('brochures:preview'), {
                                             'formated_template_name': formated_template_name,
                                             'template': template,
-                                            'preview': files
+                                            'preview': files,
+                                            'url_to_pdf': url_to_pdf
                                         })
 
 

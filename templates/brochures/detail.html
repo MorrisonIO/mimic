@@ -6,8 +6,6 @@
 
 {% block content %}
 {% load order_progress %}{% show_creation_progress request "detail" %}
-<h2>Detail Page</h2>
-
 
 <div class="included-template">
     <iframe id="encoder_iframe" height=500px width="100%" src="{% url 'brochures:render_including_template' template.template %}"></iframe>
