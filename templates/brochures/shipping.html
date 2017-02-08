@@ -6,14 +6,16 @@
 
 {% block content %}
 {% load order_progress %}{% show_creation_progress request "ship_and_mail" %}
-<p>Shipping & Mailing</p>
+
+<img style="margin: 0 auto;" src="http://www.dpsdgp.com/images/page_under_construction.jpg" alt=""/>
 <form action="." method="post">{% csrf_token %}
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
-            <button type="submit" class="">
+            <button class="">
+            <!--<button type="submit" class="">-->
                 <img src="{% static 'img/arrow.png' %}" alt="">
-                Continue
+                Add To Cart
             </button>
         </div>
     </div>   
