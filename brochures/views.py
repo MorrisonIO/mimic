@@ -88,7 +88,9 @@ def create_pdf(request, template_name, template_id):
             if request.POST.get('report_name', None):
                 preview['report_name'] = request.POST.get('report_name', None)
             else:
-                preview['report_name'] = 'Report'
+                from datetime import datetime
+                formated_date = datetime.now().strftime("%m_%d_%y__%H_%M")
+                preview['report_name'] = 'Report_{}'.format(formated_date)
             return create_preview_from_files(request, preview, template_name)
         else:
             print('form.errors', form.errors)
