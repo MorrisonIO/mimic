@@ -90,7 +90,8 @@
   padding: 0;
 }
 .temp2-page {
-  background: #117f46;
+  /*background: #117f46;*/
+  border: 1px solid #333;
   height: 21cm;
   width: 29.7cm;
   page-break-after: always;
