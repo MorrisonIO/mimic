@@ -1300,3 +1300,16 @@ p.entry_nav_text {
 .show-list-style{
     list-style: disc inside;
 }
+button.submit.with-checker {
+    padding: 0;
+    width: 125px;
+    height: 30px;
+    outline: none;
+}
+
+button.submit.with-checker div{
+    width: 100%; 
+    height: 100%;
+    padding: 5px 0px;
+    text-align: center;
+}

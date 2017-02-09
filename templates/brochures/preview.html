@@ -6,7 +6,7 @@
 {% block custom_head %}
 <script type="text/javascript">
 $(document).ready(function(e){
-    $('#dataForm').submit(function(ev){
+    $('#checkForm').click(function(ev){
         if(!$('#approval').prop('checked')){
             $('.checkbox-label[for="approval"]').css('color', 'red')
             ev.preventDefault();
@@ -32,7 +32,7 @@ $(document).ready(function(e){
     </br>
     <p>Adobe Reader is required to view the preview and any other PDF files found throughout this site. </p>
     <p>To obtain the latest version of the free Adobe Reader, please visit the <a href="http://www.adobe.com/">Adobe Web Site</a>.</p>
-    <p><a href="{{url_to_pdf}} target='_blank'">See PDF</a></p>
+    <p><a href="{{url_to_pdf}}" target="_blank">See PDF</a></p>
     </br>
     </br>
 
@@ -74,9 +74,11 @@ $(document).ready(function(e){
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
-            <button class="submit">
+            <button class="submit with-checker" style="padding: 0;">
+                <div id="checkForm" >
                 <img src="{% static 'img/arrow.png' %}" alt="">
                 Continue
+                </div>
             </button>
         </div>
     </div>   

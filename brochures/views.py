@@ -85,7 +85,7 @@ def create_pdf(request, template_name, template_id):
             for key, _ in request._post.iteritems():
                 if key.startswith('text'):
                     preview[key] = request.POST.get(key, None)
-            if request.POST.get('report_name', None):
+            if request.POST.get('report_name', None) or request.POST.get('report_name', None) == 'Report':
                 preview['report_name'] = request.POST.get('report_name', None)
             else:
                 from datetime import datetime
@@ -105,8 +105,7 @@ def create_pdf(request, template_name, template_id):
                   'brochures/create_pdf.html', {
                       'formated_template_name': formated_template_name,
                       'template': template
-                  }
-                 )
+                  })
 
 
 def create_preview_from_files(request, files, template):
@@ -131,17 +130,12 @@ def create_preview_from_files(request, files, template):
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
     # messages.success(request, "s|The PDF successully created: \
-    #                 <a href='{0}' target='_blank'>Download</a>".format(url_to_pdf))
+    #      <a href='{0}' target='_blank'>Download</a>".format(url_to_pdf))
 
     template = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
-
-    return HttpResponseRedirect(reverse('brochures:preview'), {
-                                            'formated_template_name': formated_template_name,
-                                            'template': template,
-                                            'preview': files,
-                                            'url_to_pdf': url_to_pdf
-                                        })
+    request.session['url_to_pdf'] = url_to_pdf
+    return HttpResponseRedirect(reverse('brochures:preview'))
 
 
 @login_required
@@ -152,7 +146,6 @@ def get_brochure_modal_data(request):
     template = Brochure.objects.get(pk=template_id)
     description = template.description if template else ''
     return HttpResponse(json.dumps({'description': description}))
-
 
 
 def render_view(request, template_name):
@@ -258,7 +251,9 @@ def preview_page(request):
     property info
     """
     if request.method == 'GET':
-        return render(request, 'brochures/preview.html', {})
+        url_to_pdf = request.session.get('url_to_pdf', None)
+
+        return render(request, 'brochures/preview.html', {'url_to_pdf': url_to_pdf})
     else:
         return HttpResponseRedirect(reverse('brochures:ship_and_mail'))
 
