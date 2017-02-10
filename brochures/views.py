@@ -12,7 +12,7 @@ from django.template.loader import get_template
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import BrochuresPDFForm
-from models import Brochure
+from models import Brochure, BrochureTemplate
 from itertools import repeat
 from forms import PersonalInfoForm, PropertyInfoForm
 
@@ -113,11 +113,11 @@ def create_preview_from_files(request, files, template):
     Create pdf from form data
     """
     from weasyprint import HTML
+    template_file = template.getName().split('/')[-1]
 
-    template_name = template.template
     template_id = template.id
-    html_template = get_template('pdf/{}.html'.format(template_name))
-    context = Context({'context':files})
+    html_template = get_template('pdf/{}'.format(template_file))
+    context = Context({'context': files})
     rendered_template = html_template.render(context)
 
     if settings.STATIC_ROOT:
@@ -129,8 +129,6 @@ def create_preview_from_files(request, files, template):
     url_to_pdf = '{0}{1}.pdf'.format('/static/pdf/', files['report_name'])
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
-    # messages.success(request, "s|The PDF successully created: \
-    #      <a href='{0}' target='_blank'>Download</a>".format(url_to_pdf))
 
     template = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
@@ -148,14 +146,15 @@ def get_brochure_modal_data(request):
     return HttpResponse(json.dumps({'description': description}))
 
 
-def render_view(request, template_name):
+def render_view(request, template_id):
     """
     Render single template.
     Uses to render template within create_pdf page 
     """
-    print('template_name', template_name)
-    return render(request, 'pdf/{}.html'.format(template_name), {
-    })
+    print('template_id', template_id)
+    template = get_object_or_404(BrochureTemplate, id=template_id)
+    template_file = template.getName().split('/')[-1]
+    return render(request, 'pdf/{}'.format(template_file), {})
 
 
 def personal_info(request):
@@ -211,9 +210,14 @@ def detail_page(request):
     messages.warning(request, '')
 
     session = request.session.get('brochure_info', None)
-    template_id = session['template_id']
-    template = get_object_or_404(Brochure, id=template_id)
-    template_name = template.template
+    brochure_id = session['template_id']
+    brochure = get_object_or_404(Brochure, id=brochure_id)
+    print('id', brochure.__dict__)
+    template = get_object_or_404(BrochureTemplate, id=brochure.template_id)
+    template_path = template.getName()
+    template_file_name = template_path.split('/')[-1]
+    print('template_file_name', template_file_name)
+    # template_name = template.file
     if request.method == 'POST':
         form = PropertyInfoForm(data=request.POST)
         preview = {}
@@ -238,11 +242,11 @@ def detail_page(request):
             return create_preview_from_files(request, preview, template)
 
     form = PropertyInfoForm()
-    formated_template_name = 'pdf/{}.html'.format(template_name)
+    formated_template_name = 'pdf/{}'.format(template_file_name)
 
     return render(request, 'brochures/detail.html', {
         'formated_template_name': formated_template_name,
-        'template': template,
+        'template': brochure,
         'form': form
         })
 
