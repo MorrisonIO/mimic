@@ -3,11 +3,64 @@
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+    <style>
+    @page { 
+        size: portrait;
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+    .template-page {
+        /*background: #117f46;*/
+        border: 1px solid #333;
+        height: 297mm;
+        width: 210mm;
+        position: relative;
+        page-break-after: always;
+    }
+    @media print {
+        html, body {
+            width: 297mm;
+            height: 210mm;
+            margin: 0;
+            padding: 0;
+        }
+        * {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+        .template-page {
+            size: landscape;
+            page-break-after: always;
+        }
+    }
+    .preview-paragraph{
+        position: relative;
+        width: 200mm;
+        float: left;
+        text-align: justify;
+        height: 50%;
+        margin-left: 5mm;
+        margin-right: 5mm;
+        line-height: 25px !important
+    }
+    .preview-images {
+        width: 70mm;
+        height: 90mm;
+        margin: 0mm 5mm 0mm 0mm;
+        border: 1px solid #333;
+        border-radius: 5px;
+    }
+
+    #img2 {
+        float: right;
+        margin: 0mm 0mm 0mm 5mm;
+    }
+</style>
 </head>
 <body>
-     {% if context %}
-     <div class="page">
+     <div class="template-page">
          <p class='preview-paragraph'>
              <img id='img1' src="{{context.file1}}" class="preview-images" />
              {{context.text1}}
@@ -16,16 +69,6 @@
              <img id='img2' src="{{context.file2}}" class="preview-images" />
              {{context.text2}}
          </p>
-    {% else %}
-     <div class="preview-page">
-         <p class='preview-paragraph'>
-             <img id='img1' class="preview-images" src=""/>
-             some text 1
-         </p>  
-         <p class='preview-paragraph'>
-             <img id='img2' class="preview-images" />
-             some text 2
-         </p>
-    {% endif %}
+  </div>
 </body>
 </html>
