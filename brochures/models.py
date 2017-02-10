@@ -2,6 +2,19 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
+class BrochureTemplate(models.Model):
+    """
+    Model describes personal info step in brochure ordering
+    """
+    file = models.FileField(upload_to='templates/pdf')
+    name = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name
+
+    def getName(self):
+        return self.file.file.name
+
 class Brochure(models.Model):
     """
     This is a model for all existing brochures
@@ -9,7 +22,7 @@ class Brochure(models.Model):
     name = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=1000)
-    template = models.CharField(max_length=250)
+    template = models.ForeignKey(BrochureTemplate, default=1)
     preview_image = models.CharField(max_length=250, default="img/brochure.jpg")
     num_of_images = models.PositiveSmallIntegerField(default=0)
     num_of_textfields = models.PositiveSmallIntegerField(default=0)
@@ -17,6 +30,7 @@ class Brochure(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class PersonalInfo(models.Model):
     """
