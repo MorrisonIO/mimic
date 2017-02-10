@@ -1313,3 +1313,11 @@ button.submit.with-checker div{
     padding: 5px 0px;
     text-align: center;
 }
+
+table.price {
+    width: 400px !important;
+    border: 1px dotted #e2e4e2;
+}
+table.price tr:nth-child(2n+1) {
+    background-color: #f4f4f4;
+}

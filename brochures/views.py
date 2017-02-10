@@ -162,19 +162,19 @@ def personal_info(request):
     """
     Personal Info
     """
-    if request.is_ajax() and request.method == "POST":
-        request.session['template_id'] = request.GET['template_id']
+    if request.is_ajax() and request.method == "GET":
+        request.session['brochure_info'] = dict(template_id=request.GET['template_id'])
         return HttpResponse('200')
     if request.method == 'POST':
         form = PersonalInfoForm(data=request.POST)
         if form.is_valid():
-            request.session['first_name'] = request.POST.get('first_name', None)
-            request.session['last_name'] = request.POST.get('last_name', None)
-            request.session['title'] = request.POST.get('title', None)
-            request.session['email'] = request.POST.get('email', None)
-            request.session['website'] = request.POST.get('website', None)
-            request.session['phone1'] = request.POST.get('phone1', None)
-            request.session['phone2'] = request.POST.get('phone2', None)
+            request.session['brochure_info']['first_name'] = request.POST.get('first_name', None)
+            request.session['brochure_info']['last_name'] = request.POST.get('last_name', None)
+            request.session['brochure_info']['title'] = request.POST.get('title', None)
+            request.session['brochure_info']['email'] = request.POST.get('email', None)
+            request.session['brochure_info']['website'] = request.POST.get('website', None)
+            request.session['brochure_info']['phone1'] = request.POST.get('phone1', None)
+            request.session['brochure_info']['phone2'] = request.POST.get('phone2', None)
             return HttpResponseRedirect(reverse('brochures:property_info'))
         else:
             print("form.errors", form.errors)
@@ -191,12 +191,12 @@ def property_info(request):
 
     if request.method == 'POST':
         form = PropertyInfoForm(data=request.POST)
-        request.session['property_address1'] = request.POST.get('property_address1', None)
-        request.session['property_address2'] = request.POST.get('property_address2', None)
-        request.session['property_city'] = request.POST.get('property_city', None)
-        request.session['property_state'] = request.POST.get('property_state', None)
-        request.session['property_code'] = request.POST.get('property_code', None)
-        request.session['property_price'] = request.POST.get('property_price', None)
+        request.session['brochure_info']['property_address1'] = request.POST.get('property_address1', None)
+        request.session['brochure_info']['property_address2'] = request.POST.get('property_address2', None)
+        request.session['brochure_info']['property_city'] = request.POST.get('property_city', None)
+        request.session['brochure_info']['property_state'] = request.POST.get('property_state', None)
+        request.session['brochure_info']['property_code'] = request.POST.get('property_code', None)
+        request.session['brochure_info']['property_price'] = request.POST.get('property_price', None)
         return HttpResponseRedirect(reverse('brochures:detail'))
     else:
         form = PropertyInfoForm()
@@ -210,7 +210,8 @@ def detail_page(request):
     """
     messages.warning(request, '')
 
-    template_id = request.session.get('template_id', None)
+    session = request.session.get('brochure_info', None)
+    template_id = session['template_id']
     template = get_object_or_404(Brochure, id=template_id)
     template_name = template.template
     if request.method == 'POST':
@@ -228,12 +229,12 @@ def detail_page(request):
             else:
                 preview['report_name'] = 'Report'
 
-            request.session['property_address1'] = request.POST.get('property_address1', None)
-            request.session['property_address2'] = request.POST.get('property_address2', None)
-            request.session['property_city'] = request.POST.get('property_city', None)
-            request.session['property_state'] = request.POST.get('property_state', None)
-            request.session['property_code'] = request.POST.get('property_code', None)
-            request.session['property_price'] = request.POST.get('property_price', None)
+            request.session['brochure_info']['property_address1'] = request.POST.get('property_address1', None)
+            request.session['brochure_info']['property_address2'] = request.POST.get('property_address2', None)
+            request.session['brochure_info']['property_city'] = request.POST.get('property_city', None)
+            request.session['brochure_info']['property_state'] = request.POST.get('property_state', None)
+            request.session['brochure_info']['property_code'] = request.POST.get('property_code', None)
+            request.session['brochure_info']['property_price'] = request.POST.get('property_price', None)
             return create_preview_from_files(request, preview, template)
 
     form = PropertyInfoForm()
@@ -263,8 +264,17 @@ def ship_and_mail(request):
     property info
     """
     if request.method == 'GET':
-        return render(request, 'brochures/shipping.html', {})
+        from datetime import datetime, timedelta
+        delivery_date = datetime.now().strftime("%d %B %Y")
+        return render(request, 'brochures/shipping.html', {'delivery_date': delivery_date})
     else:
+        cart = request.session.get('cart', None) or Cart()
+        template_id = request.session.get('template_id', None)
+        brochure = Brochure.objects.get(pk=template_id)
+        unique_id = 'pdf_q{}'.format(brochure.id)
+        cart.add_item(brochure, unique_id, 40)
+        request.session['cart'] = cart
+        request.session['brochure_info'] = None
         return HttpResponseRedirect(reverse('brochures:brochures'))
 
 

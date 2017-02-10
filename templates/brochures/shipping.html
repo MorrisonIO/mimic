@@ -5,10 +5,115 @@
 {% block page_title %}Shipping & Mailing{% endblock %}
 
 {% block content %}
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(e){
+});
+    function calculate(val){
+        console.log('value', val)
+        var price = 0;
+        if(val > 500){
+            price = val*0.67; 
+        } else if(val > 200){
+            price = val*0.68; 
+        } else if(val > 100){
+            price = val*0.69; 
+        } else {
+            price = val*0.74; 
+        } 
+
+        $('#product_price').text('$'+price.toFixed(1));
+    }
+</script>
+{% endblock %}
 {% load order_progress %}{% show_creation_progress request "ship_and_mail" %}
 
-<img style="margin: 0 auto;" src="http://www.dpsdgp.com/images/page_under_construction.jpg" alt=""/>
+<h3>Delivery Method: Ship to Me</h3>
+
+
 <form action="." method="post">{% csrf_token %}
+        <h4>Quantity & Delivery Options</h4>
+
+        <table class="quantity price">
+            <tbody>
+                <tr align="center" valign="middle" class="title">
+                    <td colspan="3">Quantity Pricing</td>
+                </tr>
+                <tr align="center" valign="middle" class="header">
+                    <td width="65px">Quantity</td>
+                    <td width="65px">Total</td>
+                    <td width="65px">Each</td>
+                </tr>
+                
+                <tr align="center" valign="middle" class="item">
+                    <td>50</td>
+                    <td>$37.00</td>
+                    <td>$0.74
+                    </td>
+                </tr>
+            
+                <tr align="center" valign="middle" class="altitem">
+                    <td>100</td>
+                    <td>$69.00</td>
+                    <td>$0.69
+                    </td>
+                </tr>
+            
+                <tr align="center" valign="middle" class="item">
+                    <td>200</td>
+                    <td>$136.00</td>
+                    <td>$0.68
+                    </td>
+                </tr>
+            
+                <tr align="center" valign="middle" class="altitem">
+                    <td>500</td>
+                    <td>$335.00</td>
+                    <td>$0.67
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </br>
+
+        <p>Quantity</p>
+        <input type="number" value="20" min="20" step="1" onkeyup="calculate(this.value)" onchange="calculate(this.value)">
+        <p>	Order in increments of 1.<label class="error checkbox-label"> Minimum quantity of 20.</label> </p>
+
+         <table class="price">
+            <tr>
+                <td>Product Price</td>
+                <td id="product_price">$0</td>
+            </tr>
+            <tr>
+                <td>Shipping</td>
+                <td>$20</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>These prices do not include handling fees, discounts or sales tax</p>
+                    <p>*Actual shipping charges may be less. See order summary during checkout for final shipping charges.</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+
+        <select>
+            <option selected="selected" value="0">--Select Method--</option>
+            <option value="130674">Expedited (2-5 days)</option>
+            <option value="130676">Express - International</option>
+            <option value="130678">Ground (4-5 days)</option>
+        </select>
+        <p> Estimated Shipping Date: {{delivery_date}}</p>
+        
+        <p>Where to Ship</p>
+        {% if address_full %}
+        {% else %}
+        {% endif %}
+    
+    
     <div class="submit" id="continue">
         <div class="center">
             <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
