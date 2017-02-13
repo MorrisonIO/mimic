@@ -1315,9 +1315,17 @@ button.submit.with-checker div{
 }
 
 table.price {
+    display: inline-table;
     width: 400px !important;
     border: 1px dotted #e2e4e2;
 }
 table.price tr:nth-child(2n+1) {
     background-color: #f4f4f4;
+}
+.ship-info em {
+    width: 150px;
+    float: left;
+}
+.remove-float {
+    float: none;
 }

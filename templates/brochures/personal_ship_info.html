@@ -1,0 +1,48 @@
+{% load tag_helper %}
+{% if brochure_info|get_value_by_key:'first_name' %}
+<p>
+    <em>Name</em> {{brochure_info.first_name}}
+</p>
+{% endif %}
+{% if brochure_info|get_value_by_key:'last_name' %}
+<p>
+    <em>Last Name</em> {{brochure_info|get_value_by_key:'last_name'}}
+</p>
+{% endif %}
+{% if brochure_info|get_value_by_key:'title' %}
+<p>
+    <em>Title</em> {{brochure_info|get_value_by_key:'title'}}
+</p>
+{% endif %}
+{% if brochure_info|get_value_by_key:'email' %}
+<p>
+    <em>Email</em> {{brochure_info|get_value_by_key:'email'}}
+</p>
+{% endif %}
+{% if brochure_info|get_value_by_key:'website' %}
+<p>
+    <em>Website</em> {{brochure_info|get_value_by_key:'website'}}
+</p>
+{% endif %}
+{% if brochure_info|get_value_by_key:'phone1' %}
+<p>
+    <em>Phone</em> {{brochure_info|get_value_by_key:'phone1'}}
+</p>
+{% endif %}
+{% if brochure_info|get_value_by_key:'phone2' %}
+    {% if brochure_info|get_value_by_key:'phone1' %}
+    <p>
+        <em>Phone</em> {{brochure_info|get_value_by_key:'phone2'}}
+    </p>
+    {% else%}
+    <p>
+        <em>Additional Phone</em> {{brochure_info|get_value_by_key:'phone2'}}
+    </p>
+    {% endif %}
+{% endif %}
+{% if brochure_info|get_value_by_key:'coating' %}
+    <p>
+        <em>Coating</em> Yes
+    </p>
+
+{% endif %}

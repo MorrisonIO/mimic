@@ -39,7 +39,7 @@
         })
     }
     function startOrdering(url, template_id){
-        // need to save template id in session 
+        // need to save brochure id in session 
         $.ajax({
             url: url,
             data: {'template_id': template_id},
@@ -92,16 +92,16 @@
 
 {% endblock %}
 {% block content %}
-    {% for template in templates %}
-        <div class="template-item photos-{{template.num_of_images}} feature-{{template.feature_prop | to_one_word}} filterable">
+    {% for brochure in brochures %}
+        <div class="template-item photos-{{brochure.num_of_images}} feature-{{brochure.feature_prop | to_one_word}} filterable">
             <div class="tmp-item-wrapper">
-                <img src="{% static ''%}{{template.preview_image}}" alt="" />
+                <img src="{% static ''%}{{brochure.preview_image}}" alt="" />
                 <div class="tmp-item-box">  
-                    <a href="{% url 'brochures:create_pdf' template.template_id %}" class="title"><h2>{{ template.title }}</h2>  </a>
-                    <p>{{ template.description }}</p>  
+                    <a href="{% url 'brochures:create_pdf' brochure.template_id %}" class="title"><h2>{{ brochure.title }}</h2>  </a>
+                    <p>{{ brochure.description }}</p>  
                     
-                    <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{template.id}})" class="info">Order brochure</a>
-                    <a href="#" class="info showModalBtn1" onclick="showDesc({{template.id}})">Show description</a>  
+                    <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{brochure.id}})" class="info">Order brochure</a>
+                    <a href="#" class="info showModalBtn1" onclick="showDesc({{brochure.id}})">Show description</a>  
                 </div>  
             </div>
         </div>

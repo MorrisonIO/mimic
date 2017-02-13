@@ -12,6 +12,9 @@ from django.template.loader import get_template
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import BrochuresPDFForm
+from addresses.forms import AddressForm
+from addresses.models import Address
+from orders.models import Cart
 from models import Brochure, BrochureTemplate
 from itertools import repeat
 from forms import PersonalInfoForm, PropertyInfoForm
@@ -19,13 +22,13 @@ from forms import PersonalInfoForm, PropertyInfoForm
 
 def collect_menu_data():
     import json
-    templates = Brochure.objects.all()
+    brochures = Brochure.objects.all()
     elems = {}
     elems['feature_prop'] = {'title': 'Feature Properties'}
     elems['num_of_images'] = {'title': 'Number of photos'}
     try:
-        temps = serializers.serialize('json', templates)
-        for temp in templates:
+        temps = serializers.serialize('json', brochures)
+        for temp in brochures:
             if temp.feature_prop.encode('utf-8') in elems['feature_prop']:
                 elems['feature_prop'][temp.feature_prop.encode('utf-8')] += 1
             else:
@@ -56,11 +59,10 @@ def index(request):
     """
     Shows the list of Brochures:
     """
-    templates = Brochure.objects.all()
+    brochures = Brochure.objects.all()
     elems = collect_menu_data()
-    print ('templates', templates[0].__dict__)
     return render(request, 'brochures/brochures_list.html', {
-        'templates': templates,
+        'brochures': brochures,
         'menu_data': elems
         })
 
@@ -98,13 +100,13 @@ def create_pdf(request, template_name, template_id):
                           .format(', '.join(list(key for key, value in form.errors.iteritems())))
             messages.warning(request, warning_msg)
 
-    template = get_object_or_404(Brochure, id=template_id)
+    brochure = get_object_or_404(Brochure, id=template_id)
     formated_template_name = 'pdf/{}.html'.format(template_name)
 
     return render(request,
                   'brochures/create_pdf.html', {
                       'formated_template_name': formated_template_name,
-                      'template': template
+                      'brochure': brochure
                   })
 
 
@@ -130,15 +132,12 @@ def create_preview_from_files(request, files, template):
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
 
-    template = get_object_or_404(Brochure, id=template_id)
-    formated_template_name = 'pdf/{}.html'.format(template_name)
     request.session['url_to_pdf'] = url_to_pdf
     return HttpResponseRedirect(reverse('brochures:preview'))
 
 
 @login_required
 def get_brochure_modal_data(request):
-    # print("request", request.__dict__)
     import json
     template_id = request.GET.get('id')
     template = Brochure.objects.get(pk=template_id)
@@ -149,9 +148,8 @@ def get_brochure_modal_data(request):
 def render_view(request, template_id):
     """
     Render single template.
-    Uses to render template within create_pdf page 
+    Uses to render template within create_pdf page
     """
-    print('template_id', template_id)
     template = get_object_or_404(BrochureTemplate, id=template_id)
     template_file = template.getName().split('/')[-1]
     return render(request, 'pdf/{}'.format(template_file), {})
@@ -162,7 +160,7 @@ def personal_info(request):
     Personal Info
     """
     if request.is_ajax() and request.method == "GET":
-        request.session['brochure_info'] = dict(template_id=request.GET['template_id'])
+        request.session['brochure_info'] = dict(template_id=int(request.GET['template_id']))
         return HttpResponse('200')
     if request.method == 'POST':
         form = PersonalInfoForm(data=request.POST)
@@ -174,6 +172,7 @@ def personal_info(request):
             request.session['brochure_info']['website'] = request.POST.get('website', None)
             request.session['brochure_info']['phone1'] = request.POST.get('phone1', None)
             request.session['brochure_info']['phone2'] = request.POST.get('phone2', None)
+            request.session.save()
             return HttpResponseRedirect(reverse('brochures:property_info'))
         else:
             print("form.errors", form.errors)
@@ -196,10 +195,11 @@ def property_info(request):
         request.session['brochure_info']['property_state'] = request.POST.get('property_state', None)
         request.session['brochure_info']['property_code'] = request.POST.get('property_code', None)
         request.session['brochure_info']['property_price'] = request.POST.get('property_price', None)
+        request.session.save()
         return HttpResponseRedirect(reverse('brochures:detail'))
     else:
         form = PropertyInfoForm()
-
+    print('brochure info porp get', request.session['brochure_info'])
     return render(request, 'brochures/property_info.html', {'form': form})
 
 
@@ -208,16 +208,12 @@ def detail_page(request):
     property info
     """
     messages.warning(request, '')
-
     session = request.session.get('brochure_info', None)
     brochure_id = session['template_id']
     brochure = get_object_or_404(Brochure, id=brochure_id)
-    print('id', brochure.__dict__)
     template = get_object_or_404(BrochureTemplate, id=brochure.template_id)
     template_path = template.getName()
     template_file_name = template_path.split('/')[-1]
-    print('template_file_name', template_file_name)
-    # template_name = template.file
     if request.method == 'POST':
         form = PropertyInfoForm(data=request.POST)
         preview = {}
@@ -233,17 +229,17 @@ def detail_page(request):
             else:
                 preview['report_name'] = 'Report'
 
-            request.session['brochure_info']['property_address1'] = request.POST.get('property_address1', None)
-            request.session['brochure_info']['property_address2'] = request.POST.get('property_address2', None)
-            request.session['brochure_info']['property_city'] = request.POST.get('property_city', None)
-            request.session['brochure_info']['property_state'] = request.POST.get('property_state', None)
-            request.session['brochure_info']['property_code'] = request.POST.get('property_code', None)
-            request.session['brochure_info']['property_price'] = request.POST.get('property_price', None)
+            # request.session['brochure_info']['property_address1'] = request.POST.get('property_address1', None)
+            # request.session['brochure_info']['property_address2'] = request.POST.get('property_address2', None)
+            # request.session['brochure_info']['property_city'] = request.POST.get('property_city', None)
+            # request.session['brochure_info']['property_state'] = request.POST.get('property_state', None)
+            # request.session['brochure_info']['property_code'] = request.POST.get('property_code', None)
+            # request.session['brochure_info']['property_price'] = request.POST.get('property_price', None)
+            # request.session.save()
             return create_preview_from_files(request, preview, template)
 
     form = PropertyInfoForm()
     formated_template_name = 'pdf/{}'.format(template_file_name)
-
     return render(request, 'brochures/detail.html', {
         'formated_template_name': formated_template_name,
         'template': brochure,
@@ -257,9 +253,10 @@ def preview_page(request):
     """
     if request.method == 'GET':
         url_to_pdf = request.session.get('url_to_pdf', None)
-
         return render(request, 'brochures/preview.html', {'url_to_pdf': url_to_pdf})
     else:
+        request.session['brochure_info']['coating'] = request.POST.get('coating', None)
+        request.session.save()
         return HttpResponseRedirect(reverse('brochures:ship_and_mail'))
 
 
@@ -267,18 +264,50 @@ def ship_and_mail(request):
     """
     property info
     """
+    addresses = Address.objects.filter(owners__in=[request.user])
+    brochure_info = request.session.get('brochure_info', {})
     if request.method == 'GET':
         from datetime import datetime, timedelta
-        delivery_date = datetime.now().strftime("%d %B %Y")
-        return render(request, 'brochures/shipping.html', {'delivery_date': delivery_date})
+        # delivery_date = datetime.now().strftime("%d %B %Y")
+        form = AddressForm()
+        return render(request, 'brochures/shipping.html', {
+            'form': form,
+            'addresses': addresses,
+            'brochure_info': brochure_info
+        })
     else:
+        if not request.POST.get('shipto_address', None):
+            form = AddressForm(request.POST)
+            if form.is_valid():
+                new_addr = form.save()
+                if request.POST.get('add_to_ab', None):
+                    new_addr.owners.add(request.user)
+                    # messages.success(request, "s|The address was added to your Address Book.")
+                    new_addr.save()
+                request.session['shipto_address'] = new_addr
+            else:
+                messages.warning(request, "e|There was a problem with your submission. \
+                                           Refer to the messages below and try again.")
+                return render(request, 'brochures/shipping.html', {
+                    'form': form,
+                    'addresses': addresses,
+                    'brochure_info': brochure_info
+                })
+
+        else:
+            form = AddressForm()
+            address_id = request.POST.get('shipto_address', None)
+            address = get_object_or_404(Address, pk=address_id)
+            request.session['shipto_address'] = address
+
         cart = request.session.get('cart', None) or Cart()
-        template_id = request.session.get('template_id', None)
-        brochure = Brochure.objects.get(pk=template_id)
+        template_id = request.session['brochure_info']['template_id']
+        brochure = Brochure.objects.get(id=template_id)
         unique_id = 'pdf_q{}'.format(brochure.id)
-        cart.add_item(brochure, unique_id, 40)
+        cart.add_item(brochure, unique_id, request.POST.get('quantity', 20))
         request.session['cart'] = cart
         request.session['brochure_info'] = None
+        messages.success(request, "s|Your brochure was successfully added to cart.")
         return HttpResponseRedirect(reverse('brochures:brochures'))
 
 
