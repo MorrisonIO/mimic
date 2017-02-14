@@ -22,14 +22,14 @@
         }
         buildmenu();
         $(document).on('change input paste', '#search_input', function(ev){
-            if(ev.target.value.length > 2){
+            if(ev.target.value.length > 1){
                 $(".template-item").hide()
                 var toShow = []
                 var h2_arr = $('.tmp-item-wrapper h2')
                 var p_arr = $('.tmp-item-wrapper p')
                 $.each(h2_arr, function(id, value){
                     if($(this).text().toLowerCase().indexOf(ev.target.value) > -1){
-                        toShow.push($(this).parent().parent().parent().parent())
+                        toShow.push($(this).parent().parent().parent())
                     }
                 })
                 $.each(p_arr, function(id, value){
@@ -120,7 +120,7 @@
             <div class="tmp-item-wrapper">
                 <img src="{% static ''%}{{brochure.preview_image}}" alt="" />
                 <div class="tmp-item-box">  
-                    <a href="{% url 'brochures:create_pdf' brochure.template_id %}" class="title"><h2>{{ brochure.title }}</h2>  </a>
+                    <h2>{{ brochure.title }}</h2>
                     <p>{{ brochure.description }}</p>  
                     
                     <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{brochure.id}})" class="info">Order brochure</a>
