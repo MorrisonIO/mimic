@@ -18,12 +18,12 @@
             {% if img_n == 1 %}
             <p>
                 <label for="main_photo" class="required" style="display: inline; padding-right: 1em;">Main photo</label>
-                <input id="main_photo" name="main_photo" type="file">
+                <input id="main_photo" name="main_photo" type="file" accept="image/gif, image/jpeg, image/jpg, image/png">
             </p>
             {% endif %}
             <p>
                 <label for="file{{img_n}}" class="required" style="display: inline; padding-right: 1em;">Image {{img_n}}</label>
-                <input id="file{{img_n}}" name="file{{img_n}}" type="file">
+                <input id="file{{img_n}}" name="file{{img_n}}" type="file" accept="image/gif, image/jpeg, image/jpg, image/png">
             </p>
         {% endfor %}
             <p>
