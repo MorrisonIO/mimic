@@ -68,12 +68,12 @@
                         {% if category == 'num_of_images' %}
                         <li>
                             <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
-                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}} ({{menu_data|get_value_by_key:'num_of_images'|get_value_by_key:row}})</label>
                         </li>
                         {% elif category == 'feature_prop' %}
                         <li>
                             <input class="filter" data-filter=".feature-{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
-                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}} ({{menu_data|get_value_by_key:'feature_prop'|get_value_by_key:row}})</label>
                         </li>
                         {% else %}
                         <li>
