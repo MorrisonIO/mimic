@@ -9,7 +9,7 @@
 {% load tag_helper %}
 {% block content %}
     {% if current_org %}
-        <p class="logo center">{% if current_org.logo %}<img src="{% static '' %}{{ current_org.logo.url | get_name }}" alt="{{ current_org }}">{% else %}{{ current_org }}{% endif %}</p>
+        <p class="logo center">{% if current_org.logo %}<img src="{% static 'logos/' %}{{ current_org.logo.url | get_name }}" alt="{{ current_org }}">{% else %}{{ current_org }}{% endif %}</p>
         {{ current_org.homepage_notes|safe }}
     {% endif %}
 {% endblock %}

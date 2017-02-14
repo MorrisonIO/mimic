@@ -22,4 +22,6 @@ static/uploads
 static/pdf
 settings.json
 settings_local.py
+static_to
 logos
+brochure_images

@@ -149,9 +149,11 @@ LOGIN_REDIRECT_URL = '/oos/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
-                    ('downloads', os.path.join(BASE_DIR, "downloads")),
-                    os.path.join(BASE_DIR, 'logos'),]
-                    
+                    ('downloads', os.path.join(BASE_DIR, "downloads/files")),
+                    ('logo_icons', os.path.join(BASE_DIR, 'logo_icons')),
+                    ('logos', os.path.join(BASE_DIR, 'logos')),
+                    ('brochure_images', os.path.join(BASE_DIR, 'brochure_images')),]
+
 STATIC_URL = '/static/'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
