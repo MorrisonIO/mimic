@@ -34,7 +34,7 @@ def collect_menu_data():
             else:
                 elems['feature_prop'][temp.feature_prop.encode('utf-8')] = 1
 
-            if temp.num_of_images in elems['num_of_images']:
+            if "photos {}".format(temp.num_of_images) in elems['num_of_images']:
                 elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] += 1
             else:
                 elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] = 1
