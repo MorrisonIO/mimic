@@ -23,7 +23,7 @@ class Brochure(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=1000)
     template = models.ForeignKey(BrochureTemplate, default=1)
-    preview_image = models.FileField(upload_to='brochure_images/img', default="img/brochure.jpg")
+    preview_image = models.FileField(upload_to='brochure_images', default="img/brochure.jpg")
     num_of_images = models.PositiveSmallIntegerField(default=0)
     num_of_textfields = models.PositiveSmallIntegerField(default=0)
     feature_prop = models.CharField(max_length=128, default="Single Property")

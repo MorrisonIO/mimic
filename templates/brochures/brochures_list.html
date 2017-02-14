@@ -118,7 +118,12 @@
     {% for brochure in brochures %}
         <div class="template-item photos-{{brochure.num_of_images}} feature-{{brochure.feature_prop | to_one_word}} filterable">
             <div class="tmp-item-wrapper">
+                {# need to check is this file media or not #}
+                {% if brochure.preview_image.url|slice:'7:11' == 'img/' %}
                 <img src="{% static ''%}{{brochure.preview_image}}" alt="" />
+                {% else %}
+                <img src="{{brochure.preview_image.url}}" alt="" />
+                {% endif %}
                 <div class="tmp-item-box">  
                     <h2>{{ brochure.title }}</h2>
                     <p>{{ brochure.description }}</p>  

@@ -150,11 +150,14 @@ LOGIN_REDIRECT_URL = '/oos/'
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
                     ('downloads', os.path.join(BASE_DIR, "downloads/files")),
-                    ('logo_icons', os.path.join(BASE_DIR, 'logo_icons')),
-                    ('logos', os.path.join(BASE_DIR, 'logos')),
-                    ('brochure_images', os.path.join(BASE_DIR, 'brochure_images')),]
+                    # ('logo_icons', os.path.join(BASE_DIR, 'logo_icons')),
+                   ]
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
 
