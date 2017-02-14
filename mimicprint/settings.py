@@ -70,11 +70,39 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'mimicprint.urls'
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
+                    ('downloads', os.path.join(BASE_DIR, "downloads/files")),
+                    # ('logo_icons', os.path.join(BASE_DIR, 'logo_icons')),
+                   ]
+
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# URL that handles the media served from MEDIA_ROOT.
+# Example: "http://media.lawrence.com"
+# MEDIA_URL = 'http://localhost:8000/media/'
+
+# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
+# trailing slash.
+# Examples: "http://foo.com/media/", "/media/".
+# ADMIN_MEDIA_PREFIX = '/media/admin/'
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR + '/templates'
+            BASE_DIR + '/templates',
+            MEDIA_URL + '/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -146,31 +174,6 @@ SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/oos/'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
-                    ('downloads', os.path.join(BASE_DIR, "downloads/files")),
-                    # ('logo_icons', os.path.join(BASE_DIR, 'logo_icons')),
-                   ]
-
-STATIC_URL = '/static/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-MEDIA_URL = '/media/'
-
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# URL that handles the media served from MEDIA_ROOT.
-# Example: "http://media.lawrence.com"
-# MEDIA_URL = 'http://localhost:8000/media/'
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-# ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Overwrite prior settings with settings_local.py if exists
 try:
