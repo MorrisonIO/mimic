@@ -28,12 +28,12 @@
                 var h2_arr = $('.tmp-item-wrapper h2')
                 var p_arr = $('.tmp-item-wrapper p')
                 $.each(h2_arr, function(id, value){
-                    if($(this).text().toLowerCase().indexOf(ev.target.value) > -1){
+                    if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
                         toShow.push($(this).parent().parent().parent())
                     }
                 })
                 $.each(p_arr, function(id, value){
-                    if($(this).text().toLowerCase().indexOf(ev.target.value) > -1){
+                    if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
                         toShow.push($(this).parent().parent().parent())
                     }
                 })
