@@ -175,10 +175,33 @@ $(document).ready(function(){
     // PRODUCT LIST
     $("h3.category").click(function(){
         var table = $(this).next();
+        var self = $(this)
         if ( table.is(':visible') ) {
-           $(this).addClass('cat-closed');
+            self.addClass('cat-closed');
         } else {
-            $(this).removeClass('cat-open');
+            if(!self.hasClass('loaded')) {
+                var loader = '<div id="floatingCirclesG">' +
+                                '<div class="f_circleG" id="frotateG_01"></div>' + 
+                                '<div class="f_circleG" id="frotateG_02"></div>' + 
+                                '<div class="f_circleG" id="frotateG_03"></div>' + 
+                                '<div class="f_circleG" id="frotateG_04"></div>' + 
+                                '<div class="f_circleG" id="frotateG_05"></div>' + 
+                                '<div class="f_circleG" id="frotateG_06"></div>' + 
+                                '<div class="f_circleG" id="frotateG_07"></div>' + 
+                                '<div class="f_circleG" id="frotateG_08"></div>' +
+                            '</div>'
+                table.find('tbody').html(loader)
+                $.get({
+                    url: 'category',
+                    data: {
+                        id: self.attr('data-id')
+                    }
+                }).done(function(res){
+                    self.addClass('loaded')
+                    table.find('tbody').html(res)
+                })
+            }
+            self.removeClass('cat-closed');
         }
         table.fadeToggle();
         // reattach facebox to preview links, otherwise if the page

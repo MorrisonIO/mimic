@@ -21,7 +21,10 @@ from forms import PersonalInfoForm, PropertyInfoForm
 
 
 def collect_menu_data():
-    import json
+    """
+    Collect data for menu information
+    E.g.: number of images or number of brochures types
+    """
     brochures = Brochure.objects.all()
     elems = {}
     elems['feature_prop'] = {'title': 'Feature Properties'}
@@ -40,18 +43,6 @@ def collect_menu_data():
                 elems['num_of_images']['{} {}'.format('photos', temp.num_of_images)] = 1
     finally:
         return elems
-
-
-@login_required
-def create_menu_elems(request):
-    """
-    Gets: templates from DB and count all fields
-    Returns: dict with counted fields
-    """
-    try:
-        return HttpResponse(json.dumps(collect_menu_data()))
-    except Exception as ex:
-        return HttpResponse(ex, status_code=500)
 
 
 @login_required

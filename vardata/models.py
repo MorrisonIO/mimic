@@ -742,7 +742,7 @@ class EverestEnvelopeCommon(models.Model):
     product = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return "\n".join(["%s: %s" % f for f in self.as_list])
+        return "\n".join(["%s: %s" % f for f in self.as_list()])
 
     def as_list(self):
         return (

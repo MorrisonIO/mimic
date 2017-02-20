@@ -9,10 +9,10 @@
 {% if not search %}
     <script type="text/javascript">
     $(document).ready(function(){
-        if ( '{{ profile.default_product_view }}' == 'c' ) {
-            $("h3.category").addClass('cat-closed');
-            $("table.product_list").hide();
-        }
+        // if ( '{{ profile.default_product_view }}' == 'c' ) {
+        //     $("h3.category").addClass('cat-closed');
+        //     $("table.product_list").hide();
+        // }
     });
     </script>
 {% endif %}
@@ -33,8 +33,12 @@
     <form action="{% url 'orders:process_products' %}" method="post">{% csrf_token %}
 
     {% for cat in categories %}
-        <h3 class="category">{% if search %}Search results{% else %}{{ cat.name }}{% endif %}</h3>
-        <table class="product_list tablesorter">
+        {% if search %}
+        <h3 class="category">Search results
+        {% else %}
+        <h3 class="category collapsed cat-closed" data-id={{cat.id}}>{{ cat.name }}</h3>
+        {% endif %}
+        <table class="product_list tablesorter" style="display: none;">
         <thead>
         <tr>
             <th>{% if cat.name_altname %}{{ cat.name_altname }}{% else %}Item{% endif %}</th>
@@ -56,14 +60,6 @@
                 <tr class="{% cycle odd,even %}">
                     {% include "products/product_row.html" %}
                 </tr>
-            {% else %}
-                {% for prodcat in product.categories.all %}
-                    {% ifequal prodcat cat %}
-                        <tr class="{% cycle odd,even %}">
-                            {% include "products/product_row.html" %}
-                        </tr>
-                    {% endifequal %}
-                {% endfor %}
             {% endif %}
         {% endfor %}
         </tbody>

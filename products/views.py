@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import loader, Context, Template
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.contrib import messages
 from django.http import HttpResponse
 from products.models import Product, Category
@@ -66,3 +66,28 @@ def search(request):
         'categories': [1, ]  # hack to reuse product list template,
                              # which loops through categories
     })
+
+def get_category(request):
+    """
+    Return category object
+    """
+    org = request.session['current_org']
+    user = request.user
+    user_is_manager = user.has_perm('orders.change_order')
+    try:
+        profile = UserProfile.objects.get(user=user, org=org)
+    except MultipleObjectsReturned as mor_ex:
+        profile = UserProfile.objects.filter(user=user, org=org)[0]
+    except ObjectDoesNotExist as odne_ex:
+        profile = None
+    unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
+    category_id = request.GET.get('id', None)
+    cat = Category.objects.filter(id=category_id)
+    products = Product.objects.filter(categories__in=cat, status__exact='av').distinct().order_by('sort', 'name')
+    rendered = render_to_string('products/product_list_item.html', {
+        'products': products,
+        'cat': cat[0],
+        'user_is_manager': user_is_manager,
+        'unrestricted_qtys': unrestricted_qtys
+        }, request=request)
+    return HttpResponse(rendered)
