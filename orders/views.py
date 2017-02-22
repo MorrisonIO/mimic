@@ -393,9 +393,9 @@ def order_list(request):
     today = datetime.datetime.today()
     cutoff = today - datetime.timedelta(days=21)
     if user_is_approval_manager:
-        order_list = Order.objects.filter(org=org).filter(date__range=(cutoff, today))
+        order_list = Order.objects.filter(org=org) #.filter(date__range=(cutoff, today))
     else:
-        order_list = Order.objects.filter(placed_by__exact=request.user).filter(date__range=(cutoff, today))
+        order_list = Order.objects.filter(placed_by__exact=request.user) #.filter(date__range=(cutoff, today))
 
     return render(request, 'orders/order_list.html', {
         'order_list': order_list,
