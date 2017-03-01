@@ -68,7 +68,7 @@
 <body>
      <div class="template-page">
          <p class='preview-paragraph'>
-             <img id='img1' src="{{context.file1}}" class="preview-images" alt="Image 1"/>
+             <img id='img1' src="{{context.image}}" class="preview-images" alt="Image 1"/>
              {% if context.text1 %}
                 {{context.file1}}
              {% else %}
@@ -76,7 +76,7 @@
              {% endif %}
          </p>  
          <p class='preview-paragraph'>
-             <img id='img2' src="{{context.file2}}" class="preview-images" alt="Image 2"/>
+             <img id='img2' src="{{context.image}}" class="preview-images" alt="Image 2"/>
              {% if context.text2 %}
                 {{context.text2}}
              {% else%}
