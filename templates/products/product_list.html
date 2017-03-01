@@ -42,6 +42,7 @@
         <thead>
         <tr>
             <th>{% if cat.name_altname %}{{ cat.name_altname }}{% else %}Item{% endif %}</th>
+            {% if cat.name_altname == "Document Title" %} <th>Preview</th> {% endif %}
             {% if cat.show_revision %}<th>{% if cat.revision_altname %}{{ cat.revision_altname }}{% else %}Revision{% endif %}</th>{% endif %}
             {% if cat.show_part_number %}<th>{% if cat.part_number_altname %}{{ cat.part_number_altname }}{% else %}Part&nbsp;Number{% endif %}</th>{% endif %}
             {% if cat.show_price %}
