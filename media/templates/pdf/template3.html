@@ -1,0 +1,165 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+      @page { 
+            size: portrait;
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
+        }
+        .template-page {
+            /*background: #117f46;*/
+            border: 1px solid #333;
+            height: 297mm;
+            width: 210mm;
+            position: relative;
+            page-break-after: always;
+        }
+        @media print {
+            html, body {
+                width: 297mm;
+                height: 210mm;
+                margin: 0;
+                padding: 0;
+            }
+            * {
+                    box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                }
+            .template-page {
+                size: landscape;
+                page-break-after: always;
+            }
+        }
+        .template-main-photo {
+            width: 100%;
+            height: 250mm;
+            line-height: 250mm;
+            text-align: center;
+            display: block;
+        }
+        .template-footer {
+            height: 5cm;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            background: #191b16;
+        }
+        .template-creds {
+            /*float: right;*/
+            position: relative;
+            height: 100%;
+        }
+        .template-footer-text {
+            height: 100%;
+            vertical-align:top;
+            margin-top: 25px;
+            margin-right: 20px;
+        }
+        .template-creds > * {
+            position: absolute;
+            font-size:0;
+        }
+        .template-textos {
+            top: 25px;
+            right: 220px;
+            position: absolute;
+        }
+        .template-logo {
+            border-left: 1px solid #fff;
+            height: 80%;
+            right: 0;
+            top: 17px;
+        }
+        .template-name, .template-surname {
+            color: #fff;
+            font-size: 25px;
+            font-family: fantasy;
+        }
+
+        .template-content {
+            height: 25cm;
+            background-color: #54e4ff;
+        }
+
+        .template-content img,
+        .template-content p {
+            position: absolute;
+        }
+        .img1 {
+            left: 10mm;
+            top: 10mm;
+            width: 80mm;
+            height: 100mm;
+            text-align: center;
+            line-height: 100mm; /* should be the same as height value */
+        }
+        .img1 {
+            left: 10mm;
+            top: 10mm;
+            width: 80mm;
+            height: 100mm;
+            text-align: center;
+            line-height: 100mm; /* should be the same as height value */
+        }
+        .img2 {
+            left: 10mm;
+            top: 120mm;
+            width: 80mm;
+            height: 100mm;
+            text-align: center;
+            line-height: 100mm; /* should be the same as height value */
+        }
+
+        .textField1 {
+            left: 100mm;
+            top: 6mm;
+        }
+        .textField2 {
+            left: 100mm;
+            top: 116mm;
+        }
+    </style>
+</head>
+<body>
+<div class="template-pages">
+  <div class="template-page">
+    <div class="template-content">
+      <img class="img1" alt="img1" src="{{context.file1}}" />
+      <img class="img2" alt="img2" src="{{context.file2}}" />
+      <p class="textField1">{{context.text1}}</p>
+      <p class="textField2">{{context.text2}}</p>
+    </div>  
+    <div class="template-footer">
+      <div class="template-creds">
+        <div class="template-textos">
+          <p class="template-name">Alexey</p>
+          <p class="template-surname">Alkhutov</p>
+        </div> 
+        <img class="template-logo" src="https://pp.vk.me/c638717/v638717483/1aa7f/ock_2ZloqSQ.jpg" alt="dunice">
+        
+      </div>
+    </div>
+  </div>
+  <div class="template-page">
+    <img class="template-main-photo temp-img" src="{{context.main_photo}}" alt="main photo" />
+    <div class="template-footer">
+      <div class="template-creds">
+        <div class="template-textos">
+          <p class="template-name">Alexey</p>
+          <p class="template-surname">Alkhutov</p>
+        </div> 
+        <img class="template-logo" src="https://pp.vk.me/c638717/v638717483/1aa7f/ock_2ZloqSQ.jpg" alt="dunice">
+        
+      </div>
+    </div>
+  </div>
+  
+  
+</div>
+</body>
+</html>

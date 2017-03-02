@@ -1511,3 +1511,8 @@ table.price tr:nth-child(2n+1) {
 	}
 }
 /* < LOADER */
+
+.links a img {
+    height: 75px;
+    width: auto;
+}

@@ -5,7 +5,15 @@
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery-indicator.css' %}" type="text/css">
 <script type="text/javascript" src="{% static 'js/side-menu.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-helper.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-fullscreen.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-indicator.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.blueimp-gallery.js' %}"></script>
+
 <script type="text/javascript">
     $(document).ready(function(e){
         function closeModal(){
@@ -21,6 +29,7 @@
             closeModal();
         }
         buildmenu();
+        initLinks();
         $(document).on('change input paste', '#search_input', function(ev){
             if(ev.target.value.length > 1){
                 $(".template-item").hide()
@@ -46,6 +55,16 @@
             }
        }) 
     });
+    function initLinks(){
+        document.getElementById('links').onclick = function (event) {
+            event = event || window.event;
+            var target = event.target || event.srcElement,
+                link = target.src ? target.parentNode : target,
+                options = {index: link, event: event, fullscreen: true},
+                links = this.getElementsByTagName('a');
+            blueimp.Gallery(links, options);
+        };
+    }
     function showDesc(id){
         $.ajax({
             url: 'get_brochure_modal_data',

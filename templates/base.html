@@ -107,8 +107,28 @@
     <div class="modal" role="dialog"></div>
     <div class="modal-content" role="alert">
         <button class="close" role="button">X</button>
+        <div id="links" class="links">
+            <a href="{% static 'img/brochure.jpg' %}" title="Banana">
+                <img src="{% static 'img/brochure.jpg' %}" alt="Banana">
+            </a>
+            <a href="{% static 'img/brochure.jpg' %}" title="Apple">
+                <img src="{% static 'img/brochure.jpg' %}" alt="Apple">
+            </a>
+            <a href="{% static 'img/brochure.jpg' %}" title="Orange">
+                <img src="{% static 'img/brochure.jpg' %}" alt="Orange">
+            </a>
+        </div>
         <p id="text"></p>
     </div>
 {% endblock %}
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause-slider"></a>
+        <ol class="indicator"></ol>
+    </div>
 </body>
 </html>

@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+    @page { 
+        size: portrait;
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+    .template-page {
+        /*background: #117f46;*/
+        border: 1px solid #333;
+        height: 297mm;
+        width: 210mm;
+        position: relative;
+        page-break-after: always;
+    }
+    @media print {
+        html, body {
+            width: 297mm;
+            height: 210mm;
+            margin: 0;
+            padding: 0;
+        }
+        * {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+        .template-page {
+            size: landscape;
+            page-break-after: always;
+        }
+    }
+    .preview-paragraph{
+        position: relative;
+        width: 200mm;
+        float: left;
+        text-align: justify;
+        height: 50%;
+        margin-left: 5mm;
+        margin-right: 5mm;
+        line-height: 25px !important
+    }
+    .preview-images {
+        width: 70mm;
+        height: 90mm;
+        margin: 0mm 5mm 0mm 0mm;
+        border: 1px solid #333;
+        border-radius: 5px;
+    }
+    img {
+        text-align: center;
+        line-height: 90mm;
+    }
+    #img1 {
+        float: left;
+    }
+    #img2 {
+        float: right;
+        margin: 0mm 0mm 0mm 5mm;
+    }
+</style>
+</head>
+<body>
+     <div class="template-page">
+         <p class='preview-paragraph'>
+             <img id='img1' src="{{context.file1}}" class="preview-images" alt="Image 1"/>
+             {% if context.text1 %}
+                {{context.file1}}
+             {% else %}
+                This isx a sample text field 1. 
+             {% endif %}
+         </p>  
+         <p class='preview-paragraph'>
+             <img id='img2' src="{{context.file2}}" class="preview-images" alt="Image 2"/>
+             {% if context.text2 %}
+                {{context.text2}}
+             {% else%}
+                This is a sample text field 2.
+             {% endif %}
+         </p>
+  </div>
+</body>
+</html>

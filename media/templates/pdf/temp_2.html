@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+</head>
+<body>
+<div class="temp2-pages">
+  <div class="temp2-page">
+    <div class="temp2-content">
+      <div class="temp2-photos-grid">
+        <img class ="temp2-one temp-img" src="{{context.file1}}" alt="one" />
+        <img class="temp2-two temp-img" src="{{context.file2}}" alt="two" />
+        <img class="temp2-three temp-img" src="{{context.file3}}" alt="three" />
+        <img class="temp2-four temp-img" src="{{context.file4}}" alt="one" />
+      </div>
+      <div class="temp2-texts">
+        <p>{{context.text1}}</p>
+      </div>
+    </div>
+    
+    <div class="temp2-footer">
+      <div class="temp2-creds">
+        <div class="temp2-textos">
+          <p class="temp2-name">Alexey</p>
+          <p class="temp2-surname">Alkhutov</p>
+        </div> 
+        <img class="temp2-logo" src="https://pp.vk.me/c638717/v638717483/1aa7f/ock_2ZloqSQ.jpg" alt="dunice">
+        
+      </div>
+    </div>
+  </div>
+  <div class="temp2-page">
+    <img class="temp2-main-photo temp-img" src="{{context.main_photo}}" alt="main photo" />
+    <div class="temp2-footer">
+      <div class="temp2-creds">
+        <div class="temp2-textos">
+          <p class="temp2-name">Alexey</p>
+          <p class="temp2-surname">Alkhutov</p>
+        </div> 
+        <img class="temp2-logo" src="https://pp.vk.me/c638717/v638717483/1aa7f/ock_2ZloqSQ.jpg" alt="dunice">
+        
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
