@@ -15,6 +15,16 @@ class BrochureTemplate(models.Model):
     def getName(self):
         return self.file.file.name
 
+
+class BrochurePreviewImage(models.Model):
+    """
+    Model presents preview images for brochure
+    """
+    name = models.CharField(max_length=200, default="Preview Image")
+    preview_img = models.FileField(upload_to='brochure_images', default="img/brochure.jpg")
+    def __str__(self):
+        return self.name
+
 class Brochure(models.Model):
     """
     This is a model for all existing brochures
@@ -24,6 +34,7 @@ class Brochure(models.Model):
     description = models.TextField(max_length=1000)
     template = models.ForeignKey(BrochureTemplate, default=1)
     preview_image = models.FileField(upload_to='brochure_images', default="img/brochure.jpg")
+    preview_images = models.ForeignKey(BrochurePreviewImage, default=1)
     num_of_images = models.PositiveSmallIntegerField(default=0)
     num_of_textfields = models.PositiveSmallIntegerField(default=0)
     feature_prop = models.CharField(max_length=128, default="Single Property")
@@ -60,3 +71,4 @@ class PropertyInfo(models.Model):
     property_state = models.CharField(max_length=100, blank=True)
     property_code = models.CharField(max_length=50, blank=True)
     property_price = models.CharField(max_length=50, blank=True)
+
