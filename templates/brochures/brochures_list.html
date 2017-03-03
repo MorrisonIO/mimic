@@ -13,6 +13,7 @@
 <script type="text/javascript" src="{% static 'js/blueimp-gallery-fullscreen.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/blueimp-gallery-indicator.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.blueimp-gallery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.lazyload.min.js' %}"></script>
 
 <script type="text/javascript">
     $(document).ready(function(e){
@@ -73,7 +74,6 @@
                 var modal = $("#theModal")
                 var _res  = JSON.parse(response)
                 $(".modal-content p").text(_res.description)
-                $(".modal").addClass("active");
                 
                 var linksContainer = $('#links').empty()
                 _res.preview_images.forEach(function(el, i){
@@ -81,9 +81,12 @@
                         .append($('<img>').prop('src', el.url))
                         .prop('href', el.url)
                         .prop('title', el.name)
+                        .addClass('lazy')
                         .attr('data-gallery', '')
                         .appendTo(linksContainer)
                 })
+                $("img.lazy").lazyload();
+                $(".modal").addClass("active");
             },
             error: function(err){
                 console.log('err',err)
