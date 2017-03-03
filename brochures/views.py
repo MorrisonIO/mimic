@@ -130,10 +130,15 @@ def create_preview_from_files(request, files, template):
 @login_required
 def get_brochure_modal_data(request):
     import json
-    template_id = request.GET.get('id')
-    template = Brochure.objects.get(pk=template_id)
-    description = template.description if template else ''
-    return HttpResponse(json.dumps({'description': description}))
+    brochure_id = request.GET.get('id')
+    brochure = Brochure.objects.get(pk=brochure_id)
+    description = brochure.description if brochure else ''
+    preview_images = []
+    for img in brochure.preview_images.all():
+        url = img.preview_img.file.name[len(settings.BASE_DIR):]
+        name = img.name
+        preview_images.append({'url': url, 'name': name})
+    return HttpResponse(json.dumps({'description': description, 'preview_images': preview_images}))
 
 
 def render_view(request, template_id):

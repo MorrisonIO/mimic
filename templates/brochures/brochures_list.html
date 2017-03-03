@@ -20,7 +20,7 @@
            $(".modal").removeClass("active");
         }
 
-        $(".close, .modal").on("click", function(){
+        $(".modal-content .close, .modal").on("click", function(){
             closeModal();
         });
 
@@ -71,9 +71,19 @@
             data: {'id': id},
             success: function(response){
                 var modal = $("#theModal")
-                $(".modal-content p").text(JSON.parse(response).description)
-                // modal.show(200);
-                 $(".modal").addClass("active");
+                var _res  = JSON.parse(response)
+                $(".modal-content p").text(_res.description)
+                $(".modal").addClass("active");
+                
+                var linksContainer = $('#links').empty()
+                _res.preview_images.forEach(function(el, i){
+                    $('<a/>')
+                        .append($('<img>').prop('src', el.url))
+                        .prop('href', el.url)
+                        .prop('title', el.name)
+                        .attr('data-gallery', '')
+                        .appendTo(linksContainer)
+                })
             },
             error: function(err){
                 console.log('err',err)
