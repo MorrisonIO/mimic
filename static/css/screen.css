@@ -1337,7 +1337,8 @@ table.price tr:nth-child(2n+1) {
 }
 
 /* LOADER > */
-#floatingCirclesG{
+#floatingCirclesG,
+.floatingCirclesG{
 	position:relative;
 	width:70px;
 	height:70px;
@@ -1347,6 +1348,10 @@ table.price tr:nth-child(2n+1) {
 		-ms-transform:scale(0.6);
 		-webkit-transform:scale(0.6);
 		-moz-transform:scale(0.6);
+}
+
+.floatingCirclesG {
+    display: inline-block;
 }
 
 .f_circleG{

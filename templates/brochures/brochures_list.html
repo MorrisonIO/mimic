@@ -74,19 +74,41 @@
                 var modal = $("#theModal")
                 var _res  = JSON.parse(response)
                 $(".modal-content p").text(_res.description)
-                
                 var linksContainer = $('#links').empty()
-                _res.preview_images.forEach(function(el, i){
+                
+                for(var i=0; i < _res.preview_images.length; i++){
+                    var el = _res.preview_images[i];
+                    function onLoad(id){
+                        $(".loader" + id).hide()
+                    }
+                    
+                    var loader = '<div class="loader'+i+' floatingCirclesG">' +
+                                '<div class="f_circleG" id="frotateG_01"></div>' + 
+                                '<div class="f_circleG" id="frotateG_02"></div>' + 
+                                '<div class="f_circleG" id="frotateG_03"></div>' + 
+                                '<div class="f_circleG" id="frotateG_04"></div>' + 
+                                '<div class="f_circleG" id="frotateG_05"></div>' + 
+                                '<div class="f_circleG" id="frotateG_06"></div>' + 
+                                '<div class="f_circleG" id="frotateG_07"></div>' + 
+                                '<div class="f_circleG" id="frotateG_08"></div>' +
+                            '</div>'
+                    var $box = $('<img id="prev_'+i+'">')
+                    
+                    $box.on('load', function(ev){
+                        var id = ev.currentTarget.id.substring(5)
+                        onLoad(id);
+                    })
                     $('<a/>')
-                        .append($('<img>').prop('src', el.url))
+                        .append(loader)
+                        .append($box.prop('src', el.url))
                         .prop('href', el.url)
+                        .prop('id', i)
                         .prop('title', el.name)
-                        .addClass('lazy')
                         .attr('data-gallery', '')
-                        .appendTo(linksContainer)
-                })
-                $("img.lazy").lazyload();
+                        .appendTo(linksContainer)   
+                }
                 $(".modal").addClass("active");
+                
             },
             error: function(err){
                 console.log('err',err)
