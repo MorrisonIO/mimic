@@ -80,6 +80,7 @@
                     var el = _res.preview_images[i];
                     function onLoad(id){
                         $(".loader" + id).hide()
+                        $('#prev_'+id).show()
                     }
                     
                     var loader = '<div class="loader'+i+' floatingCirclesG">' +
@@ -100,12 +101,13 @@
                     })
                     $('<a/>')
                         .append(loader)
-                        .append($box.prop('src', el.url))
-                        .prop('href', el.url)
+                        .append($box.prop('src', 'http://52.14.71.249/media/brochure_images/MFZH-Third_St_707_PressQ_Page_1.jpg'))
+                        .prop('href', 'http://52.14.71.249/media/brochure_images/MFZH-Third_St_707_PressQ_Page_1.jpg')
                         .prop('id', i)
                         .prop('title', el.name)
                         .attr('data-gallery', '')
-                        .appendTo(linksContainer)   
+                        .appendTo(linksContainer)
+                        $box.hide()
                 }
                 $(".modal").addClass("active");
                 
