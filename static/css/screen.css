@@ -333,7 +333,7 @@ body#events li#n_events a {
 }
 /* =Page Header -------------------- */
 #page_header {
-    background: #9eabb1;
+    background: #fff;
     height: 65px;
 }
 #page_header h1 {
@@ -351,7 +351,7 @@ body#events li#n_events a {
     padding: 7px;
     line-height: 16px;
     float: left;
-    background: #93a1a8;
+    /*background: #93a1a8;*/
 }
 #page_header input#search_input {
     float: left;
@@ -364,6 +364,7 @@ body#events li#n_events a {
 #page_header input#search_submit {
     float: left;
     margin: 0 0 0 5px;
+    height: 20px;
 }
 #page_header input#search_submit:focus {
     background: none;
@@ -1522,4 +1523,35 @@ table.price tr:nth-child(2n+1) {
 .links a img {
     height: 75px;
     width: auto;
+}
+
+
+.products-categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.products-categories li {
+    float: left;
+     /*display: inline;*/
+}
+
+.products-categories li a {
+    display: block;
+    color: #333;
+    text-align: center;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+.products-categories li a.active {
+    border-bottom:1px solid #000;
+}
+.products-categories li a:hover {
+    text-decoration: underline;
+    background-color: #3e4346;
+    color: #fff;
+    transition: background-color 0.5s, color 0.5s;
 }
