@@ -263,29 +263,38 @@ form#setorg img.alert {
 }
 body#dashboard li#n_dashboard,
 body#addresses li#n_addresses,
-body#products li#n_products,
 body#brochures li#n_brochures,
 body#orders li#n_orders,
 body#analytics li#n_analytics,
 body#downloads li#n_downloads,
+body#products li#n_products,
 body#events li#n_events {
-    background-image:url(../img/nav_left_on.gif);
-    border-width:0;
+    background-image: none;
+    /*background-image:url(../img/nav_left_on.gif);
+    border-width:0;*/
 }
 body#dashboard li#n_dashboard a,
 body#addresses li#n_addresses a,
-body#products li#n_products a,
 body#brochures li#n_brochures a,
 body#orders li#n_orders a,
 body#analytics li#n_analytics a,
 body#downloads li#n_downloads a,
+body#products li#n_products a,
 body#events li#n_events a {
-    background-image:url(../img/nav_right_on.gif);
-    color:#fff;
+    /*background-image:url(../img/nav_right_on.gif);*/
+    /*color:#fff;*/
     font-weight: bold;
     padding-bottom: 9px;
+    background: #fff;
+    color: #333;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+body#products li#n_products{
 }
 
+body#products li#n_products a {
+}
 #nav p#cart_info {
     float: right;
     height: 32px;
