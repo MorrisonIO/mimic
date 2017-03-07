@@ -62,7 +62,7 @@
                 <li id="n_dashboard" class="first"><a href="{% url 'dashboard' %}" title="Dashboard">Dashboard</a></li>
                 <li id="n_addresses"><a href="{% url 'addresses:address_index' %}" title="Addresses">Addresses</a></li>
                 <li id="n_products"><a href="{% url 'products:product_list' %}" title="New Products">New Products</a></li>
-                <li id="n_brochures"><a href="{% url 'brochures:brochures' %}" title="Brochures">Brochures</a></li>
+                {#<li id="n_brochures"><a href="{% url 'brochures:brochures' %}" title="Brochures">Brochures</a></li>#}
                 <li id="n_orders"><a href="{% url 'orders:order_index' %}" title="Orders">Orders</a></li>
                 {% if perms.orders.change_order %}
                     <li id="n_analytics"><a href="{% url 'reports:report_index' %}" title="Analytics">Analytics</a></li>
