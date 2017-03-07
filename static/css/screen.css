@@ -263,7 +263,7 @@ form#setorg img.alert {
 }
 body#dashboard li#n_dashboard,
 body#addresses li#n_addresses,
-body#brochures li#n_brochures,
+body#brochures li#n_products,
 body#orders li#n_orders,
 body#analytics li#n_analytics,
 body#downloads li#n_downloads,
@@ -275,7 +275,7 @@ body#events li#n_events {
 }
 body#dashboard li#n_dashboard a,
 body#addresses li#n_addresses a,
-body#brochures li#n_brochures a,
+body#brochures li#n_products a,
 body#orders li#n_orders a,
 body#analytics li#n_analytics a,
 body#downloads li#n_downloads a,
