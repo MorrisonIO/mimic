@@ -19,7 +19,7 @@ tenv/*
 *.sql
 db.sqlite3.sqlite
 static/uploads
-static/pdf
+*.pdf
 settings.json
 settings_local.py
 static_to
