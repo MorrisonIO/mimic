@@ -111,7 +111,7 @@ def create_preview_from_files(request, files, template):
     template_id = template.id
     html_template = get_template('pdf/{}'.format(template_file))
     context = Context({'context': files})
-    rendered_template = html_template.render(context)
+    rendered_template = html_template.render({'context': files})
 
     if settings.STATIC_ROOT:
         target = '{0}/pdf/{1}.pdf'.format(settings.STATIC_ROOT, files['report_name'])
@@ -203,6 +203,8 @@ def detail_page(request):
     """
     property info
     """
+    import base64
+
     messages.warning(request, '')
     session = request.session.get('brochure_info', None)
     brochure_id = session['template_id']
@@ -215,8 +217,8 @@ def detail_page(request):
         preview = {}
         if form.is_valid():
             for file_key, file_val in request.FILES.iteritems():
-                path = handle_uploaded_file(file_val)
-                preview[file_key] = path
+                path = base64.b64encode(file_val.read()).decode()
+                preview[file_key] = "data:image/jpg;charset=utf-8;base64,{}".format(path)
             for key, _ in request._post.iteritems():
                 if key.startswith('text'):
                     preview[key] = request.POST.get(key, None)
@@ -320,7 +322,7 @@ def handle_uploaded_file(f):
     """
     filename = sanitize_filename(f.name)
     path = '/uploads/%s' % filename
-    folder_path = settings.STATIC_ROOT if settings.STATIC_ROOT else settings.STATICFILES_DIRS[0]
+    folder_path = settings.MEDIA_ROOT
     destination = open('{0}{1}'.format(folder_path.encode('utf8'), path), 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
