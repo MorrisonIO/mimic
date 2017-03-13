@@ -89,3 +89,16 @@ def get_value_by_key(obj, key):
     Get object and return value for key
     """
     return obj.get(key, None)
+
+
+@register.filter
+def price_constructor(price):
+    """
+    Create css class for side menu
+    """
+    if price < 10: return 'price_max_10'
+    elif price < 50: return 'price_max_50'
+    elif price < 100: return 'price_max_100'
+    elif price < 500: return 'price_max_500'
+    elif price < 1000: return 'price_max_1000'
+    else: return 'price_max_1000'

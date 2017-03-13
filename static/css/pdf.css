@@ -263,7 +263,8 @@
     position: relative;
     color: #333;
     padding: 10px 20px 20px;
-    text-align: center
+    text-align: center;
+    background-color: transparent;
 }
 .tmp-item-wrapper a.info {
     display: inline-block;
@@ -301,11 +302,11 @@
 .tmp-item-wrapper p { 
     transform: translateY(100px);
     opacity: 0;
-	transition: all 0.2s linear;
+	  transition: all 0.2s linear;
 }
 .tmp-item-wrapper a.info{
     opacity: 0;
-	transition: all 0.2s ease-in-out;
+	  transition: all 0.2s ease-in-out;
 }
 
 .tmp-item-wrapper:hover img { 

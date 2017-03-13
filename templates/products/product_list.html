@@ -3,19 +3,85 @@
 
 {% block title %}Product list{% endblock %}
 {% block page_title %}Product list{% endblock %}
-{% block body_class %}onecol{% endblock %}
+{% block body_class %}twocol-context-right{% endblock %}
 {% block active_product_state %}active{% endblock %}
 
 {% block custom_head %}
+<link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
+<script type="text/javascript" src="{% static 'js/side-menu.js' %}"></script>
 {% if not search %}
     <script type="text/javascript">
     $(document).ready(function(){
-    
+        buildmenu();
     });
     </script>
 {% endif %}
 {% endblock %}
 
+
+{% block sidebar %}
+{% load tag_helper %}
+<div id="accordian">
+	<ul>
+        <li>
+            <h3>Categories</h3>
+            <ul class="filters-category">
+            {% for category in categories %}
+                <li>
+                    <input class="filter" data-filter=".{{category.name|to_one_word}}" type="checkbox" id="{{category.name|to_one_word}}{{forloop.counter}}">
+                    <label class="checkbox-label" for="{{category.name|to_one_word}}{{forloop.counter}}">{{category.name}}</label>
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% for category in menu_data %}
+            <li>
+                <h3>{{menu_data|get_value_by_key:category|get_value_by_key:'title'}}</h3>
+                <ul class="filters-category">
+                {% if menu_data|get_value_by_key:category|get_value_by_key:'title' == 'Price' %}
+                    <li>
+                        <input class="filter" data-filter=".price_max_10" type="checkbox" id="price_max_10">
+                        <label class="checkbox-label" for="price_max_10"> 0 < 10</label>
+                    </li>
+                    <li>
+                        <input class="filter" data-filter=".price_max_50" type="checkbox" id="price_max_50">
+                        <label class="checkbox-label" for="price_max_50"> 11 < 50</label>
+                    </li>
+                    <li>
+                        <input class="filter" data-filter=".price_max_100" type="checkbox" id="price_max_100">
+                        <label class="checkbox-label" for="price_max_100"> 51 < 100</label>
+                    </li>
+                    <li>
+                        <input class="filter" data-filter=".price_max_500" type="checkbox" id="price_max_500">
+                        <label class="checkbox-label" for="price_max_500"> 101 < 500</label>
+                    </li>
+                    <li>
+                        <input class="filter" data-filter=".price_max_1000" type="checkbox" id="price_max_1000">
+                        <label class="checkbox-label" for="price_max_1000"> 501 < 1000</label>
+                    </li>
+                    <li>
+                        <input class="filter" data-filter=".price_max_inf" type="checkbox" id="price_max_inf">
+                        <label class="checkbox-label" for="price_max_inf"> More than 1000</label>
+                    </li>
+                {% else %}
+                    {% for row in menu_data|get_value_by_key:category %}
+                        {% if row != 'title' %}
+                            <li>
+                                <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                                <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                            </li>
+
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </ul>
+            </li>    
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
 
 {% block content %}
 {% if search %}
@@ -28,13 +94,32 @@
 
 {% if products %}
     <form action="{% url 'orders:process_products' %}" method="post">{% csrf_token %}
+        
+        {% for prod in products %}
+            {% for product in prod.products %}
+            <div class="template-item {{product.price | price_constructor}} {{product.min_order_qty }} {{prod.name|to_one_word}} filterable">
+                <div class="tmp-item-wrapper">
+                    <img src="{% static 'img/product_preview.jpg' %}" alt="" />
+                    <div class="tmp-item-box">  
+                        <h2>{{ product.name }}</h2>
+                        <p>{{ product.description }}</p>  
+                        
+                        <a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>
+                        <a href="#" class="info showModalBtn1" onclick="showDesc({{brochure.id}})">Show description</a>  
+                    </div>  
+                </div>
+            </div>
+            {% endfor %}
+        {% endfor %}
+
 
     {% for cat in categories %}
         {% if search %}
         <h3 class="category">Search results
         {% else %}
-        <h3 class="category collapsed cat-closed" data-id={{cat.id}}>{{ cat.name }}</h3>
+        <h3 class="category collapsed cat-closed" data-id={{cat.id}}>{{ cat.name }}
         {% endif %}
+        </h3>
         <table class="product_list tablesorter" style="display: none;">
         <thead>
         <tr>
@@ -55,7 +140,7 @@
         <tbody>
         {% for product in products %}
             {% if search %}
-                <tr class="{% cycle odd,even %}">
+                <tr class="{#% cycle odd,even %#}">
                     {% include "products/product_row.html" %}
                 </tr>
             {% endif %}
