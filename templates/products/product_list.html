@@ -9,36 +9,106 @@
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery-indicator.css' %}" type="text/css">
 <script type="text/javascript" src="{% static 'js/side-menu.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-helper.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-fullscreen.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-indicator.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.blueimp-gallery.js' %}"></script>
 {% if not search %}
     <script type="text/javascript">
-    $(document).ready(function(){
-        buildmenu();
-        $(document).on('change input paste', '#search_input', function(ev){
-            if(ev.target.value.length > 1){
-                $(".template-item").hide()
-                var toShow = []
-                var h2_arr = $('.tmp-item-wrapper h2')
-                var p_arr = $('.tmp-item-wrapper p')
-                $.each(h2_arr, function(id, value){
-                    if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
-                        toShow.push($(this).parent().parent().parent())
-                    }
-                })
-                $.each(p_arr, function(id, value){
-                    if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
-                        toShow.push($(this).parent().parent().parent())
-                    }
-                })
-                window.toShow = toShow
-                toShow.forEach(function(el){
-                    el.show()
-                })
-            } else {
-                $(".template-item").show()
+        $(document).ready(function(e){
+            function closeModal(){
+                $(".modal").removeClass("active");
             }
-       }) 
-    });
+
+            $(".modal-content .close, .modal").on("click", function(){
+                closeModal();
+            });
+
+            // pressing escape
+            if (e.keyCode == 27) {
+                closeModal();
+            }
+            buildmenu();
+            $(document).on('change input paste', '#search_input', function(ev){
+                if(ev.target.value.length > 1){
+                    $(".template-item").hide()
+                    var toShow = []
+                    var h2_arr = $('.tmp-item-wrapper h2')
+                    var p_arr = $('.tmp-item-wrapper p')
+                    $.each(h2_arr, function(id, value){
+                        if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
+                            toShow.push($(this).parent().parent().parent())
+                        }
+                    })
+                    $.each(p_arr, function(id, value){
+                        if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
+                            toShow.push($(this).parent().parent().parent())
+                        }
+                    })
+                    window.toShow = toShow
+                    toShow.forEach(function(el){
+                        el.show()
+                    })
+                } else {
+                    $(".template-item").show()
+                }
+        }) 
+        });
+        function showDesc(id){
+            $.ajax({
+                url: 'get_product_modal_data',
+                data: {'id': id},
+                success: function(response){
+                    var modal = $("#theModal")
+                    var _res  = JSON.parse(response)
+                    $(".modal-content p").text(_res.description)
+                    var linksContainer = $('#links').empty()
+                    _res.preview_images = [{'url':'/static/img/product_preview.jpg', 'name':'Preview Image'}]
+                    for(var i=0; i < _res.preview_images.length; i++){
+                        var el = _res.preview_images[i];
+                        function onLoad(id){
+                            $(".loader" + id).hide()
+                            $('#prev_'+id).show()
+                        }
+                        
+                        var loader = '<div class="loader'+i+' floatingCirclesG">' +
+                                    '<div class="f_circleG" id="frotateG_01"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_02"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_03"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_04"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_05"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_06"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_07"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_08"></div>' +
+                                '</div>'
+                        var $box = $('<img id="prev_'+i+'">')
+                        
+                        $box.on('load', function(ev){
+                            var id = ev.currentTarget.id.substring(5)
+                            onLoad(id);
+                        })
+                        $('<a/>')
+                            .append(loader)
+                            .append($box.prop('src', el.url))
+                            .prop('href', el.url)
+                            .prop('id', i)
+                            .prop('title', el.name)
+                            .attr('data-gallery', '')
+                            .appendTo(linksContainer)
+                            $box.hide()
+                    }
+                    $(".modal").addClass("active");
+                    
+                },
+                error: function(err){
+                    console.log('err',err)
+                }
+            })
+        }
     </script>
 {% endif %}
 {% endblock %}
@@ -128,8 +198,8 @@
                         <h2>{{ product.name }}</h2>
                         <p>{{ product.description }}</p>  
                         
-                        <a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>
-                        <a href="#" class="info showModalBtn1" onclick="showDesc({{brochure.id}})">Show description</a>  
+                        {#<a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>#}
+                        <a href="#" class="info showModalBtn1" onclick="showDesc({{product.id}})">Show description</a>  
                     </div>  
                 </div>
             </div>

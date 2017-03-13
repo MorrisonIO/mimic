@@ -127,3 +127,11 @@ def get_category(request):
         'unrestricted_qtys': unrestricted_qtys
         }, request=request)
     return HttpResponse(rendered)
+
+def get_product_modal_data(request):
+    import json
+    product_id = request.GET.get('id')
+    product = Product.objects.get(pk=product_id)
+    description = product.description if product else ''
+    preview_images = [{'url': product.preview, 'name': 'Preview Image'}] if product.preview else []
+    return HttpResponse(json.dumps({'description': description, 'preview_images': preview_images}))
