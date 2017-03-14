@@ -80,6 +80,8 @@ def to_one_word(text):
     Gets text and returns all words joined by '-'
     Example: for 'One two' returns 'One-two'
     """
+    import re
+    text = re.sub('([^0-9a-zA-Z ]+|[ ]{2,})', '', text)
     return '-'.join(text.split(' '))
 
 

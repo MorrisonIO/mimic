@@ -206,7 +206,7 @@
                                 {% endfor %}
                             </select>
                         {% else %}
-                            <input type="text" size="4" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                            <input type="number" size="4" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
                         {% endif %}
                         <a href="#" class="info showModalBtn1 visible" onclick="showDesc({{product.id}})">Show description</a>  
                         <input type="hidden" name="u_{{ product.id }}" value="{{ product.unique_id }}">
