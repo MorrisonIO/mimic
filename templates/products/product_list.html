@@ -198,8 +198,19 @@
                         <h2>{{ product.name }}</h2>
                         <p>{{ product.description }}</p>  
                         
-                        {#<a href="{% url 'brochures:personal_info' %}" class="info">Order brochure</a>#}
-                        <a href="#" class="info showModalBtn1" onclick="showDesc({{product.id}})">Show description</a>  
+                        {% if product.fixed_order_qtys and not unrestricted_qtys %}{% load product_filters %}
+                            <select name="qty_{{ product.id }}">
+                                <option value=""></option>
+                                {% for q in product.fixed_order_qtys|qty_list %}
+                                    <option value="{{ q }}">{{ q }}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <input type="text" size="4" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                        {% endif %}
+                        <a href="#" class="info showModalBtn1 visible" onclick="showDesc({{product.id}})">Show description</a>  
+                        <input type="hidden" name="u_{{ product.id }}" value="{{ product.unique_id }}">
+                        <input type="hidden" name="o_{{ product.id }}" value="{{ forloop.counter }}">
                     </div>  
                 </div>
             </div>
@@ -207,41 +218,7 @@
         {% endfor %}
 
 
-    {% for cat in categories %}
-        {% if search %}
-        <h3 class="category">Search results
-        {% else %}
-        <h3 class="category collapsed cat-closed" data-id={{cat.id}}>{{ cat.name }}
-        {% endif %}
-        </h3>
-        <table class="product_list tablesorter" style="display: none;">
-        <thead>
-        <tr>
-            <th>{% if cat.name_altname %}{{ cat.name_altname }}{% else %}Item{% endif %}</th>
-            {% if cat.name_altname == "Document Title" %} <th>Preview</th> {% endif %}
-            {% if cat.show_revision %}<th>{% if cat.revision_altname %}{{ cat.revision_altname }}{% else %}Revision{% endif %}</th>{% endif %}
-            {% if cat.show_part_number %}<th>{% if cat.part_number_altname %}{{ cat.part_number_altname }}{% else %}Part&nbsp;Number{% endif %}</th>{% endif %}
-            {% if cat.show_price %}
-                {% if user_is_manager or profile.can_see_prices %}
-                    <th>{% if cat.price_altname %}{{ cat.price_altname }}{% else %}Price{% endif %}</th>
-                {% endif %}
-            {% endif %}
-            {% if cat.show_inventory %}<th>Inventory</th>{% endif %}
-            <th class="qty" colspan="2">Quantity</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for product in products %}
-            {% if search %}
-                <tr class="{#% cycle odd,even %#}">
-                    {% include "products/product_row.html" %}
-                </tr>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-        </table>
-    {% endfor %}
+    
 
     <div class="submit">
         <div class="center">
