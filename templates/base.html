@@ -11,22 +11,22 @@
     <link rel="stylesheet" href="{% static 'css/screen.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/print.css' %}" type="text/css" media="print">
     <script type="text/javascript">var MEDIA_URL = "/static/";</script> 
-    <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.mb.browser.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.tablesorter.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.labelify.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/facebox.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.datepick.pack.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.datepick.pack.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"  ></script>
+    <script type="text/javascript" src="{% static 'js/jquery.mb.browser.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/jquery.tablesorter.min.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/jquery.labelify.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/facebox.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/jquery.datepick.pack.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/jquery.datepick.pack.js' %}"defer ></script>
+    <script type="text/javascript" src="{% static 'js/global.js' %}"defer ></script>
     {#% js_tag "js/global.js" %#}
     <!--[if lte IE 7]>
          <link rel="stylesheet" href="{% static 'css/ie.css' %}" />
     <![endif]-->
     <!--[if lte IE 6]>
         {% css_tag "css/ie6.css" %}
-        <script type="text/javascript" src="{% static 'js/unitpngfix.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/unitpngfix.js' %}"defer ></script>
     <![endif]-->
     {% block custom_head %}{% endblock %}
  </head>
