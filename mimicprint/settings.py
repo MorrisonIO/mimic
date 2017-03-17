@@ -102,7 +102,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR + '/templates',
-            MEDIA_URL + '/templates',
+            MEDIA_ROOT + 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
