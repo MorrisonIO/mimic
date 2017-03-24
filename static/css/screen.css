@@ -70,7 +70,7 @@ cite, em { font-style: italic; }
 .f-left { float: left; }
 .bottom-margin { margin: 0 0 20px 0; }
 .bottom-nomargin { margin: 0 0 0 0; }
-
+.top-margin { margin: 20px 0 0 0; }
 code, kbd, samp, pre, tt, var { font: 14px Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Courier, monospace; }
 abbr, acronym { border-bottom: 1px dotted; cursor: help; }
 
@@ -1563,4 +1563,7 @@ table.price tr:nth-child(2n+1) {
     background-color: #3e4346;
     color: #fff;
     transition: background-color 0.5s, color 0.5s;
+}
+.color-dark-gray{
+  color: #333;
 }
