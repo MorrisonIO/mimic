@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^detail/$', views.detail_page, name='detail'),
     url(r'^preview/$', views.preview_page, name='preview'),
     url(r'^shipping/$', views.ship_and_mail, name='ship_and_mail'),
+    url(r'^creator/$', views.creator, name='creator'),
 ]

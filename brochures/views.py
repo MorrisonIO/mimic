@@ -148,7 +148,7 @@ def render_view(request, template_id):
     """
     template = get_object_or_404(BrochureTemplate, id=template_id)
     template_file = template.getName().split('/')[-1]
-    return render(request, 'pdf/{}'.format(template_file), {})
+    return render(request, 'pdf/{}'.format(template_file), {'context':{}})
 
 
 def personal_info(request):
@@ -197,6 +197,17 @@ def property_info(request):
         form = PropertyInfoForm()
     print('brochure info porp get', request.session['brochure_info'])
     return render(request, 'brochures/property_info.html', {'form': form})
+
+
+def creator(request):
+    return render(request, 'brochures/creator.html', {})
+
+
+def creator_data(request):
+    if request.method == 'POST':
+        ui_text = request.POST.get('ui_text')
+        ui_template = Template(ui_text)
+        return HttpResponse(ui_template.render({}))
 
 
 def detail_page(request):
