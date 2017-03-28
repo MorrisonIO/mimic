@@ -175,6 +175,10 @@ def personal_info(request):
     else:
         form = PersonalInfoForm()
 
+    brochure_info = request.session['brochure_info']
+    if not brochure_info or 'template_id' not in brochure_info:
+        return HttpResponseRedirect(reverse('brochures:brochures'))
+
     return render(request, 'brochures/personal_info.html', {'form': form})
 
 
@@ -182,7 +186,9 @@ def property_info(request):
     """
     property info
     """
-
+    brochure_info = request.session['brochure_info']
+    if not brochure_info or 'template_id' not in brochure_info:
+        return HttpResponseRedirect(reverse('brochures:brochures'))
     if request.method == 'POST':
         form = PropertyInfoForm(data=request.POST)
         request.session['brochure_info']['property_address1'] = request.POST.get('property_address1', None)
@@ -218,6 +224,10 @@ def detail_page(request):
 
     messages.warning(request, '')
     session = request.session.get('brochure_info', None)
+
+    if not session or 'template_id' not in session:
+        return HttpResponseRedirect(reverse('brochures:brochures'))
+
     brochure_id = session['template_id']
     brochure = get_object_or_404(Brochure, id=brochure_id)
     template = get_object_or_404(BrochureTemplate, id=brochure.template_id)
@@ -260,6 +270,10 @@ def preview_page(request):
     """
     property info
     """
+    session = request.session.get('brochure_info', None)
+    if not session or 'template_id' not in session:
+        return HttpResponseRedirect(reverse('brochures:brochures'))
+
     if request.method == 'GET':
         url_to_pdf = request.session.get('url_to_pdf', None)
         return render(request, 'brochures/preview.html', {'url_to_pdf': url_to_pdf})
@@ -273,6 +287,10 @@ def ship_and_mail(request):
     """
     property info
     """
+    session = request.session.get('brochure_info', None)
+    if not session or 'template_id' not in session:
+        return HttpResponseRedirect(reverse('brochures:brochures'))
+
     addresses = Address.objects.filter(owners__in=[request.user])
     brochure_info = request.session.get('brochure_info', {})
     if request.method == 'GET':
