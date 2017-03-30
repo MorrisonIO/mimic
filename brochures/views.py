@@ -1,5 +1,6 @@
 import random
 import re
+import os
 
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404
@@ -123,6 +124,8 @@ def create_preview_from_files(request, files, template):
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="temp_1.pdf"'
 
+    remove_files(files)
+
     request.session['url_to_pdf'] = url_to_pdf
     return HttpResponseRedirect(reverse('brochures:preview'))
 
@@ -238,8 +241,8 @@ def detail_page(request):
         preview = {}
         if form.is_valid():
             for file_key, file_val in request.FILES.iteritems():
-                path = base64.b64encode(file_val.read()).decode()
-                preview[file_key] = "data:image/jpg;charset=utf-8;base64,{}".format(path)
+                path = handle_uploaded_file(file_val)		 #base64.b64encode(file_val.read()).decode()
+                preview[file_key] = path #"data:image/jpg;charset=utf-8;base64,{}".format(path)
             for key, _ in request._post.iteritems():
                 if key.startswith('text'):
                     preview[key] = request.POST.get(key, None)
@@ -350,12 +353,14 @@ def handle_uploaded_file(f):
     so that you could store the file somewhere non-public and deliver it to Mimic staff that way.
     """
     filename = sanitize_filename(f.name)
-    path = '/uploads/%s' % filename
+    path = 'uploads/%s' % filename
     folder_path = settings.MEDIA_ROOT
+    if not os.path.isdir(folder_path + 'uploads'):
+        os.mkdir(folder_path + 'uploads')
     destination = open('{0}{1}'.format(folder_path.encode('utf8'), path), 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
-    url = '%s%s' % (settings.STATIC_URL, path)
+    url = '%s%s' % (settings.MEDIA_URL, path)
     return url
 
 
@@ -379,3 +384,11 @@ def sanitize_filename(name):
     r = re.compile('[^a-zA-Z0-9_.]')
     filename = r.sub('_', name)
     return '%s-%s' % (rstr, filename)
+
+
+def remove_files(files):
+    """
+    Remove files from disk
+    """
+    for k,v in files.iteritems():
+        if k.startswith('image'): os.remove(settings.BASE_DIR + v)
