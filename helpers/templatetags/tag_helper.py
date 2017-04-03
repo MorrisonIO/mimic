@@ -104,3 +104,14 @@ def price_constructor(price):
     elif price < 500: return 'price_max_500'
     elif price < 1000: return 'price_max_1000'
     else: return 'price_max_1000'
+
+@register.filter
+def show_category(menu_data):
+    """
+    Filter menu_data to show in side mwnu only items with data
+    """
+    _updated_menu_data = {}
+    for category in menu_data:
+        if len(menu_data[category]) > 1:
+            _updated_menu_data[category] = menu_data[category]
+    return _updated_menu_data

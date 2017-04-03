@@ -127,50 +127,57 @@
                     <label class="checkbox-label" for="{{category.name|to_one_word}}{{forloop.counter}}">{{category.name}}</label>
                 </li>
             {% endfor %}
+            {% if categories|length_is:"0" %}
+                <li>
+                    <label class="checkbox-label" for="nothing">There are no categories</label>
+                </li>
+            {% endif %}
             </ul>
         </li>
-        {% for category in menu_data %}
-            <li>
-                <h3>{{menu_data|get_value_by_key:category|get_value_by_key:'title'}}</h3>
-                <ul class="filters-category">
-                {% if menu_data|get_value_by_key:category|get_value_by_key:'title' == 'Price' %}
-                    <li>
-                        <input class="filter" data-filter=".price_max_10" type="checkbox" id="price_max_10">
-                        <label class="checkbox-label" for="price_max_10"> 0 < 10</label>
-                    </li>
-                    <li>
-                        <input class="filter" data-filter=".price_max_50" type="checkbox" id="price_max_50">
-                        <label class="checkbox-label" for="price_max_50"> 11 < 50</label>
-                    </li>
-                    <li>
-                        <input class="filter" data-filter=".price_max_100" type="checkbox" id="price_max_100">
-                        <label class="checkbox-label" for="price_max_100"> 51 < 100</label>
-                    </li>
-                    <li>
-                        <input class="filter" data-filter=".price_max_500" type="checkbox" id="price_max_500">
-                        <label class="checkbox-label" for="price_max_500"> 101 < 500</label>
-                    </li>
-                    <li>
-                        <input class="filter" data-filter=".price_max_1000" type="checkbox" id="price_max_1000">
-                        <label class="checkbox-label" for="price_max_1000"> 501 < 1000</label>
-                    </li>
-                    <li>
-                        <input class="filter" data-filter=".price_max_inf" type="checkbox" id="price_max_inf">
-                        <label class="checkbox-label" for="price_max_inf"> More than 1000</label>
-                    </li>
-                {% else %}
-                    {% for row in menu_data|get_value_by_key:category %}
-                        {% if row != 'title' %}
-                            <li>
-                                <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
-                                <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
-                            </li>
+        {% for category in menu_data|show_category %}
+            {#% if menu_data|show_category:category %#}
+                <li>
+                    <h3>{{menu_data|get_value_by_key:category|get_value_by_key:'title'}}</h3>
+                    <ul class="filters-category">
+                    {% if menu_data|get_value_by_key:category|get_value_by_key:'title' == 'Price' %}
+                        <li>
+                            <input class="filter" data-filter=".price_max_10" type="checkbox" id="price_max_10">
+                            <label class="checkbox-label" for="price_max_10"> 0 < 10</label>
+                        </li>
+                        <li>
+                            <input class="filter" data-filter=".price_max_50" type="checkbox" id="price_max_50">
+                            <label class="checkbox-label" for="price_max_50"> 11 < 50</label>
+                        </li>
+                        <li>
+                            <input class="filter" data-filter=".price_max_100" type="checkbox" id="price_max_100">
+                            <label class="checkbox-label" for="price_max_100"> 51 < 100</label>
+                        </li>
+                        <li>
+                            <input class="filter" data-filter=".price_max_500" type="checkbox" id="price_max_500">
+                            <label class="checkbox-label" for="price_max_500"> 101 < 500</label>
+                        </li>
+                        <li>
+                            <input class="filter" data-filter=".price_max_1000" type="checkbox" id="price_max_1000">
+                            <label class="checkbox-label" for="price_max_1000"> 501 < 1000</label>
+                        </li>
+                        <li>
+                            <input class="filter" data-filter=".price_max_inf" type="checkbox" id="price_max_inf">
+                            <label class="checkbox-label" for="price_max_inf"> More than 1000</label>
+                        </li>
+                    {% else %}
+                        {% for row in menu_data|get_value_by_key:category %}
+                            {% if row != 'title' %}
+                                <li class="">
+                                    <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                                    <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">{{row}}</label>
+                                </li>
 
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                </ul>
-            </li>    
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
+                </li>
+            {#% endif %#}
         {% endfor %}
     </ul>
 </div>
