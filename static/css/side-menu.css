@@ -60,15 +60,20 @@
 }
 
 #accordian label {
-	width: 314px;
+	width: 100%;
+	height: 28px;
 	display: inline-block;
 	float: none;
 	text-align: left;
 	margin: 0;
-	padding-left: 10px;
+	/*padding-left: 10px;*/
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #accordian > ul > li > ul > li {
 	padding-left: 10px;
+	height: 28px;
 }
 
 #accordian > ul > li > ul > li:hover {
