@@ -1,7 +1,8 @@
 {% extends "admin/base_site.html" %}
+{% load staticfiles %}
 
 {% block extrahead %}
-    <link rel="stylesheet" media="print" type="text/css" href="{{ MEDIA_URL }}css/print.css" />
+    <link rel="stylesheet" media="print" type="text/css" href="{% static 'css/print.css' %}" />
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -14,7 +15,7 @@
 {% endblock %}
 
 {% block content %}<div id="docket">
-    {% load markup %}
+    {% load markup_tags %}
     <div id="content-main">
         <input type="submit" id="print" value="Print docket" onclick="javascript:window.print()">
 
@@ -48,23 +49,23 @@
                 <div class="instr"><h4>Components</h4><p>This product is comprised of the following components.</p><ul>{% for r in product.ratios.all %}<li>{{ r.component }}</li>{% endfor %}</ul><p>Note that those components may themselves be comprised of components; check the online system for further info.</p></div>
                 {% endif %}
                 {% if product.prepress_info %}
-                    <div class="instr"><h4>Prepress</h4>{{ product.prepress_info|markdown }}</div>
+                    <div class="instr"><h4>Prepress</h4>{{ product.prepress_info|apply_markup:"markdown" }}</div>
                 {% endif %}
                 {% if product.bw_info %}
-                    <div class="instr"> <h4>B&amp;W Printing</h4> {{ product.bw_info|markdown }}<p class="checkboxes"><input type="checkbox"> Proof required <input type="checkbox"> Store and delete</p></div>
+                    <div class="instr"> <h4>B&amp;W Printing</h4> {{ product.bw_info|apply_markup:"markdown" }}<p class="checkboxes"><input type="checkbox"> Proof required <input type="checkbox"> Store and delete</p></div>
                 {% endif %}
                 {% if product.colour_info %}
-                    <div class="instr"> <h4>Colour Printing</h4> {{ product.colour_info|markdown }} <p class="checkboxes"><input type="checkbox"> Proof required</p></div>
+                    <div class="instr"> <h4>Colour Printing</h4> {{ product.colour_info|apply_markup:"markdown" }} <p class="checkboxes"><input type="checkbox"> Proof required</p></div>
                 {% endif %}
                 {% if product.bindery_info %}
-                    <div class="instr"> <h4>Bindery</h4> {{ product.bindery_info|markdown }} </div>
+                    <div class="instr"> <h4>Bindery</h4> {{ product.bindery_info|apply_markup:"markdown" }} </div>
                 {% endif %}
                 {# always show shipping block, as there is always a shipto address #}
-                <div class="instr"> <h4>Shipping</h4> <p>Ship to:<br>{% with order.ship_to as address %}{% include "addresses/address_snippet.txt" %}{% endwith %}</p>{{ product.shipping_info|markdown }} </div>
+                <div class="instr"> <h4>Shipping</h4> <p>Ship to:<br>{% with order.ship_to as address %}{% include "addresses/address_snippet.txt" %}{% endwith %}</p>{{ product.shipping_info|apply_markup:"markdown" }} </div>
                 {# always show billing block, as there is bill/no-bill #}
-                <div class="instr"> <h4>Billing</h4><p><input type="radio" name="billing{{ forloop.counter }}" value="" checked /> Bill</input>&nbsp;&nbsp;&nbsp;<input type="radio" name="billing{{ forloop.counter }}" value="" /> Do not bill: _________________________ </input></p> {{ product.billing_info|markdown }} </div>
+                <div class="instr"> <h4>Billing</h4><p><input type="radio" name="billing{{ forloop.counter }}" value="" checked /> Bill</input>&nbsp;&nbsp;&nbsp;<input type="radio" name="billing{{ forloop.counter }}" value="" /> Do not bill: _________________________ </input></p> {{ product.billing_info|apply_markup:"markdown" }} </div>
                 {% if product.outsourcing_info %}
-                    <div class="instr"> <h4>Outsourcing</h4> {{ product.outsourcing_info|markdown }} </div>
+                    <div class="instr"> <h4>Outsourcing</h4> {{ product.outsourcing_info|apply_markup:"markdown" }} </div>
                 {% endif %}
             </div>
             {% if not forloop.last %}<hr />{% endif %}

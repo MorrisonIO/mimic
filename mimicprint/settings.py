@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'contact_form',
     'markdown_deux',
+    'django_markup',
     # APPS
     'addresses.apps.AddressesConfig',
     'charts.apps.ChartsConfig',
