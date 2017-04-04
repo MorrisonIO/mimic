@@ -7,7 +7,7 @@
 <div class="org_entry">
     <h4>{{ entry }}</h4>
     <p class="publish_date">Published on {{ entry.date_created|date:"l, F j, Y \a\t H:i" }}</p>
-    {{ entry.body|markdown|safe }}
+    {{ entry.body|safe }}
     {% if entry.docket %}<p><strong>Docket:</strong> {{ entry.docket }}</p>{% endif %}
     {% if entry.invoice %}<p><strong>Invoice:</strong> {{ entry.invoice }}</p>{% endif %}
     <p class="back">&larr; <a href="{% url 'events:client_events_index' %}">Back to Events</a></p>
