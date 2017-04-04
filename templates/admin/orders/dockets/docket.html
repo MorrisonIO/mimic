@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+    <link rel="stylesheet" media="print" type="text/css" href="{{ MEDIA_URL }}css/print.css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo; 
+        <a href="/admin/orders/order/">Orders</a> &rsaquo; 
+        <a href="/admin/orders/order/{{ order.id }}/">{{ order }}</a> &rsaquo; 
+        Docket
+    </div>
+{% endblock %}
+
+{% block content %}<div id="docket">
+    {% load markup %}
+    <div id="content-main">
+        <input type="submit" id="print" value="Print docket" onclick="javascript:window.print()">
+
+        {% for item in ordered_items %}{% with item.inventory_history.product as product %}
+            <h2>Main Docket{% if not forloop.first %} (cont'd){% endif %}: {{ order }}</h2>
+            <div class="docketinfo">
+                <h3>Order Info</h3>
+                <div class="order_info">
+                <p><span class="label">Date received:</span><b>&nbsp;{{ order.date|date:"l, M j, Y \a\t H:i" }}</b><br />
+                <span class="label">Arrival date to customer:</span><b>&nbsp;{{ order.due_date|date:"l, M j, Y" }}</b><br />
+                &nbsp;<br />
+                <span class="label">MIMIC SHIP DATE:</span><br />
+                <span class="label">CUSTOMER TO PICK-UP:</span><br />
+                &nbsp;<br />
+                <span class="label">Client:</span><b>&nbsp;{{ order.org }}</b><br />
+                <span class="label">Placed by:</span><b>&nbsp;{{ order.placed_by.get_full_name }}</b><br />
+                <span class="label">PO Number:</span><b>&nbsp;{{ order.po_number }}</b><br />
+                <span class="label">Invoice Number:</span><b>&nbsp;{% if order.invoice_number %}{{ order.invoice_number }}{% else %}Not invoiced yet.{% endif %}</b></p>
+                <p><span class="label">Additional Info:</span></p>{{ order.additional_info}}
+                </div>
+                {% if product.approval_required %}<div class="appr_req"><h4>Awaiting Client Approval</h4><p>This product <b>requires approval</b> before production proceeds. Do not initiate work unless authorized.</p><p>Auth: ____________________ </p><p>Date: ____________________</p></div>{% endif %}
+            </div>
+            <div class="jobinfo">
+                <h3>Job {{ forloop.counter }} of {{ ordered_items.count }}</h3>
+                <p><span class="label">Part name:</span><b>&nbsp;{{ product }}</b><br />
+                {% if product.part_number %}<span class="label">Part number:</span>&nbsp;<b>{{ product.part_number }}</b><br />{% endif %}
+                <span class="label">Qty required:</span><b>&nbsp;{{ item.inventory_history.amount }}</b><br />
+                <span class="label">Description:</span>&nbsp;{{ product.description }}<br /></p>
+
+                {% if product.ratios.all %}
+                <div class="instr"><h4>Components</h4><p>This product is comprised of the following components.</p><ul>{% for r in product.ratios.all %}<li>{{ r.component }}</li>{% endfor %}</ul><p>Note that those components may themselves be comprised of components; check the online system for further info.</p></div>
+                {% endif %}
+                {% if product.prepress_info %}
+                    <div class="instr"><h4>Prepress</h4>{{ product.prepress_info|markdown }}</div>
+                {% endif %}
+                {% if product.bw_info %}
+                    <div class="instr"> <h4>B&amp;W Printing</h4> {{ product.bw_info|markdown }}<p class="checkboxes"><input type="checkbox"> Proof required <input type="checkbox"> Store and delete</p></div>
+                {% endif %}
+                {% if product.colour_info %}
+                    <div class="instr"> <h4>Colour Printing</h4> {{ product.colour_info|markdown }} <p class="checkboxes"><input type="checkbox"> Proof required</p></div>
+                {% endif %}
+                {% if product.bindery_info %}
+                    <div class="instr"> <h4>Bindery</h4> {{ product.bindery_info|markdown }} </div>
+                {% endif %}
+                {# always show shipping block, as there is always a shipto address #}
+                <div class="instr"> <h4>Shipping</h4> <p>Ship to:<br>{% with order.ship_to as address %}{% include "addresses/address_snippet.txt" %}{% endwith %}</p>{{ product.shipping_info|markdown }} </div>
+                {# always show billing block, as there is bill/no-bill #}
+                <div class="instr"> <h4>Billing</h4><p><input type="radio" name="billing{{ forloop.counter }}" value="" checked /> Bill</input>&nbsp;&nbsp;&nbsp;<input type="radio" name="billing{{ forloop.counter }}" value="" /> Do not bill: _________________________ </input></p> {{ product.billing_info|markdown }} </div>
+                {% if product.outsourcing_info %}
+                    <div class="instr"> <h4>Outsourcing</h4> {{ product.outsourcing_info|markdown }} </div>
+                {% endif %}
+            </div>
+            {% if not forloop.last %}<hr />{% endif %}
+        {% endwith %}{% endfor %}
+        
+    </div><!--content-main-->
+</div>{% endblock %}

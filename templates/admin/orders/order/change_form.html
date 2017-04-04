@@ -1,0 +1,21 @@
+{% extends "admin/change_form.html" %}
+
+{% block object-tools %}
+    {% if change %}{% if not is_popup %}
+        <ul class="object-tools">
+            <li><a href="../../products_ordered/{{ object_id }}/" class="viewsitelink">View products</a></li>
+            <li><a href="../../dockets/{{ object_id }}/" class="viewsitelink">Create docket</a></li>
+            <li><a href="history/" class="historylink">History</a></li>
+            {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">View on site</a></li>{% endif%}
+        </ul>
+    {% endif %}{% endif %}
+{% endblock %}
+
+{% block after_related_objects %}
+    <fieldset class="module aligned">
+        <h2>Products ordered</h2>
+        <div class="form-row">
+            <a href="/admin/orders/products_ordered/{{ object_id }}/">View all products on this order</a> to mark bill/no-bill status, download variable print-ready PDFs, etc.
+        </div>
+    </fieldset>
+{% endblock %}

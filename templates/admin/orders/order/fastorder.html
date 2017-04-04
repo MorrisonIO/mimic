@@ -1,0 +1,99 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+<script type="text/javascript" src="../../../jsi18n/"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/core.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/calendar.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/DateTimeShortcuts.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}admin/css/forms.css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo; 
+        <a href="/admin/orders/order/">Orders</a> &rsaquo; 
+        Add FastOrder
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Add FastOrder</h1>
+    {% if errors %}<p class="errornote">Please correct the errors below.</p>{% endif %}
+
+    <div id="content-main">
+    <form action="" method="post" id="fastorder_form"><div>
+        <fieldset class="module aligned">
+            <h2>Details</h2>
+            <div class="form-row">
+                {% if form.errors.org %}{{ form.errors.org }}{% endif %}
+                <label {% if form.org.field.required %}class="required"{% endif %}>{{ form.org.label }}:</label>
+                {{ form.org }}
+            </div>
+ 
+            <div class="form-row">
+                {% if form.errors.due_date %}{{ form.errors.due_date }}{% endif %}
+                <label {% if form.due_date.field.required %}class="required"{% endif %}>{{ form.due_date.label }}:</label>
+                {{ form.due_date }}
+            </div>               
+                
+            <div class="form-row">
+                {% if form.errors.ship_to %}{{ form.errors.ship_to }}{% endif %}
+                <label {% if form.ship_to.field.required %}class="required"{% endif %}>{{ form.ship_to.label }}:</label>
+                {{ form.ship_to }}
+            </div>
+                
+            <div class="form-row">
+                {% if form.errors.po_number %}{{ form.errors.po_number }}{% endif %}
+                <label {% if form.po_number.field.required %}class="required"{% endif %}>{{ form.po_number.label }}:</label>
+                {{ form.po_number }}
+            </div>
+                
+            <div class="form-row">
+                {% if form.errors.additional_info %}{{ form.errors.additional_info }}{% endif %}
+                <label {% if form.additional_info.field.required %}class="required"{% endif %}>{{ form.additional_info.label }}:</label>
+                {{ form.additional_info }}
+            </div>
+        </fieldset>
+        <fieldset class="module aligned">
+            <h2>Products</h2>
+                <table cellspacing="0">
+                    <thead><tr><th class="sorted">Job</th><th class="sorted">Product</th><th class="sorted">Quantity</th></tr></thead>
+                    <tbody>
+                       <tr class="row0">
+                            <td><label{% if form.job1_product.field.required %} class="required"{% endif %}>1</label></td>
+                            <td>{% if form.errors.job1_product %}{{ form.errors.job1_product }}{% endif %}{{ form.job1_product }}</td>
+                            <td>{% if form.errors.job1_qty %}{{ form.errors.job1_qty }}{% endif %}{{ form.job1_qty }}</td>
+                        </tr>
+                        <tr class="row1">
+                            <td><label{% if form.job2_product.field.required %} class="required"{% endif %}>2</label></td>
+                            <td>{{ form.job2_product }}</td>
+                            <td>{% if form.errors.job2_qty %}{{ form.errors.job2_qty }}{% endif %}{{ form.job2_qty }}</td>
+                        </tr>
+                        <tr class="row0">
+                            <td><label{% if form.job3_product.field.required %} class="required"{% endif %}>3</label></td>
+                            <td>{{ form.job3_product }}</td>
+                            <td>{% if form.errors.job3_qty %}{{ form.errors.job3_qty }}{% endif %}{{ form.job3_qty }}</td>
+                        </tr>
+                        <tr class="row1">
+                            <td><label{% if form.job4_product.field.required %} class="required"{% endif %}>4</label></td>
+                            <td>{{ form.job4_product }}</td>
+                            <td>{% if form.errors.job4_qty %}{{ form.errors.job4_qty }}{% endif %}{{ form.job4_qty }}</td>
+                        </tr>
+                        <tr class="row0">
+                            <td><label{% if form.job5_product.field.required %} class="required"{% endif %}>5</label></td>
+                            <td>{{ form.job5_product }}</td>
+                            <td>{% if form.errors.job5_qty %}{{ form.errors.job5_qty }}{% endif %}{{ form.job5_qty }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+        </fieldset>
+
+        <div class="submit-row">
+            <input type="submit" value="Save and add another" name="_addanother"  />
+            <input type="submit" value="Save and continue editing" name="_continue" />
+            <input type="submit" value="Save" class="default" />
+        </div>
+    </div></form>
+    </div>
+{% endblock %}

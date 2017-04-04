@@ -1,0 +1,35 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="/admin/">Home</a> &rsaquo; 
+        <a href="/admin/orders/order/">Orders</a> &rsaquo; 
+        <a href="/admin/orders/order/{{ worknote.order.id }}/">{{ worknote.order }}</a> &rsaquo; 
+        Work notes
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Work notes for order {{ worknote.order }}</h1>
+    <ul class="object-tools">
+        <li><a href="/admin/orders/worknote/{{ worknote.id }}/" class="viewsitelink">Edit work note</a></li>
+    </ul>
+    <div id="content-main">
+    <fieldset class="module aligned ()">
+        <h2>Work notes</h2>
+        <div class="form-row">
+            <p><strong><label class="required">Status:</label></strong> {{ worknote.status }}</p>
+            <p><strong><label class="required">Last modified:</label></strong> {{ worknote.last_modified }}</p>
+            <p><strong><label class="required">Staff involved:</label></strong> {% for staff in worknote.staff.all %}{{ staff.first_name }}{% if not forloop.last %}, {% endif %}{% endfor %}. Staff will {% if not worknote.mail_staff %}<strong>not</strong> {% endif %} be notified by mail of updates.</p>
+            <hr>
+        </div>
+        <div class="form-row">
+            {% load markup %} 
+            <p><strong><label class="required">Notes:</label></strong> (<span class='dieter'>Dieter</span>, <span class="erin">Erin</span>, <span class="david">David</span>, <span class="laura">Laura</span>, <span class="lenny">Lenny</span>, <span class="production">Production</span>)</p>
+            {{ notes|markdown|safe }}
+        </div>
+        </fieldset>
+    </div>
+{% endblock %}
+
+
