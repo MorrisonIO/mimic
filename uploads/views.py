@@ -42,6 +42,10 @@ def handle_uploaded_file(f):
     return url
 
 
+def show_list(request):
+    return render(request, 'uploads/list.html', {})
+
+
 def upload_file(request):
     """
     Displays and validates the upload form, and redirects to a confirmation page after the upload completes.
