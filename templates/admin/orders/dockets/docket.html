@@ -44,7 +44,7 @@
                 {% if product.part_number %}<span class="label">Part number:</span>&nbsp;<b>{{ product.part_number }}</b><br />{% endif %}
                 <span class="label">Qty required:</span><b>&nbsp;{{ item.inventory_history.amount }}</b><br />
                 <span class="label">Description:</span>&nbsp;{{ product.description }}<br /></p>
-
+                <span>Revision: {{item.revision}}</span>
                 {% if product.ratios.all %}
                 <div class="instr"><h4>Components</h4><p>This product is comprised of the following components.</p><ul>{% for r in product.ratios.all %}<li>{{ r.component }}</li>{% endfor %}</ul><p>Note that those components may themselves be comprised of components; check the online system for further info.</p></div>
                 {% endif %}

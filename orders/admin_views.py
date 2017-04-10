@@ -12,7 +12,7 @@ from products.models import Product
 
 from .forms import FastOrderForm
 from .views import subtract_inventory
-from .models import Cart, Order, OrderedItem, WorkNote  #InventoryHistory
+from .models import Cart, Order, OrderedItem, InventoryHistory, WorkNote  #InventoryHistory
 
 
 @staff_member_required
@@ -36,6 +36,11 @@ def create_docket(request, order_id):
     """
     order = Order.objects.get(pk=order_id)
     ordered_items = OrderedItem.objects.filter(order=order)
+    for item in ordered_items:
+        invent_history = InventoryHistory.objects.get(pk=item.inventory_history_id)
+        product = Product.objects.get(pk=invent_history.product_id)
+        item.revision = product.revision or "None"
+
     return render(request, 'admin/orders/dockets/docket.html', {
         'order': order,
         'ordered_items': ordered_items,
