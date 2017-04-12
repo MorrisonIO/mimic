@@ -5,7 +5,7 @@ class Upload(models.Model):
         A Upload are a files that we place on the site
         that becomes pdf file
     """
-    name = models.CharField(max_length=200, default='file')
+    name = models.CharField(max_length=200, default="file_name", blank=True, null=True)
     file = models.FileField(upload_to='downloads/files')
     # org = models.ForeignKey(Org, blank=True, null=True)
     comments = models.TextField(blank=True, help_text="HTML is allowed.")
