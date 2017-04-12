@@ -153,7 +153,7 @@ class Report(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('report_detail', None, { 'report_id': self.id })
+        return ('reports:report_detail', None, { 'report_id': self.id })
 
     def _calc_dates(self):
         now = datetime.datetime.now()
