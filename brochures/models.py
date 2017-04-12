@@ -8,7 +8,7 @@ class BrochureTemplate(models.Model):
     Model describes personal info step in brochure ordering
     """
     file = models.FileField(upload_to='templates/pdf')
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, default="template")
     def __str__(self):
         return self.name
 
