@@ -1,13 +1,15 @@
 {% extends "admin/base_site.html" %}
+{% load staticfiles %}
 
-{% block extrahead %}
-  <link rel="stylesheet" media="all" type="text/css" href="{{ MEDIA_URL }}css/multi-select.css" />
-  <link rel="stylesheet" media="all" type="text/css" href="{{ MEDIA_URL }}css/export.css" />
+{{% block extrahead %}
+
+  <link rel="stylesheet" media="all" type="text/css" href="{% static 'css/multi-select.css' %}" />
+  <link rel="stylesheet" media="all" type="text/css" href="{% static 'css/export.css' %}" />
   <script src="//code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
   <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
-  <script src="{{ MEDIA_URL }}js/jquery.multi-select.js" type="text/javascript"></script>
-  <script src="{{ MEDIA_URL }}js/jquery.quicksearch.js" type="text/javascript"></script>
+  <script src="{% static 'js/jquery.multi-select.js '%}" type="text/javascript"></script>
+  <script src="{% static 'js/jquery.quicksearch.js '%}" type="text/javascript"></script>
   <script type="text/javascript">
     $(function(){
       $('#exported-products').multiSelect({
@@ -63,7 +65,7 @@
 {% block content %}
   {% load markup %}
 
-  <form action="download" method="post">
+  <form action="download" method="post">{% csrf_token %}
     <div class="export-products-holder">
       <select multiple="multiple" id="exported-products" name="products[]">
         {% for item in items %}

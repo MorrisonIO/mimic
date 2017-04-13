@@ -1,12 +1,13 @@
 {% extends "admin/base_site.html" %}
+{% load staticfiles %}
 
 {% block extrastyle %}
 <script type="text/javascript" src="../../../jsi18n/"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/core.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/calendar.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/DateTimeShortcuts.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}admin/css/forms.css" />
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/calendar.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/DateTimeShortcuts.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}" />
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -22,7 +23,7 @@
     {% if errors %}<p class="errornote">Please correct the errors below.</p>{% endif %}
 
     <div id="content-main">
-    <form action="" method="post" id="fastorder_form"><div>
+    <form action="" method="post" id="fastorder_form">{% csrf_token %}<div>
         <fieldset class="module aligned">
             <h2>Details</h2>
             <div class="form-row">

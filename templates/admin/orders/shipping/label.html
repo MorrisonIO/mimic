@@ -1,13 +1,14 @@
 {% extends "admin/base_site.html" %}
+{% load staticfiles %}
 
 {% block extrahead %}
 <script type="text/javascript" src="../../../../../jsi18n/"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/core.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/calendar.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/DateTimeShortcuts.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}admin/js/admin/CollapsedFieldsets.js"></script>
-<link rel="stylesheet" media="print" type="text/css" href="{{ MEDIA_URL }}css/print.css" />
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/calendar.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/DateTimeShortcuts.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/CollapsedFieldsets.js' %}"></script>
+<link rel="stylesheet" media="print" type="text/css" href="{% static 'css/print.css' %}" />
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -38,7 +39,7 @@ tel: 905.415.2772 fax: 905.415.2005 www.mimicprint.com</p>
     {% else %}
         <div id="label">
         <h1>Create a Label</h1>
-        <form action="" method="post">
+        <form action="" method="post">{% csrf_token %}
         <h2>Ship to</h2>
         <div class="f-left">
             <p><strong>Use address on order:</strong></p>
@@ -54,7 +55,7 @@ tel: 905.415.2772 fax: 905.415.2005 www.mimicprint.com</p>
                 <option value="{{ a.id }}">{{ a.last_name }}, {{ a.first_name }}{% if a.company %} ({{ a.company }}){% endif %}</option>
                 {% endfor %}
             </select>
-            <a href="../../../../addresses/address/add/" class="add-another" id="add_id_address" onclick="return showAddAnotherPopup(this);"> <img src="{{ MEDIA_URL }}admin/img/admin/icon_addlink.gif" width="10" height="10" alt="Add Another"/></a>
+            <a href="../../../../addresses/address/add/" class="add-another" id="add_id_address" onclick="return showAddAnotherPopup(this);"> <img src="{% static 'admin/img/admin/icon_addlink.gif' %}" width="10" height="10" alt="Add Another"/></a>
         </div>
         <hr class="clear">
         <h2>Contents</h2>
