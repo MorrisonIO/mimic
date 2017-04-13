@@ -283,7 +283,7 @@ def cancel_order(request):
     """
     delete_order_session_vars(request)
     messages.warning(request, "s|Your order has been cancelled.")
-    return HttpResponseRedirect(reverse('cart_summary'))
+    return HttpResponseRedirect(reverse('orders:cart_summary'))
 
 
 @login_required
@@ -302,7 +302,7 @@ def delete_from_cart(request, unique_id):
                 request.session['data_approved'].remove(item)
 
     messages.info(request, 's|The item was removed from your order.')
-    return HttpResponseRedirect(reverse('cart_summary'))
+    return HttpResponseRedirect(reverse('orders:cart_summary'))
 
 
 @login_required
