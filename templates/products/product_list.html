@@ -33,11 +33,11 @@
 
     {% for cat in categories %}
         {% if search %}
-        <h3 class="category">Search results
+        <table class="product_list tablesorter">
         {% else %}
         <h3 class="category collapsed cat-closed" data-id={{cat.id}}>{{ cat.name }}</h3>
-        {% endif %}
         <table class="product_list tablesorter" style="display: none;">
+        {% endif %}
         <thead>
         <tr>
             <th>{% if cat.name_altname %}{{ cat.name_altname }}{% else %}Item{% endif %}</th>
