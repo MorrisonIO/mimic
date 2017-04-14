@@ -10,7 +10,7 @@
                     {% endfor %}
                 </select>
             {% else %}
-                <input type="text" size="4" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                <input type="number" size="4" min=0 name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
             {% endif %}
         </td>
         <td class="qty_info">

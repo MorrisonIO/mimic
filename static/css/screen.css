@@ -754,6 +754,9 @@ table.line_item .vardata {
     font-style: italic;
     color: #999;
 }
+table.qty_meta_info input[type="number"]{
+    width: 40px;
+}
 
 /*}}}*/
 /* {{{ =Forms 
