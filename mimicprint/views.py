@@ -33,7 +33,12 @@ def dashboard(request):
     The main ordering system homepage (aka the dashboard)
     to display the user's recent activity, current org info, etc.
     """
-    current_org = request.session['current_org'] if 'current_org' in request.session.keys() \
+    orgs = Org.objects.filter(userprofile__user=request.user)
+    if orgs.count() == 1:
+        current_org = orgs[0]
+        request.session['current_org'] = orgs[0]
+    else:
+        current_org = request.session['current_org'] if 'current_org' in request.session.keys() \
                                                  else ''  # requires python 2.5
     entries_list = Entry.objects.filter(status__exact='public')
     if current_org:

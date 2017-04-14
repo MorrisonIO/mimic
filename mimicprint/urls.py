@@ -44,11 +44,11 @@ urlpatterns = [
     # url(r'^accounts/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
 
     url(r'^oos/$',
-        view='mimicprint.views.dashboard',
+        views.dashboard,
         name='dashboard',
     ),
     url(r'^oos/setorg/$',
-        view='mimicprint.views.setorg',
+        views.setorg,
         name='setorg',
     ),
     url(r'^oos/addresses/', include('addresses.urls')),

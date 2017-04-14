@@ -1,9 +1,9 @@
 {% for product in products %}
     {% for prodcat in product.categories.all %}
-        {#% if prodcat == cat %#}
+        {% if prodcat == cat %}
             <tr class="{% cycle odd,even %}">
                 {% include "products/product_row.html" %}
             </tr>
-        {#% endif %#}
+        {% endif %}
     {% endfor %}
 {% endfor %}
