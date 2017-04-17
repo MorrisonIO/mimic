@@ -31,17 +31,17 @@ urlpatterns = [
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'mimicprint.views.logout_user', name='logout'),
     url(r'^accounts/profile/$', views.profile, name='profile'),
-    # url(r'^accounts/password_change/$',
-    #     view = 'django.contrib.auth.views.password_change',
-    #     name = 'password_change'
-    # ),
-    # url(r'^accounts/password_change/done/$', 'django.contrib.auth.views.password_change_done'),
-    # url(r'^accounts/password_reset/$',
-    #     'django.contrib.auth.views.password_reset',
-    #     name = 'password_reset'
-    # ),
-    # url(r'^accounts/password_reset/done/$', 'django.contrib.auth.views.password_reset_done'),
-    # url(r'^accounts/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
+    url(r'^accounts/password_change/$',
+        view = 'django.contrib.auth.views.password_change',
+        name = 'password_change'
+    ),
+    url(r'^accounts/password_change/done/$', 'django.contrib.auth.views.password_change_done'),
+    url(r'^accounts/password_reset/$',
+        'django.contrib.auth.views.password_reset',
+        name = 'password_reset'
+    ),
+    url(r'^accounts/password_reset/done/$', 'django.contrib.auth.views.password_reset_done', name='password_reset_done'),
+    url(r'^accounts/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', name='password_reset_confirm'),
 
     url(r'^oos/$',
         views.dashboard,
