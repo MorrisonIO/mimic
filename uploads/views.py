@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from uploads.forms import UploadFileForm
 from django.conf import settings 
 from django.core.cache import cache
+from .models import Upload
 import re
 import random
 
@@ -54,16 +55,31 @@ def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            file = request.FILES['file']
-            path = handle_uploaded_file(file)
+            # file = request.FILES['file']
+            # path = handle_uploaded_file(file)
+            uploaded = Upload()
+            uploaded.name = form.cleaned_data['title'] or "File"
+            uploaded.file = request.FILES['file']
+            uploaded.comments = form.cleaned_data['comments']
+            uploaded.is_deletable = True
+            uploaded.user_name = form.cleaned_data['name']
+            uploaded.email = form.cleaned_data['email']
+            try:
+                uploaded.save()
+            except Exception as ex:
+                message = "Error: There was a problem with your submission. Refer to the messages below and try again."
+                return render(request, 'uploads/upload.html', {
+                    'form': form,
+                    'message': message,
+                })
 
             # send mail to staff
             t = loader.get_template('emails/file_uploaded.txt')
             subject = "File Upload"
             c = Context({
                 'file': file,
-                'path': path,
-                'file_url': request.build_absolute_uri(path),
+                'path': uploaded.file.name,
+                'file_url': request.build_absolute_uri(uploaded.file.name),
                 'form': request.POST,
             })
             body = t.render(c)

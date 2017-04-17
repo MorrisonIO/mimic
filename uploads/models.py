@@ -6,14 +6,15 @@ class Upload(models.Model):
         that becomes pdf file
     """
     name = models.CharField(max_length=200, default="file_name", blank=True, null=True)
-    file = models.FileField(upload_to='downloads/files')
+    file = models.FileField(upload_to='uploads')
     # org = models.ForeignKey(Org, blank=True, null=True)
     comments = models.TextField(blank=True, help_text="HTML is allowed.")
     is_deletable = models.BooleanField(
         help_text="If checked, users are allowed to delete this file."
         )
     date_added = models.DateTimeField(auto_now_add=True)
-
+    user_name = models.CharField(max_length=200, default="", blank=True, null=True)
+    email = models.CharField(max_length=200, default="", blank=True, null=True)
     def __unicode__(self):
         return u'%s' % self.name
 
