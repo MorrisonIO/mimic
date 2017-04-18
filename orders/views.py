@@ -216,7 +216,7 @@ def vardata_preview(request):
 
         # redirect back to vardata_input to see
         # if there are any more items to get data for
-        return HttpResponseRedirect(reverse('vardata_input'))
+        return HttpResponseRedirect(reverse('orders:vardata_input'))
 
     else:
         # session var set in the vardata view
