@@ -207,7 +207,7 @@ def MimicBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ MimicBc_print
 def MimicBc_print(request, ordereditem_id):
@@ -389,7 +389,7 @@ def TlaBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ TlaBc_print
 def TlaBc_print(request, ordereditem_id):
@@ -585,7 +585,7 @@ def HarrisCertificate_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ HarrisCertificate_print
 def HarrisCertificate_print(request, ordereditem_id):
@@ -815,7 +815,7 @@ def DrAsiaPacificBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ DrAsiaPacificBc_print
 def DrAsiaPacificBc_print(request, ordereditem_id):
@@ -1037,7 +1037,7 @@ def DrMarkhamBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ DrMarkhamBc_print
 def DrMarkhamBc_print(request, ordereditem_id):
@@ -1244,7 +1244,7 @@ def DrUkBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ DrUkBc_print
 def DrUkBc_print(request, ordereditem_id):
@@ -1456,7 +1456,7 @@ def DrRemoteBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ DrRemoteBc_print
 def DrRemoteBc_print(request, ordereditem_id):
@@ -1744,7 +1744,7 @@ def CaTechTorontoBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ CaTechTorontoBc_print
 def CaTechTorontoBc_print(request, ordereditem_id):
@@ -2064,7 +2064,7 @@ def CaTechMontrealBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ CaTechMontrealBc_print
 def CaTechMontrealBc_print(request, ordereditem_id):
@@ -2385,7 +2385,7 @@ def CaTechOttawaBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ CaTechOttawaBc_print
 def CaTechOttawaBc_print(request, ordereditem_id):
@@ -2722,7 +2722,7 @@ def RossBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ RossBc_print
 def RossBc_print(request, ordereditem_id):
@@ -2986,7 +2986,7 @@ def TrilliumBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ TrilliumBc_print
 def TrilliumBc_print(request, ordereditem_id):
@@ -3189,7 +3189,7 @@ def KafkoEnglishCanadaBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ KafkoEnglishCanadaBc_print
 def KafkoEnglishCanadaBc_print(request, ordereditem_id):
@@ -3305,7 +3305,7 @@ def KafkoFrenchCanadaBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ KafkoFrenchCanadaBc_print
 def KafkoFrenchCanadaBc_print(request, ordereditem_id):
@@ -3461,7 +3461,7 @@ def KafkoUsBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ KafkoUsBc_print
 def KafkoUsBc_print(request, ordereditem_id):
@@ -3633,7 +3633,7 @@ def AlgonquinMississaugaBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ AlgonquinMississaugaBc_print
 def AlgonquinMississaugaBc_print(request, ordereditem_id):
@@ -3701,7 +3701,7 @@ def AlgonquinOttawaBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ AlgonquinOttawaBc_print
 def AlgonquinOttawaBc_print(request, ordereditem_id):
@@ -3873,7 +3873,7 @@ def SuperiorEnergyBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ SuperiorEnergyBc_print
 def SuperiorEnergyBc_print(request, ordereditem_id):
@@ -4070,7 +4070,7 @@ def SuperiorEnergyAgentBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 #{{{ SuperiorEnergyAgentBc_print
 def SuperiorEnergyAgentBc_print(request, ordereditem_id):
@@ -4129,7 +4129,7 @@ def generic_1up(request, renderer, pagesize, styles):
 
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 
 
 def hash_square(c, top, left, bottom, right, noTop=False, noLeft=False, noRight=False, noBottom=False):
@@ -4878,7 +4878,7 @@ def CaTechBc_1up(request):
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
 
-    return HttpResponseRedirect(reverse('vardata_preview'))
+    return HttpResponseRedirect(reverse('orders:vardata_preview'))
 #}}}
 
 def _catech_bc_1up(pdf_file, data):
