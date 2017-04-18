@@ -141,7 +141,7 @@ def vardata_remodify(request, unique_id):
                 'quantity': item['quantity']
             })
             request.session['form_data'] = item            # repopulate form w/user info
-    return HttpResponseRedirect(reverse('vardata_input'))
+    return HttpResponseRedirect(reverse('orders:vardata_input'))
 
 
 @login_required
