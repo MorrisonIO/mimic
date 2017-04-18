@@ -165,7 +165,7 @@ def vardata_input(request):
             form = var_form(request.POST)
             if form.is_valid():
                 request.session['form_data'] = form.cleaned_data
-                url = "%s%s/" % (reverse('vardata_prefix'), product.var_form)
+                url = "%s%s/" % (reverse('vardata:vardata_prefix'), product.var_form)
                 # create preview images
                 return HttpResponseRedirect(url)
             else:
