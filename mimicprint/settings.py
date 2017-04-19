@@ -88,6 +88,8 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+FONT_DIR = os.path.join(BASE_DIR, 'fonts/')
+
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
 # MEDIA_URL = 'http://localhost:8000/media/'
