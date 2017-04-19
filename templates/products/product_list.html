@@ -3,78 +3,275 @@
 
 {% block title %}Product list{% endblock %}
 {% block page_title %}Product list{% endblock %}
-{% block body_class %}onecol{% endblock %}
+{% block body_class %}twocol-context-right{% endblock %}
+{% block active_product_state %}active{% endblock %}
 
 {% block custom_head %}
+<link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery-indicator.css' %}" type="text/css">
+<script type="text/javascript" src="{% static 'js/side-menu.js' %}" defer ></script>
+<script type="text/javascript" src="{% static 'js/blueimp-helper.js' %}"defer ></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery.min.js' %}"defer ></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-fullscreen.js' %}"defer ></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-indicator.js' %}"defer ></script>
+<script type="text/javascript" src="{% static 'js/jquery.blueimp-gallery.js' %}"defer ></script>
 {% if not search %}
     <script type="text/javascript">
-    $(document).ready(function(){
-        // if ( '{{ profile.default_product_view }}' == 'c' ) {
-        //     $("h3.category").addClass('cat-closed');
-        //     $("table.product_list").hide();
-        // }
-    });
+        $(document).ready(function(e){
+            function closeModal(){
+                $(".modal").removeClass("active");
+            }
+            $(".modal-content .close, .modal").on("click", function(){
+                closeModal();
+            });
+            // pressing escape
+            if (e.keyCode == 27) {
+                closeModal();
+            }
+            buildmenu();
+            $(document).on('change input paste', '#search_input', function(ev){
+                if(ev.target.value.length > 1){
+                    $(".template-item").hide()
+                    var toShow = []
+                    var h2_arr = $('.tmp-item-wrapper h2')
+                    var p_arr = $('.tmp-item-wrapper p')
+                    $.each(h2_arr, function(id, value){
+                        if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
+                            toShow.push($(this).parent().parent().parent())
+                        }
+                    })
+                    $.each(p_arr, function(id, value){
+                        if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
+                            toShow.push($(this).parent().parent().parent())
+                        }
+                    })
+                    window.toShow = toShow
+                    toShow.forEach(function(el){
+                        el.show()
+                    })
+                } else {
+                    $(".template-item").show()
+                }
+            })
+            $(".submit-on-side button").click(function(){
+                $(this).css('margin-left', '0px'); 
+                var spinner = $(this).prev(); 
+                spinner.show(); 
+                var img = $(this).find("img");
+                $(this).addClass('processing');
+                $(this).html('<img src="' + img.attr('src') + '"> Processing...');
+
+                $('#product-form').submit()
+            }); 
+            $('#search_input').parent('form').on('submit', function(event){
+                event.preventDefault;
+                return false;
+            })
+            var sidemenu = $(".sidebar");
+            $(window).scroll(function() {
+                var MENU_POSITION_y = 244
+                var scroll = $(window).scrollTop();
+                if (scroll >= MENU_POSITION_y) {
+                    sidemenu.addClass("fixed");
+                } else {
+                    sidemenu.removeClass("fixed");
+                }
+            });
+        });
+        function showDesc(id){
+            $.ajax({
+                url: 'get_product_modal_data',
+                data: {'id': id},
+                success: function(response){
+                    var modal = $("#theModal")
+                    var _res  = JSON.parse(response)
+                    $(".modal-content p").text(_res.description)
+                    var linksContainer = $('#links').empty()
+                    _res.preview_images = [{'url':'/static/img/product_preview.jpg', 'name':'Preview Image'}]
+                    for(var i=0; i < _res.preview_images.length; i++){
+                        var el = _res.preview_images[i];
+                        function onLoad(id){
+                            $(".loader" + id).hide()
+                            $('#prev_'+id).show()
+                        }
+                        
+                        var loader = '<div class="loader'+i+' floatingCirclesG">' +
+                                    '<div class="f_circleG" id="frotateG_01"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_02"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_03"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_04"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_05"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_06"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_07"></div>' + 
+                                    '<div class="f_circleG" id="frotateG_08"></div>' +
+                                '</div>'
+                        var $box = $('<img id="prev_'+i+'">')
+                        
+                        $box.on('load', function(ev){
+                            var id = ev.currentTarget.id.substring(5)
+                            onLoad(id);
+                        })
+                        $('<a/>')
+                            .append(loader)
+                            .append($box.prop('src', el.url))
+                            .prop('href', el.url)
+                            .prop('id', i)
+                            .prop('title', el.name)
+                            .attr('data-gallery', '')
+                            .appendTo(linksContainer)
+                            $box.hide()
+                    }
+                    $(".modal").addClass("active");
+                    
+                },
+                error: function(err){
+                    console.log('err',err)
+                }
+            })
+        }
     </script>
 {% endif %}
 {% endblock %}
 
+
+{% block sidebar %}
+{% load tag_helper %}
+<div id="accordian">
+	<ul>
+        <li>
+            <h3>Categories</h3>
+            <ul class="filters-category">
+            {% for category in categories %}
+                <li>
+                    <label class="checkbox-label" for="{{category.name|to_one_word}}{{forloop.counter}}">
+                        <input class="filter" data-filter=".{{category.name|to_one_word}}" type="checkbox" id="{{category.name|to_one_word}}{{forloop.counter}}">
+                        {{category.name}}
+                    </label>
+                </li>
+            {% endfor %}
+            {% if categories|length_is:"0" %}
+                <li>
+                    <label class="checkbox-label" for="nothing">There are no categories</label>
+                </li>
+            {% endif %}
+            </ul>
+        </li>
+        {% for category in menu_data|show_category %}
+            {#% if menu_data|show_category:category %#}
+                <li>
+                    <h3>{{menu_data|get_value_by_key:category|get_value_by_key:'title'}}</h3>
+                    <ul class="filters-category">
+                    {% if menu_data|get_value_by_key:category|get_value_by_key:'title' == 'Price' %}
+                        <li>
+                            <label class="checkbox-label" for="price_max_10">
+                                <input class="filter" data-filter=".price_max_10" type="checkbox" id="price_max_10">
+                                0 < 10
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox-label" for="price_max_50">
+                                <input class="filter" data-filter=".price_max_50" type="checkbox" id="price_max_50">
+                                11 < 50
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox-label" for="price_max_100">
+                                <input class="filter" data-filter=".price_max_100" type="checkbox" id="price_max_100">
+                                51 < 100
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox-label" for="price_max_500">
+                                <input class="filter" data-filter=".price_max_500" type="checkbox" id="price_max_500">
+                                101 < 500
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox-label" for="price_max_1000">
+                                <input class="filter" data-filter=".price_max_1000" type="checkbox" id="price_max_1000">
+                                501 < 1000
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox-label" for="price_max_inf">
+                                <input class="filter" data-filter=".price_max_inf" type="checkbox" id="price_max_inf">
+                                More than 1000
+                            </label>
+                        </li>
+                    {% else %}
+                        {% for row in menu_data|get_value_by_key:category %}
+                            {% if row != 'title' %}
+                                <li class="">
+                                    <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">
+                                        <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                                        {{row}}
+                                    </label>
+                                </li>
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
+                </li>
+            {#% endif %#}
+        {% endfor %}
+    </ul>
+    <div class="submit-on-side">
+        <div class="center">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="button" class="">
+                <img src="{% static 'img/arrow.png' %}" alt="">
+                Continue
+            </button>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
 
 {% block content %}
 {% if search %}
 <p>Your search for <strong>"{{ query_string }}"</strong> found {% if products.count %}<strong>{{ products.count }} result{{ products|pluralize }}</strong>{% else %} no results{% endif %}. {% if products %}To place an order, enter the quantit{{ products|pluralize:"y,ies" }} you require, or <a href="{% url 'products:product_list' %}" title="Product list">return to the full product list</a>.{% endif %}</p>
 {% else %}
     {% if products %}
-        <p>Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title. Also you can create a brochure. </p>
+        <p class="pd10">Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title. Also you can create a brochure. </p>
     {% endif %}
 {% endif %}
 
 {% if products %}
-    <form action="{% url 'orders:process_products' %}" method="post">{% csrf_token %}
-
-    {% for cat in categories %}
-        {% if search %}
-        <table class="product_list tablesorter">
-        {% else %}
-        <h3 class="category collapsed cat-closed" data-id={{cat.id}}>{{ cat.name }}</h3>
-        <table class="product_list tablesorter" style="display: none;">
-        {% endif %}
-        <thead>
-        <tr>
-            <th>{% if cat.name_altname %}{{ cat.name_altname }}{% else %}Item{% endif %}</th>
-            {% if cat.name_altname == "Document Title" %} <th>Preview</th> {% endif %}
-            {% if cat.show_revision %}<th>{% if cat.revision_altname %}{{ cat.revision_altname }}{% else %}Revision{% endif %}</th>{% endif %}
-            {% if cat.show_part_number %}<th>{% if cat.part_number_altname %}{{ cat.part_number_altname }}{% else %}Part&nbsp;Number{% endif %}</th>{% endif %}
-            {% if cat.show_price %}
-                {% if user_is_manager or profile.can_see_prices %}
-                    <th>{% if cat.price_altname %}{{ cat.price_altname }}{% else %}Price{% endif %}</th>
-                {% endif %}
-            {% endif %}
-            {% if cat.show_inventory %}<th>Inventory</th>{% endif %}
-            <th class="qty" colspan="2">Quantity</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% if search %}
-            {% for product in products %}
-                    <tr class="{% cycle odd,even %}">
-                        {% include "products/product_row.html" %}
-                    </tr>
+    <form id="product-form" action="{% url 'orders:process_products' %}" method="post">{% csrf_token %}
+        <div class="clearfix">
+        {% for prod in products %}
+            {% for product in prod.products %}
+            <div class="template-item {{product.price | price_constructor}} {{product.min_order_qty }} {{prod.name|to_one_word}} filterable">
+                <div class="tmp-item-wrapper">
+                    <img src="{% static 'img/product_preview.jpg' %}" alt="" />
+                    <div class="tmp-item-box">  
+                        <h2>{{ product.name }}</h2>
+                        <p>{{ product.description }}</p>  
+                        
+                        {% if product.fixed_order_qtys and not unrestricted_qtys %}{% load product_filters %}
+                            <select name="qty_{{ product.id }}">
+                                <option value=""></option>
+                                {% for q in product.fixed_order_qtys|qty_list %}
+                                    <option value="{{ q }}">{{ q }}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <input type="number" size="4" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                        {% endif %}
+                        <a href="#" class="info showModalBtn1 visible" onclick="showDesc({{product.id}})">Show description</a>  
+                        <input type="hidden" name="u_{{ product.id }}" value="{{ product.unique_id }}">
+                        <input type="hidden" name="o_{{ product.id }}" value="{{ forloop.counter }}">
+                    </div>  
+                </div>
+            </div>
             {% endfor %}
-        {% endif %}
-        </tbody>
-        </table>
-    {% endfor %}
-
-    <div class="submit">
-        <div class="center">
-            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
-            <button type="submit" class="">
-                <img src="{% static 'img/arrow.png' %}" alt="">
-                Continue
-            </button>
+        {% endfor %}
         </div>
-    </div>
     </form>
 {% else %}
     {% if not search %}
