@@ -1,7 +1,7 @@
 from django.shortcuts import render #get_object_or_404,
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404, HttpResponseServerError
+from django.http import HttpResponseRedirect, HttpResponseServerError, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext, loader, Context
 from django.contrib.auth.models import User
@@ -142,3 +142,14 @@ def profile(request):
         'profile_form': profile_form,
         'current_org': current_org
     })
+
+def testing_view(request):
+    from django.core.mail import send_mail
+    from django.conf import settings
+    try:
+        send_mail('Тема', 'Тело письма', settings.EMAIL_HOST_USER, ['to@example.com'])
+        return HttpResponse('hello')
+    except Exception as ex:
+        return HttpResponse('error!!! {}'.format(ex))
+
+    

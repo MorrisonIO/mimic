@@ -72,6 +72,8 @@ urlpatterns = [
     url(r'^admin/orders/shipping/label/(?P<order_id>\d+)/$', admin_views.create_label),
     url(r'^admin/orders/shipping/comm_inv/(?P<order_id>\d+)/$', admin_views.create_comm_inv),
 
+    url(r'^testing/$', views.testing_view, name='testing'),
+
     url(r'^oos/feedback/$', ContactFormView.as_view(form_class=FeedbackForm),
         # {
         #     'form_class': FeedbackForm,
