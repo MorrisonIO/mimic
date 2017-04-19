@@ -73,6 +73,15 @@ cite, em { font-style: italic; }
 .top-margin { margin: 20px 0 0 0; }
 code, kbd, samp, pre, tt, var { font: 14px Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Courier, monospace; }
 abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+.pd10 { padding: 10px; }
+.pd15 { padding: 15px; }
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
 
 a {
     color: #8ace2e;
@@ -124,10 +133,10 @@ ul.bulletted {
 
 .content { /* default content div */
     float: left;
-    width: 70%;
+    width: calc(100% - 370px);
 }
 .sidebar { /* default sidebar, 2% gutter between this and content */
-    width: 28%;
+    width: 350px;
     float: right;
     padding: 0;
 }
@@ -757,7 +766,10 @@ table.line_item .vardata {
 table.qty_meta_info input[type="number"]{
     width: 40px;
 }
-
+.fixed {
+    position: fixed;
+    top: 0;
+}
 /*}}}*/
 /* {{{ =Forms 
  * ------------------------------- */
@@ -768,6 +780,12 @@ div.submit { /* surrounds submit buttons on forms */
     background: #def;
     margin-top: 10px;
     padding: 15px;
+}
+div.submit-on-side { /* surrounds submit buttons on forms */
+    background: #e6a552;
+    border-top: 1px solid #333;
+    padding: 15px;
+    box-sizing: border-box;
 }
 div.submit p.instructions {
     color: #222;
