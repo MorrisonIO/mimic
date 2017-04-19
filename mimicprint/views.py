@@ -147,8 +147,8 @@ def testing_view(request):
     from django.core.mail import send_mail
     from django.conf import settings
     try:
-        send_mail('Тема', 'Тело письма', settings.EMAIL_HOST_USER, ['to@example.com'])
-        return HttpResponse('hello')
+        send_mail('Topic', 'Body', settings.EMAIL_HOST_USER, ['alexey.alkhutov@dunice.ru'])
+        return HttpResponse('Ok')
     except Exception as ex:
         return HttpResponse('error!!! {}'.format(ex))
 
