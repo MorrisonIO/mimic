@@ -131,6 +131,10 @@
                 }
             })
         }
+        function maxLengthCheck(obj){
+            if (obj.value.length > obj.maxLength)
+                obj.value = obj.value.slice(0, obj.maxLength)
+        }
     </script>
 {% endif %}
 {% endblock %}
@@ -261,7 +265,7 @@
                                 {% endfor %}
                             </select>
                         {% else %}
-                            <input type="number" size="4" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                            <input type="number" size="5" max="100000" oninput="maxLengthCheck(this)" maxlength="5" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
                         {% endif %}
                         <a href="#" class="info showModalBtn1 visible" onclick="showDesc({{product.id}})">Show description</a>  
                         <input type="hidden" name="u_{{ product.id }}" value="{{ product.unique_id }}">
