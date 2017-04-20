@@ -3,11 +3,13 @@ from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader, Context
 from django.core.mail import mail_managers, send_mail
 from django.core.urlresolvers import reverse
+from django.core.files import File
 from uploads.forms import UploadFileForm
 from django.conf import settings 
 from django.core.cache import cache
 from .models import Upload
 import re
+import os
 import random
 
 def sanitize_filename(name):
@@ -35,11 +37,14 @@ def handle_uploaded_file(f):
     so that you could store the file somewhere non-public and deliver it to Mimic staff that way.
     """
     filename = sanitize_filename(f.name)
-    path = '/uploads/%s' % filename
-    destination = open('{0}{1}'.format(settings.STATICFILES_DIRS[0].encode('utf8'), path), 'wb+')
+    path = 'uploads/%s' % filename
+    folder_path = settings.MEDIA_ROOT
+    if not os.path.isdir(folder_path + 'uploads'):
+        os.mkdir(folder_path + 'uploads')
+    destination = open('{0}{1}'.format(folder_path.encode('utf8'), path), 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
-    url = '%s%s' % (settings.STATIC_URL, path)
+    url = '%s%s' % (settings.MEDIA_URL, path)
     return url
 
 
@@ -55,11 +60,11 @@ def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            # file = request.FILES['file']
-            # path = handle_uploaded_file(file)
+            file = request.FILES['file']
+            path = handle_uploaded_file(file)
             uploaded = Upload()
             uploaded.name = form.cleaned_data['title'] or "File"
-            uploaded.file = request.FILES['file']
+            uploaded.file = File(open('{}{}'.format(settings.BASE_DIR, path), 'wb+')) #request.FILES['file']
             uploaded.comments = form.cleaned_data['comments']
             uploaded.is_deletable = True
             uploaded.user_name = form.cleaned_data['name']
@@ -120,7 +125,7 @@ def upload_progress(request):
     elif 'X-Progress-Id' in request.META:
         progress_id = request.META['X-Progress-Id']
     if progress_id:
-        from django.utils import simplejson
+        import simplejson
         cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
         data = cache.get(cache_key)
         json = simplejson.dumps(data)

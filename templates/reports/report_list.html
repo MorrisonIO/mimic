@@ -23,7 +23,7 @@
                     <td class="actions">
                         <a href="{% url 'reports:report_detail' report.id %}" title="View this report"><img src="{% static 'img/information.png' %}" alt="View" height="16" width="16"></a>
                         <a href="{% url 'reports:report_edit' report.id %}" title="Edit this report"><img src="{% static 'img/edit.png' %}" alt="Edit" height="16" width="16"></a>
-                        {#<a href="{% url 'reports:report_download' report.id "download" %}" title="Download this report"><img src="{% static 'img/page_white_excel.png' %}" alt="Download" height="16" width="16"></a>#}
+                        <a href="{% url 'reports:report_download' report.id "download" %}" title="Download this report"><img src="{% static 'img/page_white_excel.png' %}" alt="Download" height="16" width="16"></a>
                         <a href="{% url 'reports:report_delete' report.id %}" title="Delete this report" rel="dialog"><img src="{% static 'img/cross.png' %}" alt="Delete" height="16" width="16"></a>
                     </td>
                 </tr>

@@ -2,9 +2,9 @@
 
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from openpyxl.cell import Cell as gcl
-from openpyxl.utils import get_column_letter
-from openpyxl.styles import Alignment, alignment, numbers, Fill, Color, colors, Font, Border, borders
+from openpyxl.cell import Cell 
+from openpyxl.utils import get_column_letter as gcl
+from openpyxl.styles import Alignment, alignment, numbers, PatternFill, Color, colors, Font, Border, borders, Side
 
 #### WARNING: OpenPYXl has a bug that breaks office 2007 compatibility:
 ####   https://bitbucket.org/ericgazoni/openpyxl/issue/109/simple-formula-write-not-working
@@ -39,31 +39,38 @@ class ReportFormatter:
 
     def cell(self, x, y, value = None, bold = None, halign = None, formula = None, format = None, color = None, border = None, wrap_text = None):
         cell = self.ws.cell('%s%s' % (gcl(x), y))
-
+        # print('x')
+        print('ceel', dir(cell))
+        # print('xx')
         if format is not None:
-            cell.style.number_format.format_code = format
+            cell.number_format = format
 
         if value is not None:
             if formula:
-                cell.set_value_explicit(value, Cell.TYPE_FORMULA)
+                cell.set_explicit_value(value, Cell.TYPE_FORMULA)
             else:
                 cell.value = value
 
         if halign is not None:
-            cell.style.alignment.horizontal = halign
+            cell.alignment = halign
 
         if color is not None:
-            cell.style.font.color.index = color
+            cell.font = Font(color=color)
 
         if border is not None:
             for side in self.BORDERS:
-                getattr(cell.style.borders, side).border_style = border
+                cell.border = Border(right=Side(style=border),
+                                     left=Side(style=border),
+                                     top=Side(style=border),
+                                     bottom=Side(style=border))
 
         if wrap_text is not None:
-            cell.style.alignment.wrap_text = wrap_text
+            cell.alignment = Alignment(wrap_text=wrap_text)
 
         if bold is not None:
-            cell.style.font.bold = bold
+            cell.font = Font(bold=bold)
+            # cell.font.bold = bold
+            # cell.style
 
         return cell
 
@@ -90,7 +97,7 @@ class ReportFormatter:
 
     def order(self, order):
         self.cell(self.COLUMN_ORDERNO, self.row, value=order.name)
-        self.cell(self.COLUMN_DATE, self.row, value=order.due_date, format=NumberFormat.FORMAT_DATE_XLSX14)
+        self.cell(self.COLUMN_DATE, self.row, value=order.due_date, format=numbers.FORMAT_DATE_XLSX14)
 
     def items(self, items):
         for item in items:
@@ -100,9 +107,9 @@ class ReportFormatter:
         self.cell(self.COLUMN_ITEM, self.row, wrap_text=True, value=str(item))
         self.cell(self.COLUMN_PARTNO, self.row, value=item.inventory_history.product.part_number)
 
-        self.cell(self.COLUMN_QUANTITY, self.row, value=item.inventory_history.amount, halign=Alignment.HORIZONTAL_RIGHT)
+        self.cell(self.COLUMN_QUANTITY, self.row, value=item.inventory_history.amount, halign=Alignment.horizontal)
 
-        self.cell(self.COLUMN_UNITPRICE, self.row, format=NumberFormat.FORMAT_CURRENCY_USD_SIMPLE, value=item.inventory_history.product.price)
+        self.cell(self.COLUMN_UNITPRICE, self.row, format=numbers.FORMAT_CURRENCY_USD_SIMPLE, value=item.inventory_history.product.price)
 
         self.cell(
             self.COLUMN_EXTENDED, self.row,
@@ -111,10 +118,10 @@ class ReportFormatter:
                 gcl(self.COLUMN_QUANTITY), self.row,
             ),
             formula=True,
-            format=NumberFormat.FORMAT_CURRENCY_USD_SIMPLE
+            format=numbers.FORMAT_CURRENCY_USD_SIMPLE
         )
 
-        self.cell(self.COLUMN_SHIPPING, self.row, format=NumberFormat.FORMAT_CURRENCY_USD_SIMPLE)
+        self.cell(self.COLUMN_SHIPPING, self.row, format=numbers.FORMAT_CURRENCY_USD_SIMPLE)
 
         self.cell(
             self.COLUMN_HST, self.row,
@@ -122,7 +129,7 @@ class ReportFormatter:
                 gcl(self.COLUMN_EXTENDED), self.row,
                 gcl(self.COLUMN_SHIPPING), self.row,
             ),
-            format=NumberFormat.FORMAT_CURRENCY_USD_SIMPLE,
+            format=numbers.FORMAT_CURRENCY_USD_SIMPLE,
             formula=True
         )
 
@@ -133,7 +140,7 @@ class ReportFormatter:
                 gcl(self.COLUMN_SHIPPING), self.row,
                 gcl(self.COLUMN_HST), self.row
             ),
-            format=NumberFormat.FORMAT_CURRENCY_USD_SIMPLE,
+            format=numbers.FORMAT_CURRENCY_USD_SIMPLE,
             formula=True
         )
 
@@ -147,10 +154,10 @@ class ReportFormatter:
             cell = self.cell(i, row)
 
             if color is None:
-                cell.style.fill.fill_type = Fill.FILL_NONE
+                cell.fill = PatternFill()
             else:
-                cell.style.fill.fill_type = Fill.FILL_SOLID
-                cell.style.fill.start_color.index = color
+                cell.fill = PatternFill("solid", bgColor=color )
+                # cell.fill = color
 
     DEFAULT_LABEL_STYLE = {
         'color': colors.WHITE,
@@ -265,7 +272,7 @@ class OrdersReport(ReportFormatter):
         self.cell(self.COLUMN_ITEM, self.row + 1, value='Date')
 
         self.cell(self.COLUMN_PARTNO, self.row, value=order.name, bold=True)
-        self.cell(self.COLUMN_PARTNO, self.row + 1, value=order.date, format=NumberFormat.FORMAT_DATE_XLSX14)
+        self.cell(self.COLUMN_PARTNO, self.row + 1, value=order.date, format=numbers.FORMAT_DATE_XLSX14)
 
         self.row += 3
         self._row_borders()

@@ -53,6 +53,29 @@ def show_report(request, report_id, download=None, page=None):
         page = p.page(this_page)
     except InvalidPage:
         raise Http404
+    
+    counted = all_orders.count(),
+
+    ass = {
+        'report': report,
+        'page': this_page,
+        'is_paginated': p.num_pages > 1,
+        'has_next': page.has_next(),
+        'has_previous': page.has_previous(),
+        'next_page': this_page + 1,
+        'previous_page': this_page - 1,
+        'total_pages': p.num_pages,
+        'start_date': str(report.current_start_date).split(' ')[0],  # don't need to show user the time part
+        'end_date': str(report.current_end_date).split(' ')[0],
+        'orders': page.object_list,
+        'orgs': report.reported_orgs,
+        'prods': report.reported_prods,
+        'userprofiles': report.reported_userprofiles,
+        'categories': report.reported_categories,
+        'num_orders': counted
+    }
+    print('ass', ass)
+    print('report', report.get_absolute_url)
 
     return render(request, 'reports/report_view.html', {
         'report': report,
@@ -70,7 +93,7 @@ def show_report(request, report_id, download=None, page=None):
         'prods': report.reported_prods,
         'userprofiles': report.reported_userprofiles,
         'categories': report.reported_categories,
-        'num_orders': all_orders.count(),
+        'num_orders': counted
     })
 
 

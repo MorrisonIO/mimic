@@ -73,7 +73,8 @@
     {% endif %}
     {% if has_previous and has_next %} | {% endif %}
     {% if has_next %}
-        <a href="{{ report.get_absolute_url }}page{{ next_page }}/" title="View the next page of results">Next</a>
+    <p>{{ report.get_absolute_url }}</p>
+        {#<a href="{{ report.get_absolute_url }}page{{ next_page }}/" title="View the next page of results">Next</a>#}
     {% endif %}
     </p>
 
