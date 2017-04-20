@@ -4,6 +4,12 @@
 {% block title %}Analytics{% endblock %}
 {% block page_title %}Analytics{% endblock %}
 
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(ev){
+})
+</script>
+{% endblock %}
 
 {% block content %}
 <p>Click a button to the right to create a new report or chart. If you want to do a simple search for an order, you can do so from the <a href="{% url 'orders:order_index' %}">Order list</a> page.</p>
@@ -24,7 +30,7 @@
                         <a href="{% url 'reports:report_detail' report.id %}" title="View this report"><img src="{% static 'img/information.png' %}" alt="View" height="16" width="16"></a>
                         <a href="{% url 'reports:report_edit' report.id %}" title="Edit this report"><img src="{% static 'img/edit.png' %}" alt="Edit" height="16" width="16"></a>
                         {% if show_new_layout %}
-                            <a href="{% url 'reports:report_download' report.id "download" %}" title="Download this report"><img src="{% static 'img/page_white_excel.png' %}" alt="Download" height="16" width="16"></a>
+                            <a href="{% url 'reports:report_download' report.id 'download' %}"  title="Download this report"><img src="{% static 'img/page_white_excel.png' %}" alt="Download" height="16" width="16"></a>
                         {% endif %}
                         <a href="{% url 'reports:report_delete' report.id %}" title="Delete this report" rel="dialog"><img src="{% static 'img/cross.png' %}" alt="Delete" height="16" width="16"></a>
                     </td>

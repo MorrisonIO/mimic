@@ -39,12 +39,22 @@ def show_report(request, report_id, download=None, page=None):
     all_orders = report.orders(download, request.user)
 
     if download:
-        reporter = make_report(all_orders)
-        response = HttpResponse(reporter.save(None),
-                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' \
-                                          % (str(report),)  # force save as dialog
-        return response
+        try:
+            print('here')
+            reporter = make_report(all_orders)
+            response = HttpResponse(reporter.save(None),
+                                    content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' \
+                                            % (str(report),)  # force save as dialog
+            return response
+        except Exception as ex:
+            reports = Report.objects.filter(owner__exact=request.user.id, is_visible__exact=True)
+            messages.warning(request, "e|There was a problem with file generating. \
+                                        Please try again or send email to support: support@mimicprint.com")
+            return render(request, 'reports/report_list.html', {
+                'reports': reports,
+                'show_new_layout': settings.SHOW_NEW_LAYOUTS,
+            })
 
     p = Paginator(all_orders, 20)
     try:

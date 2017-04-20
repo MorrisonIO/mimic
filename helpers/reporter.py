@@ -39,9 +39,6 @@ class ReportFormatter:
 
     def cell(self, x, y, value = None, bold = None, halign = None, formula = None, format = None, color = None, border = None, wrap_text = None):
         cell = self.ws.cell('%s%s' % (gcl(x), y))
-        # print('x')
-        print('ceel', dir(cell))
-        # print('xx')
         if format is not None:
             cell.number_format = format
 
@@ -69,8 +66,6 @@ class ReportFormatter:
 
         if bold is not None:
             cell.font = Font(bold=bold)
-            # cell.font.bold = bold
-            # cell.style
 
         return cell
 
@@ -107,7 +102,7 @@ class ReportFormatter:
         self.cell(self.COLUMN_ITEM, self.row, wrap_text=True, value=str(item))
         self.cell(self.COLUMN_PARTNO, self.row, value=item.inventory_history.product.part_number)
 
-        self.cell(self.COLUMN_QUANTITY, self.row, value=item.inventory_history.amount, halign=Alignment.horizontal)
+        self.cell(self.COLUMN_QUANTITY, self.row, value=item.inventory_history.amount, halign=Alignment(horizontal='right'))
 
         self.cell(self.COLUMN_UNITPRICE, self.row, format=numbers.FORMAT_CURRENCY_USD_SIMPLE, value=item.inventory_history.product.price)
 
@@ -162,7 +157,7 @@ class ReportFormatter:
     DEFAULT_LABEL_STYLE = {
         'color': colors.WHITE,
         'bold': True,
-        'halign': Alignment.horizontal #HORIZONTAL_RIGHT
+        'halign': Alignment(horizontal='right') #HORIZONTAL_RIGHT
     }
 
     DEFAULT_CELL_STYLE = {
@@ -302,7 +297,7 @@ class OrdersReport(ReportFormatter):
             label='%s ORDER TOTAL' % (self.location_name,),
             color=colors.BLACK,
             label_pos=self.COLUMN_ITEM,
-            halign=Alignment.horizontal, #HORIZONTAL_LEFT,
+            halign=Alignment(horizontal='left'), #HORIZONTAL_LEFT,
             cell_style=self.TOTAL_CELL_STYLE
         )
         self._row_color('606060', self.row + 1)
@@ -316,6 +311,6 @@ class OrdersReport(ReportFormatter):
     }
 
     def grand_total(self, label = 'TOTAL FOR ALL LOCATIONS'):
-        ReportFormatter.grand_total(self, label, cell_style=self.GRAND_TOTAL_CELL, label_pos=self.COLUMN_ITEM, halign=Alignment.HORIZONTAL_LEFT)
+        ReportFormatter.grand_total(self, label, cell_style=self.GRAND_TOTAL_CELL, label_pos=self.COLUMN_ITEM, halign=Alignment(horizontal='left'))
         self._row_borders(self.row - 2)
         self._row_borders(self.row - 1)
