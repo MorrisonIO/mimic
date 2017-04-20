@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.conf import settings
 from reports.models import Report
 from reports.forms import ReportForm
 from orders.models import OrderedItem
@@ -19,6 +20,7 @@ def report_list(request):
     reports = Report.objects.filter(owner__exact=request.user.id, is_visible__exact=True)
     return render(request, 'reports/report_list.html', {
         'reports': reports,
+        'show_new_layout': settings.SHOW_NEW_LAYOUTS
     })
 
 
