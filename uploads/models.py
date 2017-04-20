@@ -23,4 +23,4 @@ class Upload(models.Model):
     #     return ('download_detail', None, {'download_id': self.id})
 
     class Meta:
-        ordering = ['name']
+        ordering = ['date_added']
