@@ -99,6 +99,7 @@ FONT_DIR = os.path.join(BASE_DIR, 'fonts/')
 # Examples: "http://foo.com/media/", "/media/".
 # ADMIN_MEDIA_PREFIX = '/media/admin/'
 
+SHOW_NEW_LAYOUTS = False
 
 TEMPLATES = [
     {

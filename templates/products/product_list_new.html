@@ -23,11 +23,9 @@
             function closeModal(){
                 $(".modal").removeClass("active");
             }
-
             $(".modal-content .close, .modal").on("click", function(){
                 closeModal();
             });
-
             // pressing escape
             if (e.keyCode == 27) {
                 closeModal();
@@ -56,7 +54,31 @@
                 } else {
                     $(".template-item").show()
                 }
-        }) 
+            })
+            $(".submit-on-side button").click(function(){
+                $(this).css('margin-left', '0px'); 
+                var spinner = $(this).prev(); 
+                spinner.show(); 
+                var img = $(this).find("img");
+                $(this).addClass('processing');
+                $(this).html('<img src="' + img.attr('src') + '"> Processing...');
+
+                $('#product-form').submit()
+            }); 
+            $('#search_input').parent('form').on('submit', function(event){
+                event.preventDefault;
+                return false;
+            })
+            var sidemenu = $(".sidebar");
+            $(window).scroll(function() {
+                var MENU_POSITION_y = 244
+                var scroll = $(window).scrollTop();
+                if (scroll >= MENU_POSITION_y) {
+                    sidemenu.addClass("fixed");
+                } else {
+                    sidemenu.removeClass("fixed");
+                }
+            });
         });
         function showDesc(id){
             $.ajax({
@@ -108,6 +130,10 @@
                     console.log('err',err)
                 }
             })
+        }
+        function maxLengthCheck(obj){
+            if (obj.value.length > obj.maxLength)
+                obj.value = obj.value.slice(0, obj.maxLength)
         }
     </script>
 {% endif %}
@@ -196,7 +222,17 @@
             {#% endif %#}
         {% endfor %}
     </ul>
+    <div class="submit-on-side">
+        <div class="center">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="button" class="">
+                <img src="{% static 'img/arrow.png' %}" alt="">
+                Continue
+            </button>
+        </div>
+    </div>
 </div>
+
 
 {% endblock %}
 
@@ -205,13 +241,13 @@
 <p>Your search for <strong>"{{ query_string }}"</strong> found {% if products.count %}<strong>{{ products.count }} result{{ products|pluralize }}</strong>{% else %} no results{% endif %}. {% if products %}To place an order, enter the quantit{{ products|pluralize:"y,ies" }} you require, or <a href="{% url 'products:product_list' %}" title="Product list">return to the full product list</a>.{% endif %}</p>
 {% else %}
     {% if products %}
-        <p>Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title. Also you can create a brochure. </p>
+        <p class="pd10">Below is a list of all products available for ordering, organized by category. To place an order, enter the quantity you require for each item. You may order more than one item at once. You can change the sort order by clicking on column headers, or toggle category visibility by clicking the category title. Also you can create a brochure. </p>
     {% endif %}
 {% endif %}
 
 {% if products %}
-    <form action="{% url 'orders:process_products' %}" method="post">{% csrf_token %}
-        
+    <form id="product-form" action="{% url 'orders:process_products' %}" method="post">{% csrf_token %}
+        <div class="clearfix">
         {% for prod in products %}
             {% for product in prod.products %}
             <div class="template-item {{product.price | price_constructor}} {{product.min_order_qty }} {{prod.name|to_one_word}} filterable">
@@ -229,7 +265,7 @@
                                 {% endfor %}
                             </select>
                         {% else %}
-                            <input type="number" size="4" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                            <input type="number" size="5" max="100000" oninput="maxLengthCheck(this)" maxlength="5" placeholder="Enter the number" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
                         {% endif %}
                         <a href="#" class="info showModalBtn1 visible" onclick="showDesc({{product.id}})">Show description</a>  
                         <input type="hidden" name="u_{{ product.id }}" value="{{ product.unique_id }}">
@@ -239,19 +275,7 @@
             </div>
             {% endfor %}
         {% endfor %}
-
-
-    
-
-    <div class="submit">
-        <div class="center">
-            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
-            <button type="submit" class="">
-                <img src="{% static 'img/arrow.png' %}" alt="">
-                Continue
-            </button>
         </div>
-    </div>
     </form>
 {% else %}
     {% if not search %}

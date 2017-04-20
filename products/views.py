@@ -70,7 +70,11 @@ def index(request):
         product_list += products
         products_by_category.append(dict(name=category.name, products=products))
     menu_data = collect_menu_data(product_list)
-    return render(request, 'products/product_list.html', {
+    if settings.SHOW_NEW_LAYOUTS:
+        template_to_render = 'products/product_list_new.html'
+    else:
+        template_to_render = 'products/product_list.html'
+    return render(request, template_to_render, {
         'profile': profile,
         'products': products_by_category, #products,
         'categories': categories,
