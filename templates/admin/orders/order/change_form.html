@@ -3,10 +3,10 @@
 {% block object-tools %}
     {% if change %}{% if not is_popup %}
         <ul class="object-tools">
-            <li><a href="../../products_ordered/{{ object_id }}/" class="viewsitelink">View products</a></li>
-            <li><a href="../../dockets/{{ object_id }}/" class="viewsitelink">Create docket</a></li>
-            <li><a href="history/" class="historylink">History</a></li>
-            {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">View on site</a></li>{% endif%}
+            <li><a href="../../../products_ordered/{{ object_id }}/" class="viewsitelink">View products</a></li>
+            <li><a href="../../../dockets/{{ object_id }}/" class="viewsitelink">Create docket</a></li>
+            {#<li><a href="history/" class="historylink">History</a></li>#}
+            {#% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">View on site</a></li>{% endif%#}
         </ul>
     {% endif %}{% endif %}
 {% endblock %}
