@@ -15,7 +15,7 @@ ORDERED BY
 Business: {{ user_profile.bus_phone }}
 Cell:     {{ user_profile.cell_phone }}
 Home:     {{ user_profile.home_phone }}
-Email:    {{ user.email }}
+Email:    {{ order.placed_by.email }}
 
 ITEMS
 {% for item in line_items %}{% include "orders/mimic_line_item.txt" %}{% endfor %}
