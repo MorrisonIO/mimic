@@ -64,7 +64,7 @@ def upload_file(request):
             path = handle_uploaded_file(file)
             uploaded = Upload()
             uploaded.name = form.cleaned_data['title'] or "File"
-            uploaded.file = File(open('{}{}'.format(settings.BASE_DIR, path), 'wb+')) #request.FILES['file']
+            uploaded.file = File(open('{}{}'.format(settings.BASE_DIR, path), 'rb')) #request.FILES['file']
             uploaded.comments = form.cleaned_data['comments']
             uploaded.is_deletable = True
             uploaded.user_name = form.cleaned_data['name']
