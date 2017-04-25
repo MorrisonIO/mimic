@@ -83,8 +83,8 @@ def upload_file(request):
             subject = "File Upload"
             c = Context({
                 'file': file,
-                'path': uploaded.file.name,
-                'file_url': request.build_absolute_uri(uploaded.file.name),
+                'path': path,
+                'file_url': request.build_absolute_uri(path),
                 'form': request.POST,
             })
             body = t.render(c)
