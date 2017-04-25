@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponseServerError, HttpRespo
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext, loader, Context
 from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
 from django.core.urlresolvers import reverse
 from django.core.mail import mail_admins
 from django.contrib.auth.forms import SetPasswordForm
@@ -125,6 +126,7 @@ def profile(request):
             if password_form.is_valid():
                 password_form.save()
                 messages.success(request, message="s|Your password was successfully changed.")
+                update_session_auth_hash(request, password_form.user)
                 return HttpResponseRedirect(reverse('profile'))
             else:
                 msg = "e|There was a problem with your submission.\
