@@ -218,8 +218,8 @@ def fastorder_add(request):
         if form.is_valid():
             # generate and save order
             o = Order()
-            c = Cart()
-            o.name = c.make_name()
+            # c = Cart()
+            o.name = o.make_name()
             o.placed_by = request.user
             oid = request.POST.get('org', None)
             o.org = Org.objects.get(pk=oid)
