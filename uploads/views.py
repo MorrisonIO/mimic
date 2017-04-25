@@ -83,8 +83,8 @@ def upload_file(request):
             subject = "File Upload"
             c = Context({
                 'file': file,
-                'path': uploaded.file.name,
-                'file_url': request.build_absolute_uri(uploaded.file.name),
+                'path': path,
+                'file_url': request.build_absolute_uri(path),
                 'form': request.POST,
             })
             body = t.render(c)
@@ -98,7 +98,7 @@ def upload_file(request):
                 t = loader.get_template('emails/user_file_uploaded.txt')
                 subject = "[Mimic OOS] File Upload Confirmed"
                 body = t.render(c)
-                send_mail(subject, body, 'orders@mimicprint.com', [recipient], fail_silently=False)
+                send_mail(subject, body, settings.SERVER_EMAIL, [recipient], fail_silently=False)
 
             return HttpResponseRedirect(reverse('uploads:upload_ok'))
         else:
