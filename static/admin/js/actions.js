@@ -116,6 +116,31 @@
                 return confirm(gettext("You have unsaved changes on individual editable fields. If you run an action, your unsaved changes will be lost."));
             }
         });
+        $('form#changelist-form .field-invnum_form [type="button"]').click(function(event){
+            var el = $(this);
+            var parent = el.parent();
+            var inputInvoice = parent.find('input[name="invoice_number"]');
+            var inputOrderId = parent.find('input[name="order_id"]');
+
+            var invoiceValue = inputInvoice.val().trim();
+            var orderId = inputOrderId.val().trim();
+
+            if (invoiceValue === '' || orderId === '') { return; }
+            
+            var URL_POST = '/admin/orders/save_invnum/';
+
+            var data = {
+                'invoice_number': invoiceValue,
+                'order_id': orderId
+            }
+
+            $.post(URL_POST, data, function(data, status){
+                if (status == 'success') {
+                    window.location.reload();
+                }
+            });
+
+        });
         $('form#changelist-form input[name="_save"]').click(function(event) {
             var action_changed = false;
             $('select option:selected', options.actionContainer).each(function() {

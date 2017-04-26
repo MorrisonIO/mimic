@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 from orgs.models import Org
 from addresses.models import Address
@@ -47,6 +48,7 @@ def create_docket(request, order_id):
     })
 
 
+@csrf_exempt
 @staff_member_required
 def save_invnum(request):
     """
@@ -56,15 +58,17 @@ def save_invnum(request):
         Note that we do *no* checking on the invoice number: whether it matches a certain pattern,
         whether it is unique, etc. We trust the user (and it can be edited afterwards if necessary).
     """
-    if request.POST['invoice_number'] == '':
-        # just return, don't save a blank value
-        return HttpResponseRedirect('/admin/orders/order/')
-    order_id = request.POST['order_id']
-    order = Order.objects.get(pk=order_id)
-    order.invoice_number = request.POST['invoice_number']
-    order.status = 'in'
-    order.save()
-    messages.success(request, "The invoice number was saved successfully.")
+    if request.method == 'POST':
+        if request.POST['invoice_number'] == '':
+            # just return, don't save a blank value
+            return HttpResponseRedirect('/admin/orders/order/')
+        order_id = request.POST['order_id']
+        order = Order.objects.get(pk=order_id)
+        order.invoice_number = request.POST['invoice_number']
+        order.status = 'in'
+        order.save()
+        messages.success(request, "The invoice number was saved successfully.")
+    
     return HttpResponseRedirect('/admin/orders/order/')
 
 

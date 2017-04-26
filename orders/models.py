@@ -7,6 +7,7 @@ from django.core.mail import send_mail, mail_managers
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.utils.html import format_html
 from products.models import Product
 from orgs.models import Org
 from addresses.models import Address
@@ -212,13 +213,10 @@ class Order(models.Model):
         if self.invoice_number:
             return self.invoice_number
         else:
-            return '<form action="/admin/orders/save_invnum/" method="post">\
-            <input type="text" size="10" name="invoice_number">\
-            <input type="hidden" name="order_id" value="%s">\
-            <input type="submit" value="&gt;"></form>' % self.id
-    invnum_form.allow_tags = True  # allow HTML tags
-    invnum_form.short_description = 'Invoice Number'
-
+            template = '<input type="text" size="10" name="invoice_number">\
+                        <input type="hidden" name="order_id" value="%s">\
+                        <input type="button" value="&gt;">' % self.id
+            return format_html(template)
 
 class InventoryHistory(models.Model):
     """
