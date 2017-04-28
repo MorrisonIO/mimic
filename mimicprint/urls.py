@@ -22,7 +22,9 @@ from django.views.generic import TemplateView
 from contact_form.views import ContactFormView
 from .forms import FeedbackForm
 from . import views
-from orders import admin_views
+
+from orders import admin_views as o_views
+from products import admin_views as p_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -63,14 +65,18 @@ urlpatterns = [
     url(r'^upload/', include('uploads.urls')),
 
     # Admin
-    url(r'^admin/orders/fastorder/add/$', admin_views.fastorder_add),
-    url(r'^admin/orders/products_ordered/(?P<order_id>\d+)/$', admin_views.products_ordered),
-    url(r'^admin/orders/worknote_view/(?P<worknote_id>\d+)/$', admin_views.worknote_view),
-    url(r'^admin/orders/dockets/(?P<order_id>\d+)/$', admin_views.create_docket),
-    url(r'^admin/orders/save_invnum/$', admin_views.save_invnum, name=''),
-    url(r'^admin/orders/shipping/packing_slip/(?P<order_id>\d+)/$', admin_views.create_packingslip),
-    url(r'^admin/orders/shipping/label/(?P<order_id>\d+)/$', admin_views.create_label),
-    url(r'^admin/orders/shipping/comm_inv/(?P<order_id>\d+)/$', admin_views.create_comm_inv),
+    url(r'^admin/orders/fastorder/add/$', o_views.fastorder_add),
+    url(r'^admin/orders/products_ordered/(?P<order_id>\d+)/$', o_views.products_ordered),
+    url(r'^admin/orders/worknote_view/(?P<worknote_id>\d+)/$', o_views.worknote_view),
+    url(r'^admin/orders/dockets/(?P<order_id>\d+)/$', o_views.create_docket),
+    url(r'^admin/orders/save_invnum/$', o_views.save_invnum, name=''),
+    url(r'^admin/orders/shipping/packing_slip/(?P<order_id>\d+)/$', o_views.create_packingslip),
+    url(r'^admin/orders/shipping/label/(?P<order_id>\d+)/$', o_views.create_label),
+    url(r'^admin/orders/shipping/comm_inv/(?P<order_id>\d+)/$', o_views.create_comm_inv),
+
+    url(r'^admin/products/duplicate/(?P<product_id>\d+)/$', p_views.duplicate_product),
+    # url(r'^admin/products/export/settings$', p_views.export_settings),
+    # url(r'^admin/products/export/download$', p_views.export_products),
 
     url(r'^testing/$', views.testing_view, name='testing'),
 

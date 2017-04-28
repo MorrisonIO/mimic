@@ -9,14 +9,18 @@ from django.contrib import messages
 from orgs.models import Org, UserProfile
 from products.models import Product, ProductSelection
 from django.db import connection
-from django.db.transaction import commit_on_success
+from django.db.transaction import atomic
 from datetime import datetime
+
+
+
 
 @staff_member_required
 def duplicate_product(request, product_id):
     """
     Duplicates the product provided -- creates a new row in the db with the exact same data only a different primary key. We redirect to the new change form and rely on the user to edit it accordingly (ie, distinguish it somehow from the original).
     """
+    print('in duplicate')
     product = Product.objects.get(pk=product_id)
     product.pk = None
     product.save()
@@ -47,7 +51,7 @@ def get_products_and_selections():
 
         yield data
 
-@commit_on_success
+@atomic
 def update_selections(products):
     cursor = connection.cursor()
     cursor.execute('DELETE FROM products_productselection')

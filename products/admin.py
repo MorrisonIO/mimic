@@ -34,7 +34,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('ratios', 'page_count', 'prepress_info', 'bw_info', 'colour_info', 'bindery_info', 'shipping_info', 'billing_info', 'outsourcing_info', ('is_fsc', 'paper_type', 'logo_position', 'smartwood_proof'))
         }),
     )
-    list_display = ('name', 'part_number', 'revision', 'in_categories')
+    list_display = ('name', 'part_number', 'revision', 'date_added','in_categories')
     list_filter = ('status', 'is_component', 'is_variable')
     search_fields = ('name', 'description', 'part_number')
 
