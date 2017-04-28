@@ -26,7 +26,7 @@
                 <td><a href="/admin/products/product/{{ product.id }}/" title="Click to view/edit product">{{ product }}</a></td>
                 <td align="center">
                 {% if product.is_variable %}
-                {#<a href="{% url 'vardata:vardata_prefix' %}{{ product.var_form }}/{{ item.id }}/" title="Click to download print-ready file"><img src="{% static 'img/page_white_acrobat.png' %}" alt="PDF"></a>#}
+                <a href="{% url 'vardata:vardata_prefix' %}{{ product.var_form }}/{{ item.id }}/" title="Click to download print-ready file"><img src="{% static 'img/page_white_acrobat.png' %}" alt="PDF"></a>
                 {% else %}
                     &nbsp;
                 {% endif %}

@@ -217,7 +217,7 @@ def MimicBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*3.5, inch*1.75) # 252 x 126
     bg_image = "vardata_images/MimicBc_bg.tiff"
@@ -398,7 +398,7 @@ def TlaBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/TlaBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -595,7 +595,7 @@ def HarrisCertificate_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*11.833, inch*9.333) # width, height. Measured at 72dpi, so this is 852x672
     bg_image = "%s/vardata_images/HarrisCertificate_bg_print.tif" % settings.MEDIA_ROOT
@@ -825,7 +825,7 @@ def DrAsiaPacificBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/DrBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -1047,7 +1047,7 @@ def DrMarkhamBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/DrBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -1254,7 +1254,7 @@ def DrUkBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/DrBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -1466,7 +1466,7 @@ def DrRemoteBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/DrBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -1754,7 +1754,7 @@ def CaTechTorontoBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/CaTechTorontoBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -2074,7 +2074,7 @@ def CaTechMontrealBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/CaTechMontrealBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -2395,7 +2395,7 @@ def CaTechOttawaBc_print(request, ordereditem_id):
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
 
     # Set some document specifics
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/CaTechTorontoBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -2731,7 +2731,7 @@ def RossBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/RossBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -2996,7 +2996,7 @@ def TrilliumBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/TrilliumBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -3199,7 +3199,7 @@ def KafkoEnglishCanadaBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/KafkoEnglishCanadaBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -3315,7 +3315,7 @@ def KafkoFrenchCanadaBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/KafkoFrenchCanadaBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -3471,7 +3471,7 @@ def KafkoUsBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/KafkoEnglishCanadaBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -3643,7 +3643,7 @@ def AlgonquinMississaugaBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/AlgonquinBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -3711,7 +3711,7 @@ def AlgonquinOttawaBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/AlgonquinBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -3883,7 +3883,7 @@ def SuperiorEnergyBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/SuperiorEnergyBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -4080,7 +4080,7 @@ def SuperiorEnergyAgentBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
     pagesize = (inch*17, inch*11) # width, height. Measured at 72dpi, so this is 1224x792
     bg_image = "%s/vardata_images/SuperiorAgentBc_bg_print.tif" % settings.MEDIA_ROOT
@@ -4183,7 +4183,7 @@ def generic_grid_print(request, ordereditem_id, model, renderer, pagesize, margi
     data = model.objects.get(ordereditem=ordereditem_id).__dict__
     #data = escape(model.objects.get(ordereditem=ordereditem_id).__dict__)
 
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (ordereditem.order.name, ordereditem_id)
 
     if styles and hasattr(styles, '__call__'):
@@ -4657,7 +4657,7 @@ def TrilliumDoubleBC_renderer_grid(ordereditem_id):
         PdfFileReader(packet)
     )
 
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (ordereditem.order.name, ordereditem_id)
     result.write(response)
     return response
@@ -4906,7 +4906,7 @@ def CaTechBc_print(request, ordereditem_id):
 
     # Set some document specifics
     filename = "%s-%s.pdf" % (ordereditem.order.name, ordereditem_id)
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force save as dialog
 
     _catech_bc_1up(response, data)
