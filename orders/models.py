@@ -112,7 +112,7 @@ class Order(models.Model):
     )
     name = models.CharField(max_length=200)
     placed_by = models.ForeignKey(User, related_name="orders_placed_by_set")
-    org = models.ForeignKey(Org)
+    org = models.ForeignKey(Org) 
     status = models.CharField(max_length=2, choices=STATUS_CHOICES)
     date = models.DateTimeField('Placed on', blank=True)
     due_date = models.DateField(help_text="yyyy-mm-dd")
@@ -124,6 +124,7 @@ class Order(models.Model):
     invoice_number = models.CharField(max_length=200, blank=True, null=True)
     user_notes = models.TextField("Your notes", blank=True, help_text="Any information you wish to save with this order for your own records.", null=True)
     saved = models.BooleanField(blank=True, default=False) # field might be DEPRECATED
+    printed = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -216,6 +217,19 @@ class Order(models.Model):
             template = '<input type="text" size="10" name="invoice_number">\
                         <input type="hidden" name="order_id" value="%s">\
                         <input type="button" value="&gt;">' % self.id
+            return format_html(template)
+
+
+    def printed_button(self):
+        """
+        Add a button to checking 'printed' field, or display field if value equals True 
+        """
+        if self.printed == True:
+            return self.printed
+        else:
+            printed = self.printed
+            template  = '<input type="hidden" size="10" name="order_id" value="%s">\
+                        <input type="button" class="" value="Confirm">' % self.id
             return format_html(template)
 
 class InventoryHistory(models.Model):

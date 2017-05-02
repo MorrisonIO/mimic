@@ -141,6 +141,24 @@
             });
 
         });
+        $('form#changelist-form .field-printed_button input[type="button"]').click(function(event){
+            var el = $(this);
+            var parent = el.parent();
+            var inputOrderId = parent.find('input[name="order_id"]');
+            var orderId = inputOrderId.val().trim();
+            if (orderId === '') { return; }
+
+            var URL_CONFIRM_PRINT = '/admin/orders/save_printed/';
+
+            var data = { 'order_id': orderId }
+
+            $.post(URL_CONFIRM_PRINT, data, function(data, status){
+                if (status == 'success') {
+                    window.location.reload();
+                }
+            });
+
+        }); 
         $('form#changelist-form input[name="_save"]').click(function(event) {
             var action_changed = false;
             $('select option:selected', options.actionContainer).each(function() {

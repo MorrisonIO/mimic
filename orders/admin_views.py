@@ -72,6 +72,22 @@ def save_invnum(request):
     return HttpResponseRedirect('/admin/orders/order/')
 
 
+@csrf_exempt
+@staff_member_required
+def save_printed(request):
+    """
+    Saves a print confirmation status to an order
+    Redirects to admin's orders list
+    """
+    if request.method == 'POST' and 'order_id' in request.POST:
+        order_id = request.POST['order_id']
+        order = Order.objects.get(pk=order_id)
+        order.printed = True
+        order.save()
+        messages.success(request, "The printed status was saved successfully.")
+    
+    return HttpResponseRedirect('/admin/orders/order/')
+
 @staff_member_required
 def create_packingslip(request, order_id):
     """
