@@ -225,7 +225,7 @@ class Order(models.Model):
         Add a button to checking 'printed' field, or display field if value equals True 
         """
         if self.printed == True:
-            return self.printed
+            return 'Printed'
         else:
             printed = self.printed
             template  = '<input type="hidden" size="10" name="order_id" value="%s">\
