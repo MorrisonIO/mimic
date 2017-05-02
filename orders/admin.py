@@ -3,7 +3,7 @@ from models import Order, InventoryHistory, OrderedItem, WorkNote
 
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'due_date', 'org')
-    list_display = ('name', 'org', 'date', 'due_date', 'status', 'worknotes_links',
+    list_display = ('name', 'org', 'date', 'due_date', 'status', 'worknotes_links', 'po_number',
                     'docket_link', 'printed_button', 'shipping_links', 'invnum_form')
     search_fields = ('name', 'invoice_number')
     raw_id_fields = ('ship_to',)
