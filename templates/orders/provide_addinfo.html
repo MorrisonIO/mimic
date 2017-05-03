@@ -7,7 +7,7 @@
 {% block content %}
 {% load order_progress %}{% show_order_progress request "additional" %}
 <p>Please provide the following additional information for your order. Fields with bold labels are required.</p>
-<form action="." method="post">{% csrf_token %}
+<form action="." enctype="multipart/form-data" method="post">{% csrf_token %}
 {% include "form_snippet.html" %}
 <div class="submit" id="continue">
     <div class="center">

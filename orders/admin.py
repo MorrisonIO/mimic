@@ -1,5 +1,8 @@
 from django.contrib import admin
+from django.db.models import Q
 from models import Order, InventoryHistory, OrderedItem, WorkNote
+
+from uploads.models import Upload
 
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'due_date', 'org')
@@ -12,10 +15,22 @@ class OrderAdmin(admin.ModelAdmin):
         ('Order info', {'fields': ('name', 'status', 'placed_by',
                                    'org', 'date', 'due_date', 'po_number',
                                    'additional_info', 'approved_by',
-                                   'approved_date', 'printed', 'invoice_number', 'ship_to')
+                                   'approved_date', 'printed', 'invoice_number', 'ship_to', 'additional_file')
                        }
         ),
     )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(OrderAdmin, self).get_form(request, obj, **kwargs)
+        file = obj.additional_file
+        username = request.user.username
+        print(file)
+        if file == None:
+            print(type(form.base_fields['additional_file'].queryset.filter(user_name=username)))
+            form.base_fields['additional_file'].queryset = form.base_fields['additional_file'].queryset.filter(user_name=username)
+        else: 
+            form.base_fields['additional_file'].queryset = form.base_fields['additional_file'].queryset.filter(Q(pk=file.id) | Q(user_name=username))
+        return form
 
 class InventoryHistoryAdmin(admin.ModelAdmin):
     list_display = ('product', 'order', 'date', 'notes')

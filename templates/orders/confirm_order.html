@@ -55,6 +55,11 @@
         {% if request.session.cc_confirmation %}
             <p><strong>CC order confirmation to:</strong> {{ request.session.cc_confirmation }}</p>
         {% endif %}
+
+        {% if request.session.additional_file_name  %}
+            <p><strong>Uploaded file:</strong> {{ request.session.additional_file_name }}</p>
+        {% endif %}
+
         <a href="{% url 'orders:provide_addinfo' %}" class="modify" title="Back to providing additional info">change</a>
     </div>
 

@@ -11,6 +11,7 @@ from django.utils.html import format_html
 from products.models import Product
 from orgs.models import Org
 from addresses.models import Address
+from uploads.models import Upload
 import string
 import array
 from time import time
@@ -125,6 +126,7 @@ class Order(models.Model):
     user_notes = models.TextField("Your notes", blank=True, help_text="Any information you wish to save with this order for your own records.", null=True)
     saved = models.BooleanField(blank=True, default=False) # field might be DEPRECATED
     printed = models.BooleanField(default=False)
+    additional_file = models.ForeignKey(Upload, null=True, blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return u'%s' % self.name

@@ -33,6 +33,7 @@
     {% endwith %}
 
     <h5>Additional info</h5>
+    <p><b>File: </b>{% if file_url %}<a href={{ file_url }}>Download</a>{% else %}None.{% endif %}</p>
     <p><b>P.O. number: </b>{% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}</p>
     <p><b>Additional info: </b>{% if order.additional_info %}</p><pre>{{ order.additional_info }}</pre>{% else %}None.</p>{% endif %}
     <p><b>Your notes: </b>{% if order.user_notes %}</p><pre>{{ order.user_notes }}</pre>{% else %}None.</p>{% endif %}

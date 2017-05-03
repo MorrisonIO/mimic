@@ -24,6 +24,12 @@ class OrderForm(forms.ModelForm):
     A form to handle the other info needed when ordering apart
     from the products and shipto: due date, additional info, etc.
     """
+    upload_file = forms.FileField(required=False)
+
+    def save(self, *args, **kwargs):
+        super(OrderForm, self).save(*args, **kwargs)
+
+
     def __init__(self, request=None, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.request = request
@@ -62,7 +68,7 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ( 'due_date', 'additional_info', 'user_notes', 'po_number')
+        fields = ( 'due_date', 'additional_info', 'user_notes', 'po_number', 'upload_file')
 
     def clean_due_date(self):
         """
@@ -178,3 +184,4 @@ class FastOrderForm(forms.Form):
             raise forms.ValidationError('Enter a quantity.')
         else:
             return self.cleaned_data['job5_qty']
+            

@@ -25,6 +25,7 @@ from orders.forms import OrderForm, OrderPDFForm
 from orders.models import Cart, Order, InventoryHistory, OrderedItem
 from orgs.models import Org, UserProfile
 from products.models import Product
+from uploads.models import Upload
 from vardata.models import *
 
 
@@ -347,6 +348,22 @@ def provide_shipto(request):
 
 
 @login_required
+def create_upload(request):
+    """
+    Creates Upload model from request.FILE['upload_file']
+    Returns instance
+    """
+    name = request.FILES['upload_file'].name
+    file = request.FILES['upload_file']
+    user_name = request.user.username
+    email = request.user.email
+    is_deletable = True
+    upload = Upload.objects.create(name=name, file=file, user_name=user_name,\
+                                    email=email, is_deletable=is_deletable)
+    return upload
+
+
+@login_required
 def provide_addinfo(request):
     """
     Allows the user to provide a due date and any additional info for an order.
@@ -354,6 +371,10 @@ def provide_addinfo(request):
     if request.method == 'POST':
         form = OrderForm(data=request.POST, request=request)
         if form.is_valid():  # set session vars
+            if 'upload_file' in request.FILES:
+                upload = create_upload(request)
+                request.session['additional_file_id'] = upload.id
+                request.session['additional_file_name'] = upload.name
             request.session['due_date'] = request.POST.get('due_date', None)
             request.session['po_number'] = request.POST.get('po_number', None)
             request.session['additional_info'] = request.POST.get('additional_info', None)
@@ -419,12 +440,24 @@ def show_order(request, order_id, confirm=False):
     oi = OrderedItem.objects.filter(order__exact=order.id)
     line_items = order.get_line_items()
 
+    file_url = None
+
+    if 'additional_file_id' in request.session:
+        file_url = get_file_url(request.session['additional_file_id'])
+
     return render(request, 'orders/order_detail.html', {
         'is_confirmation': confirm,
         'order': order,
         'line_items': line_items,
         'user_is_manager': user_is_manager,
+        'file_url': file_url
     })
+
+def get_file_url(upload_id):
+    upload = Upload.objects.get(pk=upload_id)
+    url = upload.file.url
+    return url
+
 
 
 @login_required
@@ -470,6 +503,10 @@ def save_new_order(request):
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
     order.user_notes = request.session['user_notes']
+    if 'additional_file_id' in request.session:
+        upload_id = request.session['additional_file_id']
+        upload = Upload.objects.get(pk=upload_id)
+        order.additional_file = upload
     order.save()
     return order
 
