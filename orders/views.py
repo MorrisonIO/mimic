@@ -442,8 +442,8 @@ def show_order(request, order_id, confirm=False):
 
     file_url = None
 
-    if 'additional_file_id' in request.session:
-        file_url = get_file_url(request.session['additional_file_id'])
+    if order.additional_file != None:
+        file_url = order.additional_file.file.url
 
     return render(request, 'orders/order_detail.html', {
         'is_confirmation': confirm,
@@ -452,12 +452,6 @@ def show_order(request, order_id, confirm=False):
         'user_is_manager': user_is_manager,
         'file_url': file_url
     })
-
-def get_file_url(upload_id):
-    upload = Upload.objects.get(pk=upload_id)
-    url = upload.file.url
-    return url
-
 
 
 @login_required
