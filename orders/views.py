@@ -348,17 +348,15 @@ def provide_shipto(request):
 
 
 @login_required
-def create_upload(request):
+def create_upload(request, file):
     """
     Creates Upload model from request.FILE['upload_file']
     Returns instance
     """
-    name = request.FILES['upload_file'].name
-    file = request.FILES['upload_file']
     user_name = request.user.username
     email = request.user.email
     is_deletable = True
-    upload = Upload.objects.create(name=name, file=file, user_name=user_name,\
+    upload = Upload.objects.create(name=file.name, file=file, user_name=user_name,\
                                     email=email, is_deletable=is_deletable)
     return upload
 
@@ -371,15 +369,12 @@ def provide_addinfo(request):
     if request.method == 'POST':
         form = OrderForm(data=request.POST, request=request)
         if form.is_valid():  # set session vars
-            if 'upload_file' in request.FILES:
-                upload = create_upload(request)
-                request.session['additional_file_id'] = upload.id
-                request.session['additional_file_name'] = upload.name
             request.session['due_date'] = request.POST.get('due_date', None)
             request.session['po_number'] = request.POST.get('po_number', None)
             request.session['additional_info'] = request.POST.get('additional_info', None)
             request.session['user_notes'] = request.POST.get('user_notes', None)
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
+            request.session['upload_file'] = request.FILES.get('upload_file', None)
             return HttpResponseRedirect(reverse('orders:confirm_order'))
         else:
             messages.warning(request, "e|There was a problem with your submission. \
@@ -439,7 +434,7 @@ def show_order(request, order_id, confirm=False):
         order = get_object_or_404(Order, pk=order_id, placed_by__exact=request.user)
     oi = OrderedItem.objects.filter(order__exact=order.id)
     line_items = order.get_line_items()
-
+    
     file_url = None
 
     if order.additional_file != None:
@@ -497,10 +492,14 @@ def save_new_order(request):
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
     order.user_notes = request.session['user_notes']
-    if 'additional_file_id' in request.session:
-        upload_id = request.session['additional_file_id']
-        upload = Upload.objects.get(pk=upload_id)
-        order.additional_file = upload
+    
+    if 'upload_file' in request.session:
+        file = request.session['upload_file']
+        if file != None:
+            upload = create_upload(request, file)
+            order.additional_file = upload
+
+    request.session['upload_file'] = None
     order.save()
     return order
 
