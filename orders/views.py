@@ -619,6 +619,7 @@ def send_order_emails(request, order):
         subject = '[Mimic OOS] Order Approval Required: %s' % order.name
     else:
         email = 'emails/order_confirmed.txt'
+        email_html = 'emails/order_confirmed.html'
         mimic_email = 'emails/mimic_order_confirmed.txt'
         if order.org.order_email:
             try:
@@ -626,6 +627,7 @@ def send_order_emails(request, order):
             except:
                 pass
         template = loader.get_template(email)
+        template_html = loader.get_template(email_html)
         mimic_template = loader.get_template(mimic_email)
         subject = '[Mimic OOS] Order Confirmed: %s' % order.name
 
@@ -636,10 +638,11 @@ def send_order_emails(request, order):
         'site': site,
     })
     body = template.render(c)
+    body_html = template_html.render(c)
     mimic_body = mimic_template.render(c)
     #    print "\n==========\nSending mail to users...\nTo: %s\nSubject: %s\n%s" % ([u for u in user_list], subject, body)
     #    print "\n==========\nSending mail to Mimic...\nTo: %s\nSubject: %s\n%s" % ([u for u in mimic_list], subject, mimic_body)
-    send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
+    send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False, html_message=body_html)  # notify user
     send_mail(subject, mimic_body, 'orders@mimicprint.com', mimic_list, fail_silently=False)  # notify mimic
 
 
