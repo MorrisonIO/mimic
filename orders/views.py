@@ -595,7 +595,7 @@ def send_order_emails(request, order):
             address = '%s <%s>' % (rep.get_full_name(), rep.email)
             mimic_list.append(address)
     else:
-        mimic_list = settings.ADMINS
+        mimic_list = settings.STAFF
     orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
     user_list = [orderer]
     if request.session['cc_confirmation']:
