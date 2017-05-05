@@ -101,6 +101,8 @@ FONT_DIR = os.path.join(BASE_DIR, 'fonts/')
 
 SHOW_NEW_LAYOUTS = False
 
+ALLOW_STAFF_EMAILS = True 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

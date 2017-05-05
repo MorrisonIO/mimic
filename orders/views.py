@@ -589,10 +589,13 @@ def send_order_emails(request, order):
     user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)
     line_items = order.get_line_items()
 
-    mimic_list = ['Production <production@mimicprint.com>']
-    for rep in order.org.mimic_rep.filter(is_active=1):
-        address = '%s <%s>' % (rep.get_full_name(), rep.email)
-        mimic_list.append(address)
+    if settings.ALLOW_STAFF_EMAILS:
+        mimic_list = ['Production <production@mimicprint.com>']
+        for rep in order.org.mimic_rep.filter(is_active=1):
+            address = '%s <%s>' % (rep.get_full_name(), rep.email)
+            mimic_list.append(address)
+    else:
+        mimic_list = settings.ADMINS
     orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
     user_list = [orderer]
     if request.session['cc_confirmation']:
