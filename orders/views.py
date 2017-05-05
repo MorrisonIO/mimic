@@ -623,6 +623,7 @@ def send_order_emails(request, order):
         email = 'emails/order_confirmed.txt'
         email_html = 'emails/order_confirmed.html'
         mimic_email = 'emails/mimic_order_confirmed.txt'
+        mimic_email_html = 'emails/mimic_order_confirmed.html'
         if order.org.order_email:
             try:
                 email = 'emails/%s' % order.org.order_email
@@ -631,6 +632,7 @@ def send_order_emails(request, order):
         template = loader.get_template(email)
         template_html = loader.get_template(email_html)
         mimic_template = loader.get_template(mimic_email)
+        mimic_template_html = loader.get_template(mimic_email_html)
         subject = '[Mimic OOS] Order Confirmed: %s' % order.name
 
     c = Context({
@@ -642,10 +644,11 @@ def send_order_emails(request, order):
     body = template.render(c)
     body_html = template_html.render(c)
     mimic_body = mimic_template.render(c)
+    mimic_body_html = mimic_template_html.render(c)
     #    print "\n==========\nSending mail to users...\nTo: %s\nSubject: %s\n%s" % ([u for u in user_list], subject, body)
     #    print "\n==========\nSending mail to Mimic...\nTo: %s\nSubject: %s\n%s" % ([u for u in mimic_list], subject, mimic_body)
     send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False, html_message=body_html)  # notify user
-    send_mail(subject, mimic_body, 'orders@mimicprint.com', mimic_list, fail_silently=False)  # notify mimic
+    send_mail(subject, mimic_body, 'orders@mimicprint.com', mimic_list, fail_silently=False, html_message=mimic_body_html)  # notify mimic
 
 
 @login_required
