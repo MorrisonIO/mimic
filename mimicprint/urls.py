@@ -37,7 +37,7 @@ urlpatterns = [
         view = 'django.contrib.auth.views.password_change',
         name = 'password_change'
     ),
-    url(r'^accounts/password_change/done/$', 'django.contrib.auth.views.password_change_done'),
+    url(r'^accounts/password_change/done/$', 'django.contrib.auth.views.password_change_done', name = 'password_change_done'),
     url(r'^accounts/password_reset/$',
         'django.contrib.auth.views.password_reset',
         name = 'password_reset'
