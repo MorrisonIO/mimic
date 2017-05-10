@@ -28,7 +28,10 @@
 
         <p>
             <h3>ITEMS</h3>
-            {% for item in line_items %}{% include "orders/mimic_line_item.txt" %}{% endfor %}<br>
+            {% for item in line_items %}{% include "orders/mimic_line_item.html" %}<br>{% endfor %}
+        </p>
+
+        <p>
             <h3>SHIP TO</h3>
             {% with order.ship_to as address %}{% include "addresses/address_snippet.html" %}{% endwith %}
         </p>

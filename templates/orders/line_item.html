@@ -1,20 +1,8 @@
-{% load staticfiles %}
-<tr>
-    <td>{{ item.quantity }}</td>
-    <td>
-        {{ item.name }} 
-        {% if item.var_data %}
-            {#{% if user_is_manager %}#}
-                {#<a href="{{ item.href_path }}" title="Download a print-ready PDF">#}
-                    {#<img src="{% static 'img/page_white_acrobat.png' %}" alt="Printready PDF">#}
-                {#</a>#}
-            {#{% endif %}#}
-            <span class="vardata">
-            {% for key,value in item.var_data.as_list %}
-                {% if value %}
-                    {{ key }}: {{ value }}{% if not forloop.last %}<br>{% endif %}
-                {% endif %}
-            {% endfor %}
-            </span>
+{{ item.quantity }}  x  {{ item.name|safe }} <br>
+{% if item.var_data %}
+    {% for key,value in item.var_data.as_list %}
+        {% if value %}
+            {{ key }}: {{ value }}<br>
         {% endif %}
-    </td>
+    {% endfor %}
+{% endif %}

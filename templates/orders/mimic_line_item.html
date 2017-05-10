@@ -1,0 +1,13 @@
+{{ item.quantity }}  x   {{ item.name|safe }}<br>
+{% if item.part_number %} Part number:   {{ item.part_number|safe }}<br> {% endif %}
+{% if item.revision %}
+     Revision:     {{ item.revision|safe }}<br> 
+{% endif %}
+{% if item.var_data %} 
+    {% for key,value in item.var_data.as_list %}
+        {% if value %}{{ key }}: {{ value }}<br> {% endif %} 
+    {% endfor %}
+    Printready file: http://{{ site.domain }}{{ item.href_path }}
+{% endif %}
+
+

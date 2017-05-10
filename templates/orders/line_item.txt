@@ -1,2 +1,2 @@
-{{ item.quantity }}     {{ item.name|safe }}{% if item.var_data %}{% for key,value in item.var_data.as_list %}{% if value %}
+{{ item.quantity }}  x  {{ item.name|safe }}{% if item.var_data %}{% for key,value in item.var_data.as_list %}{% if value %}
         {{ key }}: {{ value }}{% endif %}{% endfor %}{% endif %}
