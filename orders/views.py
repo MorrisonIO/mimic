@@ -387,7 +387,7 @@ def provide_addinfo(request):
                                        Refer to the messages below and try again.")
 
     else:
-        if request.session['upload_file']:
+        if 'upload_file' in request.session:
             try:
                 os.remove(request.session['upload_file'])
             except Exception as ex:
