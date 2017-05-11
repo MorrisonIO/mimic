@@ -2,12 +2,14 @@ import datetime
 import random
 import re
 import string
+import os 
 
 from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core.files import File
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -374,13 +376,23 @@ def provide_addinfo(request):
             request.session['additional_info'] = request.POST.get('additional_info', None)
             request.session['user_notes'] = request.POST.get('user_notes', None)
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
-            request.session['upload_file'] = request.FILES.get('upload_file', None)
+            file = request.FILES.get('upload_file', None)
+            if file != None:
+                path = handle_uploaded_file(file)
+                full_path = settings.BASE_DIR + path
+                request.session['upload_file'] = full_path
             return HttpResponseRedirect(reverse('orders:confirm_order'))
         else:
             messages.warning(request, "e|There was a problem with your submission. \
                                        Refer to the messages below and try again.")
 
     else:
+        if request.session['upload_file']:
+            try:
+                os.remove(request.session['upload_file'])
+            except Exception as ex:
+                pass
+            request.session['upload_file'] = None
         form = OrderForm(request=request)
     return render(request, 'orders/provide_addinfo.html', {
         'form': form,
@@ -393,7 +405,12 @@ def confirm_order(request):
     Final step in the ordering process: shows the user a final order summary,
     allows them to confirm and save/place the order.
     """
-    return render(request, 'orders/confirm_order.html', {})
+    context = None
+    path = request.session.get('upload_file', None)
+    filename = None
+    if path:
+        filename = os.path.basename(request.session['upload_file'])
+    return render(request, 'orders/confirm_order.html', { 'filename': filename })
 
 
 @login_required
@@ -492,13 +509,17 @@ def save_new_order(request):
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
     order.user_notes = request.session['user_notes']
-    
-    if 'upload_file' in request.session:
-        file = request.session['upload_file']
-        if file != None:
-            upload = create_upload(request, file)
-            order.additional_file = upload
 
+    if 'upload_file' in request.session:
+        path = request.session['upload_file']
+        if path and os.path.isfile(path):
+            file = File(open(path, 'r'))
+            upload = create_upload(request, file)
+            try:
+                os.remove(request.session['upload_file'])
+            except Exception as ex:
+                pass
+            order.additional_file = upload
     request.session['upload_file'] = None
     order.save()
     return order
@@ -634,12 +655,13 @@ def send_order_emails(request, order):
         mimic_template = loader.get_template(mimic_email)
         mimic_template_html = loader.get_template(mimic_email_html)
         subject = '[Mimic OOS] Order Confirmed: %s' % order.name
-
+    
     c = Context({
         'order': order,
         'user_profile': user_profile,
         'line_items': line_items,
         'site': site,
+        'host': '{}{}'.format(request.get_host(), order.additional_file.file.url) if order.additional_file else None
     })
     body = template.render(c)
     body_html = template_html.render(c)
@@ -726,11 +748,14 @@ def handle_uploaded_file(f):
     so that you could store the file somewhere non-public and deliver it to Mimic staff that way.
     """
     filename = sanitize_filename(f.name)
-    path = '/uploads/%s' % filename
-    destination = open('{0}{1}'.format(settings.STATICFILES_DIRS[0].encode('utf8'), path), 'wb+')
+    path = 'uploads/%s' % filename
+    folder_path = settings.MEDIA_ROOT
+    if not os.path.isdir(folder_path + 'uploads'):
+        os.mkdir(folder_path + 'uploads')
+    destination = open('{0}{1}'.format(folder_path.encode('utf8'), path), 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
-    url = '%s%s' % (settings.STATIC_URL, path)
+    url = '%s%s' % (settings.MEDIA_URL, path)
     return url
 
 

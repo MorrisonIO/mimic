@@ -25,6 +25,7 @@ SHIP TO
 ADDITIONAL INFO
 Comments: {% if order.additional_info %}{{ order.additional_info }}{% else %}None.{% endif %}
 P.O. Number: {% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}
+File: {% if order.additional_file %}{{host}}{% else %}None{% endif %}
 ------------------------------------------------------------------------
 
 Thank you for placing this order with us. If there are any
