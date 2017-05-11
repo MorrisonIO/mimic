@@ -515,6 +515,10 @@ def save_new_order(request):
         if path and os.path.isfile(path):
             file = File(open(path, 'r'))
             upload = create_upload(request, file)
+            try:
+                os.remove(request.session['upload_file'])
+            except Exception as ex:
+                pass
             order.additional_file = upload
     request.session['upload_file'] = None
     order.save()
@@ -646,12 +650,13 @@ def send_order_emails(request, order):
         template_html = loader.get_template(email_html)
         mimic_template = loader.get_template(mimic_email)
         subject = '[Mimic OOS] Order Confirmed: %s' % order.name
-
+    
     c = Context({
         'order': order,
         'user_profile': user_profile,
         'line_items': line_items,
         'site': site,
+        'host': '{}{}'.format(request.get_host(), order.additional_file.file.url) if order.additional_file else None
     })
     body = template.render(c)
     body_html = template_html.render(c)

@@ -37,6 +37,7 @@
             ADDITIONAL INFO<br>
             Comments: {% if order.additional_info %}{{ order.additional_info }}{% else %}None.{% endif %}<br>
             P.O. Number: {% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}<br>
+            File: {% if order.additional_file %}<a href="http://{{host}}">Download</a>{% else %}None{% endif %}
         </p>
 
         <hr>
