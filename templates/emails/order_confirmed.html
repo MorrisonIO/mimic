@@ -40,7 +40,7 @@
             <h3>ADDITIONAL INFO</h3>
             Comments: {% if order.additional_info %}{{ order.additional_info }}{% else %}None.{% endif %}<br>
             P.O. Number: {% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}<br>
-            File: {% if order.additional_file %}<a href="http://{{host}}">Download</a>{% else %}None{% endif %}
+            File: {% if order.additional_file %}<a href="{{host}}">Download</a>{% else %}None{% endif %}
         </p>
 
         <hr>
@@ -62,7 +62,7 @@
             Mimic Print & Media Services<br>
             Tel: 905.415.2772<br>
             Fax: 905.415.2005<br>
-            Web: http://{{ site.domain }}/<br>
+            Web: https://{{ site.domain }}/<br>
         </p>
     </body>
 </html>

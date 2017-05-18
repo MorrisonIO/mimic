@@ -633,6 +633,7 @@ def send_order_emails(request, order):
         email = 'emails/order_approvalrequired.txt'
         email_html = 'emails/order_approvalrequired.html'
         mimic_email = 'emails/mimic_order_approvalrequired.txt'
+        mimic_email_html = 'emails/mimic_order_approvalrequired.html'
         if order.org.approval_email:
             try:
                 email = 'emails/%s' % order.org.approval_email
@@ -641,6 +642,7 @@ def send_order_emails(request, order):
         template = loader.get_template(email)
         mimic_template = loader.get_template(mimic_email)
         template_html = loader.get_template(email_html)
+        mimic_template_html = loader.get_template(mimic_email_html)
         subject = '[Mimic OOS] Order Approval Required: %s' % order.name
     else:
         email = 'emails/order_confirmed.txt'
@@ -663,7 +665,7 @@ def send_order_emails(request, order):
         'user_profile': user_profile,
         'line_items': line_items,
         'site': site,
-        'host': '{}{}'.format(request.get_host(), order.additional_file.file.url) if order.additional_file else None
+        'host': request.build_absolute_uri(order.additional_file.file.url) if order.additional_file else None
     })
     body = template.render(c)
     body_html = template_html.render(c)

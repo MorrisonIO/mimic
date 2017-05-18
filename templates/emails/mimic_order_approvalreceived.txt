@@ -24,4 +24,4 @@ ordering system at http://{{ site.domain }}/admin/orders/order/{{ order.id }}/.
 Mimic Print & Media Services
 Tel: 905.415.2772
 Fax: 905.415.2005
-Web: http://{{ site.domain }}/
+Web: https://{{ site.domain }}/
