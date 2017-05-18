@@ -387,7 +387,7 @@ def provide_addinfo(request):
                                        Refer to the messages below and try again.")
 
     else:
-        if request.session['upload_file']:
+        if 'upload_file' in request.session:
             try:
                 os.remove(request.session['upload_file'])
             except Exception as ex:
@@ -631,6 +631,7 @@ def send_order_emails(request, order):
             approval_manager = '%s <%s>' % (fullname, manager_email)
             user_list.append(approval_manager)
         email = 'emails/order_approvalrequired.txt'
+        email_html = 'emails/order_approvalrequired.html'
         mimic_email = 'emails/mimic_order_approvalrequired.txt'
         if order.org.approval_email:
             try:
@@ -639,6 +640,7 @@ def send_order_emails(request, order):
                 pass
         template = loader.get_template(email)
         mimic_template = loader.get_template(mimic_email)
+        template_html = loader.get_template(email_html)
         subject = '[Mimic OOS] Order Approval Required: %s' % order.name
     else:
         email = 'emails/order_confirmed.txt'

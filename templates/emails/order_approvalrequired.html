@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <p>
+            The following order has been placed at the Mimic Print & Media Services
+        Online Ordering System. Please note that this order REQUIRES APPROVAL
+        from a manager, and will not be placed into production until it is
+        received. If you are the manager for this organization, please log in
+        and approve or deny this order.
+        </p>
+
+        <hr>
+
+        <p>
+            ORDER NAME<br> 
+        {{ order.name }}
+        </p>
+
+        <p>DUE DATE<br>
+        {{ order.due_date|date:"l, F j, Y" }}
+        </p>
+
+        <p>ORDERED BY<br>
+        {{ order.placed_by.get_full_name }}</p>
+
+        <p>ITEMS<br>
+        {% for item in line_items %}{% include "orders/line_item.txt" %}{% endfor %}
+        SHIP TO<br>
+        {% with order.ship_to as address %}{% include "addresses/address_snippet.txt" %}{% endwith %}
+        </p>
+
+        <p>ADDITIONAL INFO<br>
+        Comments: {% if order.additional_info %}{{ order.additional_info }}<br>{% else %}None.<br>{% endif %}
+        P.O. Number: {% if order.po_number %}{{ order.po_number }}<br>{% else %}None.<br>{% endif %}
+        </p>
+        <hr>
+
+        <p>Thank you for placing this order with us. We will process it as soon as
+        possible.
+
+        If you have any questions regarding your order or the Online Ordering 
+        System, please don't hesitate to contact us.</p> 
+
+        <p>Thank you,
+        --
+        Mimic Print & Media Services<br>
+        Tel: 905.415.2772<br>
+        Fax: 905.415.2005<br>
+        Web: http://{{ site.domain }}/</p>
+    </body>
+</html>
