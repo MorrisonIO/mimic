@@ -221,6 +221,7 @@ class Order(models.Model):
                         <input type="button" value="&gt;">' % self.id
             return format_html(template)
 
+    invnum_form.short_description = "Invoice Number"
 
     def printed_button(self):
         """
