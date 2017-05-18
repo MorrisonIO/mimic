@@ -14,7 +14,7 @@ class OrderAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Order info', {'fields': ('name', 'status', 'placed_by',
                                    'org', 'date', 'due_date', 'po_number',
-                                   'additional_info', 'approved_by',
+                                   'additional_info', 'approved_by', 'user_notes',
                                    'approved_date', 'printed', 'invoice_number', 'ship_to', 'additional_file')
                        }
         ),
