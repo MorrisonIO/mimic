@@ -102,6 +102,7 @@ FONT_DIR = os.path.join(BASE_DIR, 'fonts/')
 SHOW_NEW_LAYOUTS = False
 
 ALLOW_STAFF_EMAILS = True 
+STAFF_EMAILS = []
 
 TEMPLATES = [
     {

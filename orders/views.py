@@ -597,6 +597,24 @@ def subtract_inventory(product, order, amount, modified_by, notes, date):
         return oi
 
 
+def user_is_developer(username):
+    try:
+        return username in settings.DEVELOPER_USERS
+    except AttributeError:
+        return False
+    except Exception:
+        return False
+
+def create_mimic_list(request, order):
+    if settings.ALLOW_STAFF_EMAILS and not user_is_developer(request.user.username):
+        mimic_list = ['Production <production@mimicprint.com>']
+        for rep in order.org.mimic_rep.filter(is_active=1):
+            address = '%s <%s>' % (rep.get_full_name(), rep.email)
+            mimic_list.append(address)
+    else:
+        mimic_list = settings.STAFF_EMAILS
+    return mimic_list
+
 def send_order_emails(request, order):
     """
     Sends out the various emails when an order is placed:
@@ -609,14 +627,9 @@ def send_order_emails(request, order):
     site = Site.objects.get_current()
     user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)
     line_items = order.get_line_items()
+    
+    mimic_list = create_mimic_list(request, order)
 
-    if settings.ALLOW_STAFF_EMAILS:
-        mimic_list = ['Production <production@mimicprint.com>']
-        for rep in order.org.mimic_rep.filter(is_active=1):
-            address = '%s <%s>' % (rep.get_full_name(), rep.email)
-            mimic_list.append(address)
-    else:
-        mimic_list = settings.STAFF
     orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
     user_list = [orderer]
     if request.session['cc_confirmation']:
