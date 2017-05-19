@@ -16,7 +16,7 @@
                     {% endfor %}
                 </select>
             {% else %}
-                <input type="number" size="5" max="100000" oninput="maxLengthCheck(this)" maxlength="5" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
+                <input type="number" size="5" min="0" max="100000" oninput="maxLengthCheck(this)" maxlength="5" name="qty_{{ product.id }}"{% if item %}{# "item" only present when modifying from cart #} value="{{ item.quantity }}"{% endif %}>
             {% endif %}
         </td>
         <td class="qty_info">
