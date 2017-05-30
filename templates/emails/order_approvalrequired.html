@@ -39,11 +39,9 @@
         <p>
             <h3>ADDITIONAL INFO</h3>
             Comments: {% if order.additional_info %}{{ order.additional_info }}<br>{% else %}None.<br>{% endif %}
-            P.O. Number: {% if order.po_number %}{{ order.po_number }}<br>{% else %}None.<br>{% endif %}
+            <b>P.O. Number:</b> {% if order.po_number %}{{ order.po_number }}<br>{% else %}None.<br>{% endif %}
             File: {% if order.additional_file %}<a href="{{host}}">Download</a>{% else %}None{% endif %}
         </p>
-
-        <hr>
 
         <p>Thank you for placing this order with us. We will process it as soon as
         possible.
@@ -51,7 +49,7 @@
         If you have any questions regarding your order or the Online Ordering 
         System, please don't hesitate to contact us.</p> 
 
-        <p>Thank you,
+        <p><b>Thank you</b>,
         --<br>
         Mimic Print & Media Services<br>
         Tel: 905.415.2772<br>
