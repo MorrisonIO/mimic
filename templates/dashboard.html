@@ -15,12 +15,14 @@
 {% endblock %}
 
 {% block search %}
-<div id="search">
-    <form action="{% url 'products:product_search' %}" method="get">{% csrf_token %}
-        <input type="text" name="q" title="Search products..." id="search_input">
-        <input type="image" src="{% static 'img/search.png' %}" id="search_submit" alt="Search">
-    </form>
-</div>
+    {% if current_org %}
+    <div id="search">
+        <form action="{% url 'products:product_search' %}" method="get">{% csrf_token %}
+            <input type="text" name="q" title="Search products..." id="search_input">
+            <input type="image" src="{% static 'img/search.png' %}" id="search_submit" alt="Search">
+        </form>
+    </div>
+    {% endif %}
 {% endblock %}
 {% block sidebar %}
 <h3 class="dashhead">Recent orders</h3>
