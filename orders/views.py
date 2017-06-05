@@ -672,13 +672,18 @@ def send_order_emails(request, order):
         mimic_template = loader.get_template(mimic_email)
         mimic_template_html = loader.get_template(mimic_email_html)
         subject = '[Mimic OOS] Order Confirmed: %s' % order.name
-    
+
+    filename_prefix = request.session.get('filename_prefix', None)
+    pdf_file = "{}{}previews/{}.pdf".format(request.get_host(), settings.MEDIA_URL, filename_prefix) if filename_prefix else None
+    host = '{}{}'.format(request.get_host(), order.additional_file.file.url) if order.additional_file else None
+
     c = Context({
         'order': order,
         'user_profile': user_profile,
         'line_items': line_items,
         'site': site,
-        'host': request.build_absolute_uri(order.additional_file.file.url) if order.additional_file else None
+        'host': host,
+        'preview': pdf_file
     })
     body = template.render(c)
     body_html = template_html.render(c)
