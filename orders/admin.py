@@ -22,14 +22,16 @@ class OrderAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(OrderAdmin, self).get_form(request, obj, **kwargs)
-        file = obj.additional_file
+        additional_file = obj.additional_file if obj else None
         username = request.user.username
-        print(file)
-        if file == None:
-            print(type(form.base_fields['additional_file'].queryset.filter(user_name=username)))
-            form.base_fields['additional_file'].queryset = form.base_fields['additional_file'].queryset.filter(user_name=username)
-        else: 
-            form.base_fields['additional_file'].queryset = form.base_fields['additional_file'].queryset.filter(Q(pk=file.id) | Q(user_name=username))
+        if not additional_file:
+            form.base_fields['additional_file'].queryset = form.base_fields['additional_file'] \
+                                                                        .queryset \
+                                                                        .filter(user_name=username)
+        else:
+            form.base_fields['additional_file'].queryset = form.base_fields['additional_file'] \
+                                                                        .queryset \
+                                                                        .filter( Q(pk=additional_file.id) | Q(user_name=username) )
         return form
 
 class InventoryHistoryAdmin(admin.ModelAdmin):

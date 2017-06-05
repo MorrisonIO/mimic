@@ -13,7 +13,7 @@ class Upload(models.Model):
         help_text="If checked, users are allowed to delete this file."
         )
     date_added = models.DateTimeField(auto_now_add=True)
-    user_name = models.CharField(max_length=200, default="", blank=True, null=True)
+    user_name = models.CharField(max_length=200, default="", blank=False, null=True)
     email = models.CharField(max_length=200, default="", blank=True, null=True)
     def __unicode__(self):
         return u'%s' % self.name
