@@ -27,8 +27,10 @@
                 <p><span class="label">Date received:</span><b>&nbsp;{{ order.date|date:"l, M j, Y \a\t H:i" }}</b><br />
                 <span class="label">Arrival date to customer:</span><b>&nbsp;{{ order.due_date|date:"l, M j, Y" }}</b><br />
                 &nbsp;<br />
-                <span class="label">MIMIC SHIP DATE:</span><b>{#&nbsp;{{ order.approved_date|date:"l, M j, Y" }}#}<br />
-                <span class="label">CUSTOMER TO PICK-UP:</span><b>{#&nbsp;{{ order.due_date|date:"l, M j, Y" }}#}<br />
+                {% if request.user.is_superuser %}
+                    <span class="label">MIMIC SHIP DATE:</span><b>&nbsp;{{ order.shipping_date|date:"l, M j, Y" }}<br />
+                {% endif %}
+                <span class="label">CUSTOMER TO PICK-UP:</span><b>&nbsp;{{ order.due_date|date:"l, M j, Y" }}<br />
                 &nbsp;<br />
                 <span class="label">Client:</span><b>&nbsp;{{ order.org }}</b><br />
                 <span class="label">Placed by:</span><b>&nbsp;{{ order.placed_by.get_full_name }}</b><br />

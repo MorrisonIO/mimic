@@ -11,19 +11,15 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('name', 'invoice_number')
     raw_id_fields = ('ship_to',)
     date_hierarchy = ('date')
-    fieldsets = (
-        ('Order info', {'fields': ('name', 'status', 'placed_by',
-                                   'org', 'date', 'due_date', 'po_number',
-                                   'additional_info', 'approved_by', 'user_notes',
-                                   'approved_date', 'printed', 'invoice_number', 'ship_to', 'additional_file')
-                       }
-        ),
-    )
 
     def get_form(self, request, obj=None, **kwargs):
-        form = super(OrderAdmin, self).get_form(request, obj, **kwargs)
         additional_file = obj.additional_file if obj else None
         username = request.user.username
+        self.exclude = ()
+        if not request.user.is_superuser:
+            self.exclude = ('shipping_date',)
+        self.exclude += ('saved',)
+        form = super(OrderAdmin, self).get_form(request, obj, **kwargs)
         if not additional_file:
             form.base_fields['additional_file'].queryset = form.base_fields['additional_file'] \
                                                                         .queryset \

@@ -135,6 +135,9 @@ def get_category(request):
     return HttpResponse(rendered)
 
 def get_product_modal_data(request):
+    """
+    Find product by ID and return preview image for it
+    """
     product_id = request.GET.get('id')
     product = Product.objects.get(pk=product_id)
     description = product.description if product else ''

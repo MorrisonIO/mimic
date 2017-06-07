@@ -116,6 +116,7 @@ class Order(models.Model):
     org = models.ForeignKey(Org) 
     status = models.CharField(max_length=2, choices=STATUS_CHOICES)
     date = models.DateTimeField('Placed on', blank=True)
+    shipping_date = models.DateField('Shipping date', help_text="Set on shipping pages", blank=True, null=True)
     due_date = models.DateField(help_text="yyyy-mm-dd")
     po_number = models.CharField("P.O. number", max_length=50, blank=True)
     approved_by = models.ForeignKey(User, blank=True, null=True, related_name="orders_approved_by_set")
