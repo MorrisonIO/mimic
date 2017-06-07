@@ -1,5 +1,7 @@
 import random
 import re
+import json
+import os
 
 from django.conf import settings
 from django.shortcuts import render
@@ -133,9 +135,13 @@ def get_category(request):
     return HttpResponse(rendered)
 
 def get_product_modal_data(request):
-    import json
     product_id = request.GET.get('id')
     product = Product.objects.get(pk=product_id)
     description = product.description if product else ''
-    preview_images = [{'url': product.preview, 'name': 'Preview Image'}] if product.preview else []
-    return HttpResponse(json.dumps({'description': description, 'preview_images': preview_images}))
+    if os.path.isfile(settings.MEDIA_ROOT + product.preview.name):
+        image_path = '/media/{}'.format(product.preview.name)
+    else:
+        image_path = '/static/img/product_preview.jpg'
+
+    preview_image = [{'url': image_path, 'name': 'Preview Image'}] if product.preview else []
+    return HttpResponse(json.dumps({'description': description, 'preview_image': preview_image}))
