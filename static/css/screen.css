@@ -89,6 +89,9 @@ a {
     font-style: normal;
     outline: none;
 }
+a .fa {
+    color: #333;
+}
 a:hover {
     color: #222;
     text-decoration: none;
@@ -364,6 +367,14 @@ body#products li#n_products a {
     text-align: right;
     float: right;
     padding: 12px 20px 0 0;  
+}
+.toogle-product-view {
+    float: right;
+    padding-right: 20px;
+    padding-top: 20px;
+}
+.active-product-view{
+    border-bottom: 2px solid #333;
 }
 #page_header form {
     padding: 7px;

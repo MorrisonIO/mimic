@@ -30,8 +30,7 @@
 
 }
 #img1 {
-  float:left; /* Выравнивание по левому краю */
-  
+  float:left;  
 }
 #img2 {
   float:right;

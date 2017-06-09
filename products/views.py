@@ -49,7 +49,7 @@ def collect_menu_data(products):
 
 @login_required
 @current_org_required
-def index(request):
+def index(request, group_list=None):
     """
     Shows the list of Products:
     each Category followed by a table of all the Products in that category.
@@ -72,7 +72,7 @@ def index(request):
         product_list += products
         products_by_category.append(dict(name=category.name, products=products))
     menu_data = collect_menu_data(product_list)
-    if settings.SHOW_NEW_LAYOUTS:
+    if group_list:
         template_to_render = 'products/product_list_new.html'
     else:
         template_to_render = 'products/product_list.html'
