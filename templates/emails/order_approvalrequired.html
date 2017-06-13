@@ -41,6 +41,7 @@
             Comments: {% if order.additional_info %}{{ order.additional_info }}<br>{% else %}None.<br>{% endif %}
             <b>P.O. Number:</b> {% if order.po_number %}{{ order.po_number }}<br>{% else %}None.<br>{% endif %}
             File: {% if order.additional_file %}<a href="{{host}}">Download</a>{% else %}None{% endif %}
+            Print Ready: {% if preview %} <a href="http://{{preview}}" target="_blank" title="Click to download a PDF of this preview">Download</a>{% else %} None {% endif %}
         </p>
 
         <p>Thank you for placing this order with us. We will process it as soon as
