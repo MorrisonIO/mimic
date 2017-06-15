@@ -3678,8 +3678,8 @@ def AlgonquinOttawaBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/AlgonquinBc_bg_1up.tif" % settings.MEDIA_ROOT
 
