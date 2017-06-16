@@ -466,6 +466,10 @@ div#vardata_preview {
     padding: 15px;
 }
 div#vardata_preview a img { border: 1px solid #aaa; }
+div#vardata_preview .vardata-preview-image { 
+    display: block;
+    margin: 0 auto;
+}
 div#vardata_preview a:hover img { border: 1px solid #777; }
 
 p.order_options { margin-bottom: 20px; } /* add/cancel buttons on cart summary */
