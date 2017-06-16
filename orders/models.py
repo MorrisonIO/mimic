@@ -7,6 +7,7 @@ from django.core.mail import send_mail, mail_managers
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from products.models import Product
 from orgs.models import Org
@@ -323,6 +324,10 @@ class InventoryHistory(models.Model):
             'var_data': var_data,
         }
 
+
+    def link_to_order(self):
+        order = Order.objects.get(pk=self.order_id)
+        return mark_safe('<a href="/admin/orders/order/{}/change">{}</a>'.format(self.order_id, order.name or 'Order'))
 
 class OrderedItem(models.Model):
     """

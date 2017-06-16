@@ -31,7 +31,7 @@ class OrderAdmin(admin.ModelAdmin):
         return form
 
 class InventoryHistoryAdmin(admin.ModelAdmin):
-    list_display = ('product', 'order', 'date', 'notes')
+    list_display = ('product', 'link_to_order', 'date', 'notes')
     date_hierarchy = ('date')
     search_fields = ('product__name', 'order__name')
     raw_id_fields = ('order', 'product')
