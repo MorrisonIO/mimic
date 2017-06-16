@@ -8,7 +8,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'due_date', 'org')
     list_display = ('name', 'org', 'date', 'due_date', 'status', 'worknotes_links', 'po_number',
                     'docket_link', 'printed_button', 'shipping_links', 'invnum_form')
-    search_fields = ('name', 'invoice_number')
+    search_fields = ('name', 'invoice_number', 'status', 'org__name', 'po_number')
     raw_id_fields = ('ship_to',)
     date_hierarchy = ('date')
 
