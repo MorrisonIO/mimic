@@ -374,7 +374,6 @@ def provide_addinfo(request):
             request.session['due_date'] = request.POST.get('due_date', None)
             request.session['po_number'] = request.POST.get('po_number', None)
             request.session['additional_info'] = request.POST.get('additional_info', None)
-            request.session['user_notes'] = request.POST.get('user_notes', None)
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
             file = request.FILES.get('upload_file', None)
             if file != None:
@@ -508,7 +507,6 @@ def save_new_order(request):
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
-    order.user_notes = request.session['user_notes']
 
     if 'upload_file' in request.session:
         path = request.session['upload_file']

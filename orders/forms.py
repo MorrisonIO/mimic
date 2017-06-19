@@ -47,17 +47,12 @@ class OrderForm(forms.ModelForm):
         except KeyError:
             additional_info = ''
         try:
-            user_notes = request.session['user_notes']
-        except KeyError:
-            user_notes = ''
-        try:
             cc_confirmation = request.session['cc_confirmation']
         except KeyError:
             cc_confirmation = ''
         self.fields['due_date'].initial = due_date
         self.fields['po_number'].initial = po_number
         self.fields['additional_info'].initial = additional_info
-        self.fields['user_notes'].initial = user_notes
         self.fields['cc_confirmation'] = forms.CharField(
             label="CC order confirmation to",
             widget=widgets.TextInput,
@@ -68,7 +63,7 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ( 'due_date', 'additional_info', 'user_notes', 'po_number', 'upload_file')
+        fields = ( 'po_number', 'due_date', 'additional_info', 'upload_file')
 
     def clean_due_date(self):
         """
