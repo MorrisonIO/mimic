@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.db.models import Q
 from models import Order, InventoryHistory, OrderedItem, WorkNote
+from daterange_filter.filter import DateRangeFilter
 
 from uploads.models import Upload
 
 class OrderAdmin(admin.ModelAdmin):
-    list_filter = ('status', 'due_date', 'org')
+    list_filter = ('status', ('due_date', DateRangeFilter), ('date', DateRangeFilter), 'org')
     list_display = ('name', 'org', 'date', 'due_date', 'status', 'worknotes_links', 'po_number',
                     'docket_link', 'printed_button', 'shipping_links', 'invnum_form')
     search_fields = ('name', 'invoice_number', 'status', 'org__name', 'po_number')
@@ -16,7 +17,7 @@ class OrderAdmin(admin.ModelAdmin):
         additional_file = obj.additional_file if obj else None
         username = request.user.username
         self.exclude = ()
-        if not request.user.is_superuser:
+        if not (request.user.is_superuser or request.user.is_staff):
             self.exclude = ('shipping_date',)
         self.exclude += ('saved',)
         form = super(OrderAdmin, self).get_form(request, obj, **kwargs)
