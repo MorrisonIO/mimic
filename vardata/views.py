@@ -204,7 +204,7 @@ def MimicBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x126 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -387,7 +387,7 @@ def TlaBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -584,7 +584,7 @@ def HarrisCertificate_1up(request):
     # Create a preview image
     command = 'convert -page 792x612 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -815,7 +815,7 @@ def DrAsiaPacificBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1038,7 +1038,7 @@ def DrMarkhamBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1246,7 +1246,7 @@ def DrUkBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1459,7 +1459,7 @@ def DrRemoteBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1748,7 +1748,7 @@ def CaTechTorontoBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2069,7 +2069,7 @@ def CaTechMontrealBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2391,7 +2391,7 @@ def CaTechOttawaBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2729,7 +2729,7 @@ def RossBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2994,7 +2994,7 @@ def TrilliumBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3198,7 +3198,7 @@ def KafkoEnglishCanadaBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3315,7 +3315,7 @@ def KafkoFrenchCanadaBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3472,7 +3472,7 @@ def KafkoUsBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3645,7 +3645,7 @@ def AlgonquinMississaugaBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3714,7 +3714,7 @@ def AlgonquinOttawaBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3887,7 +3887,7 @@ def SuperiorEnergyBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -4085,7 +4085,7 @@ def SuperiorEnergyAgentBc_1up(request):
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -4894,7 +4894,7 @@ def CaTechBc_1up(request):
     # Create a preview image
     command = 'convert -page 270x162 %s %s' % (pdf_file, img_file)
     # execute command in shell
-    Popen([command], stdout=PIPE, shell=True, env={"PATH": "/usr/bin/"}, stderr=PIPE).communicate()
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
