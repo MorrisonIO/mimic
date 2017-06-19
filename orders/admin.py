@@ -48,6 +48,7 @@ class WorkNoteAdmin(admin.ModelAdmin):
             'fields': ('order', 'staff', 'mail_staff', 'status', 'notes')
         }),
     )
+    raw_id_fields = ('order',)
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(InventoryHistory, InventoryHistoryAdmin)
