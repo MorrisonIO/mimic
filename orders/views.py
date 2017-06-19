@@ -266,6 +266,7 @@ def delete_order_session_vars(request):
         'data_approved',
         'form_data',
         'due_date',
+        'shipping_date',
         'po_number',
         'additional_info',
         'user_notes',
@@ -372,6 +373,7 @@ def provide_addinfo(request):
         form = OrderForm(data=request.POST, request=request)
         if form.is_valid():  # set session vars
             request.session['due_date'] = request.POST.get('due_date', None)
+            request.session['shipping_date'] = request.POST.get('shipping_date', None)
             request.session['po_number'] = request.POST.get('po_number', None)
             request.session['additional_info'] = request.POST.get('additional_info', None)
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
@@ -393,6 +395,10 @@ def provide_addinfo(request):
                 pass
             request.session['upload_file'] = None
         form = OrderForm(request=request)
+
+    if not (request.user.is_superuser or request.user.is_staff):
+        form.fields.pop('shipping_date')
+
     return render(request, 'orders/provide_addinfo.html', {
         'form': form,
     })
@@ -500,10 +506,15 @@ def save_new_order(request):
     order.status = 'ac'  # active
     order.date = datetime.datetime.now()
     due_date_parts = request.session['due_date'].split("-")
+    shipping_date_parts = request.session['shipping_date'].split("-")
     order.due_date = datetime.date(int(due_date_parts[0]),
                                    int(due_date_parts[1]),
                                    int(due_date_parts[2])
                                   )
+    order.shipping_date = datetime.date(int(shipping_date_parts[0]),
+                                        int(shipping_date_parts[1]),
+                                        int(shipping_date_parts[2])
+                                        )
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']

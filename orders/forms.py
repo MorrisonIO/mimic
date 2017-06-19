@@ -34,10 +34,15 @@ class OrderForm(forms.ModelForm):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.request = request
         self.fields['due_date'].widget = widgets.TextInput(attrs={'class': 'datepicker'})
+        self.fields['shipping_date'].widget = widgets.TextInput(attrs={'class': 'datepicker'})
         try:
             due_date = request.session['due_date']
         except KeyError:
             due_date = ''
+        try:
+            shipping_date = request.session['shipping_date']
+        except KeyError:
+            shipping_date = ''
         try:
             po_number = request.session['po_number']
         except KeyError:
@@ -50,6 +55,7 @@ class OrderForm(forms.ModelForm):
             cc_confirmation = request.session['cc_confirmation']
         except KeyError:
             cc_confirmation = ''
+
         self.fields['due_date'].initial = due_date
         self.fields['po_number'].initial = po_number
         self.fields['additional_info'].initial = additional_info
@@ -63,7 +69,7 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ( 'po_number', 'due_date', 'additional_info', 'upload_file')
+        fields = ('po_number', 'due_date', 'shipping_date', 'additional_info', 'upload_file')
 
     def clean_due_date(self):
         """
