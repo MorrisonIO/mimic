@@ -345,7 +345,8 @@ class WorkNote(models.Model):
     Used to keep track of current progress of work on an order -- who's done what,
     current status, etc -- basically a freeform area to jot notes in.
     """
-    order = models.ForeignKey(Order, unique=True)
+    order = models.ForeignKey(Order, unique=True, help_text="Please click on the magnifying glass \
+                                            and then select the name of the order from the popup")
     staff = models.ManyToManyField(User,
                                    help_text="Select the Mimic employees involved in this order.",
                                    verbose_name="Mimic staff",
