@@ -1,14 +1,15 @@
 from django.contrib import admin
 from django.db.models import Q, CharField
-from .models import Order, InventoryHistory, OrderedItem, WorkNote
+from django.core import urlresolvers
 from daterange_filter.filter import DateRangeFilter
-from products.models import Product
 
+from .models import Order, InventoryHistory, OrderedItem, WorkNote
+from products.models import Product
 from uploads.models import Upload
 
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', ('due_date', DateRangeFilter), ('date', DateRangeFilter), 'org')
-    list_display = ('name', 'org', 'date', 'due_date', 'status', 'descriptions', 'part_numbers', 'quantity_required', 'worknotes_links', 'po_number',
+    list_display = ('name', 'org', 'date', 'due_date', 'status', 'descriptions', 'part_numbers', 'quantity', 'notes', 'po',
                     'docket_link', 'printed_button', 'shipping_links', 'invnum_form')
     search_fields = ('name', 'invoice_number', 'status', 'org__name', 'po_number')
     raw_id_fields = ('ship_to',)
@@ -34,11 +35,21 @@ class OrderAdmin(admin.ModelAdmin):
         return form
 
 
+    def po(self, obj):
+        return obj.po_number
+
+    def notes(self, obj):
+        link = '/admin/orders/worknote/add/'
+        return u'<a href="%s">%s</a>' % (link,'Add note')
+
+    notes.allow_tags=True
+
+
     def descriptions(self, obj):
         products_descriptions = ''
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         if len(ih_objs):
-            products_descriptions = '\n'.join(Product.objects.get(id=el.product_id).description for el in ih_objs \
+            products_descriptions = ',\n'.join(Product.objects.get(id=el.product_id).description for el in ih_objs \
                                             if Product.objects.get(id=el.product_id).description)
         return products_descriptions
 
@@ -47,12 +58,12 @@ class OrderAdmin(admin.ModelAdmin):
         products_pns = ''
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         if len(ih_objs):
-            products_pns = '\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+            products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
                                             if Product.objects.get(id=el.product_id).part_number)
         return products_pns
 
 
-    def quantity_required(self, obj):
+    def quantity(self, obj):
         total = 0
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         products_descriptions = sum(el.amount for el in ih_objs if el.amount)
