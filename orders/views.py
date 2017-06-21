@@ -511,10 +511,11 @@ def save_new_order(request):
                                    int(due_date_parts[1]),
                                    int(due_date_parts[2])
                                   )
-    order.shipping_date = datetime.date(int(shipping_date_parts[0]),
-                                        int(shipping_date_parts[1]),
-                                        int(shipping_date_parts[2])
-                                        )
+    if (request.user.is_staff or request.user.is_superuser) and request.session['shipping_date']:
+        order.shipping_date = datetime.date(int(shipping_date_parts[0]),
+                                            int(shipping_date_parts[1]),
+                                            int(shipping_date_parts[2])
+                                            )
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
