@@ -86,7 +86,7 @@ def index(request, group_list=None):
         'menu_data': menu_data
     })
 
-
+@current_org_required
 def search(request):
     query_string, found_products = '', ''
     user = request.user
