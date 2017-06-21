@@ -506,16 +506,19 @@ def save_new_order(request):
     order.status = 'ac'  # active
     order.date = datetime.datetime.now()
     due_date_parts = request.session['due_date'].split("-")
-    shipping_date_parts = request.session['shipping_date'].split("-")
     order.due_date = datetime.date(int(due_date_parts[0]),
                                    int(due_date_parts[1]),
                                    int(due_date_parts[2])
                                   )
     if (request.user.is_staff or request.user.is_superuser) and request.session['shipping_date']:
-        order.shipping_date = datetime.date(int(shipping_date_parts[0]),
-                                            int(shipping_date_parts[1]),
-                                            int(shipping_date_parts[2])
-                                            )
+        try:
+            shipping_date_parts = request.session['shipping_date'].split("-")
+            order.shipping_date = datetime.date(int(shipping_date_parts[0]),
+                                                int(shipping_date_parts[1]),
+                                                int(shipping_date_parts[2])
+                                                )
+        except Exception:
+            pass
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
