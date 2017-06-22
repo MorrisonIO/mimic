@@ -42,7 +42,7 @@ def collect_menu_data(products):
                 else:
                     elems['min_quantity'][str(product.min_order_qty)] = 1
     except Exception as ex:
-        print('EX:', ex)
+        pass
     finally:
         return elems
 

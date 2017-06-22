@@ -3623,7 +3623,6 @@ def AlgonquinBc_render(canvas, data, left_coord, bottom_coord, location):
 def AlgonquinMississaugaBc_1up(request):
     # Get the info that the user entered. These fields should match what's in the model.
     form_data = escape(request.session.get('form_data', None))
-
     # Set some document specifics
     timestamp = str(time()).replace('.','')
     pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)

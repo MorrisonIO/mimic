@@ -178,9 +178,7 @@ $(document).ready(function(){
         var self = $(this)
         if ( table.is(':visible') ) {
             self.addClass('cat-closed');
-            console.log('here12')
         } else {
-            console.log('here22')
             if(!self.hasClass('loaded')) {
                 var loader = '<div id="floatingCirclesG">' +
                                 '<div class="f_circleG" id="frotateG_01"></div>' + 
