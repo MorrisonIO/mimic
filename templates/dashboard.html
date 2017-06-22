@@ -7,6 +7,7 @@
 {% block body_class %}twocol_even{% endblock %}
  
 {% load tag_helper %}
+
 {% block content %}
     {% if current_org %}
         <p class="logo center">{% if current_org.logo %}<img src="{{ current_org.logo.url }}" alt="{{ current_org }}">{% else %}{{ current_org }}{% endif %}</p>
@@ -16,14 +17,15 @@
 
 {% block search %}
     {% if current_org %}
-    <div id="search">
-        <form action="{% url 'products:product_search' %}" method="get">{% csrf_token %}
-            <input type="text" name="q" title="Search products..." id="search_input">
-            <input type="image" src="{% static 'img/search.png' %}" id="search_submit" alt="Search">
-        </form>
-    </div>
+        <div id="search">
+            <form action="{% url 'products:product_search' %}" method="get">{% csrf_token %}
+                <input type="text" name="q" title="Search products..." id="search_input">
+                <input type="image" src="{% static 'img/search.png' %}" id="search_submit" alt="Search">
+            </form>
+        </div>
     {% endif %}
 {% endblock %}
+
 {% block sidebar %}
 <h3 class="dashhead">Recent orders</h3>
 <div class="dashpanel">

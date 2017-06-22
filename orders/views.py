@@ -646,7 +646,7 @@ def send_order_emails(request, order):
     orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
     user_list = [orderer]
     if request.session['cc_confirmation']:
-        addresses = request.session['cc_confirmation'].replace(' ','').split(',')
+        addresses = request.session['cc_confirmation'].replace(' ', '').split(',')
         for address in addresses:
             user_list.append(address)
 

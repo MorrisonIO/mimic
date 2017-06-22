@@ -19,26 +19,36 @@ class OrderAdmin(admin.ModelAdmin):
         additional_file = obj.additional_file if obj else None
         username = request.user.username
         self.exclude = ()
+        
         if not (request.user.is_superuser or request.user.is_staff):
             self.exclude = ('shipping_date',)
         self.exclude += ('saved',)
+
         form = super(OrderAdmin, self).get_form(request, obj, **kwargs)
         if not additional_file:
             form.base_fields['additional_file'].queryset = form.base_fields['additional_file'] \
                                                                         .queryset \
                                                                         .filter(user_name=username)
         else:
+            id_filter = Q(pk=additional_file.id)
+            name_filter = Q(user_name=username) 
             form.base_fields['additional_file'].queryset = form.base_fields['additional_file'] \
-                                                                        .queryset \
-                                                                        .filter( Q(pk=additional_file.id) | Q(user_name=username) )
+                                                                    .queryset \
+                                                                    .filterid_filter | name_filter)
 
         return form
 
 
     def po(self, obj):
+        """
+        Display po_number like 'PO'
+        """
         return obj.po_number
 
     def notes(self, obj):
+        """
+        Display worknotes like 'NOTES'
+        """
         link = '/admin/orders/worknote/add/'
         return u'<a href="%s">%s</a>' % (link,'Add note')
 
@@ -46,6 +56,9 @@ class OrderAdmin(admin.ModelAdmin):
 
 
     def descriptions(self, obj):
+        """
+        Display all products descriptions included in this order
+        """
         products_descriptions = ''
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         if len(ih_objs):
@@ -55,6 +68,9 @@ class OrderAdmin(admin.ModelAdmin):
 
 
     def part_numbers(self, obj):
+        """
+        Display all products part numbers included in this order
+        """
         products_pns = ''
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         if len(ih_objs):
@@ -64,6 +80,9 @@ class OrderAdmin(admin.ModelAdmin):
 
 
     def quantity(self, obj):
+        """
+        Display total products amount in this order
+        """
         total = 0
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         products_descriptions = sum(el.amount for el in ih_objs if el.amount)

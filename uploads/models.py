@@ -15,6 +15,7 @@ class Upload(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     user_name = models.CharField(max_length=200, default="", blank=False, null=True)
     email = models.CharField(max_length=200, default="", blank=True, null=True)
+
     def __unicode__(self):
         return u'%s' % self.name
 
