@@ -266,6 +266,7 @@ def delete_order_session_vars(request):
         'data_approved',
         'form_data',
         'due_date',
+        'shipping_date',
         'po_number',
         'additional_info',
         'user_notes',
@@ -372,9 +373,9 @@ def provide_addinfo(request):
         form = OrderForm(data=request.POST, request=request)
         if form.is_valid():  # set session vars
             request.session['due_date'] = request.POST.get('due_date', None)
+            request.session['shipping_date'] = request.POST.get('shipping_date', None)
             request.session['po_number'] = request.POST.get('po_number', None)
             request.session['additional_info'] = request.POST.get('additional_info', None)
-            request.session['user_notes'] = request.POST.get('user_notes', None)
             request.session['cc_confirmation'] = request.POST.get('cc_confirmation', None)
             file = request.FILES.get('upload_file', None)
             if file != None:
@@ -394,6 +395,10 @@ def provide_addinfo(request):
                 pass
             request.session['upload_file'] = None
         form = OrderForm(request=request)
+
+    if not (request.user.is_superuser or request.user.is_staff):
+        form.fields.pop('shipping_date')
+
     return render(request, 'orders/provide_addinfo.html', {
         'form': form,
     })
@@ -505,10 +510,18 @@ def save_new_order(request):
                                    int(due_date_parts[1]),
                                    int(due_date_parts[2])
                                   )
+    if (request.user.is_staff or request.user.is_superuser) and request.session['shipping_date']:
+        try:
+            shipping_date_parts = request.session['shipping_date'].split("-")
+            order.shipping_date = datetime.date(int(shipping_date_parts[0]),
+                                                int(shipping_date_parts[1]),
+                                                int(shipping_date_parts[2])
+                                                )
+        except Exception:
+            pass
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
-    order.user_notes = request.session['user_notes']
 
     if 'upload_file' in request.session:
         path = request.session['upload_file']
@@ -633,7 +646,7 @@ def send_order_emails(request, order):
     orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
     user_list = [orderer]
     if request.session['cc_confirmation']:
-        addresses = request.session['cc_confirmation'].replace(' ','').split(',')
+        addresses = request.session['cc_confirmation'].replace(' ', '').split(',')
         for address in addresses:
             user_list.append(address)
 

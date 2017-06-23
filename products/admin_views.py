@@ -20,7 +20,6 @@ def duplicate_product(request, product_id):
     """
     Duplicates the product provided -- creates a new row in the db with the exact same data only a different primary key. We redirect to the new change form and rely on the user to edit it accordingly (ie, distinguish it somehow from the original).
     """
-    print('in duplicate')
     product = Product.objects.get(pk=product_id)
     product.pk = None
     product.save()

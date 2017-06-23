@@ -5,6 +5,8 @@
 {% block page_title %}Product list{% endblock %}
 {% block body_class %}twocol-context-right{% endblock %}
 {% block active_product_state %}active{% endblock %}
+{% block active_group_product_view %}active-product-view{% endblock %}
+
 
 {% block custom_head %}
 <link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
@@ -89,9 +91,9 @@
                     var _res  = JSON.parse(response)
                     $(".modal-content p").text(_res.description)
                     var linksContainer = $('#links').empty()
-                    _res.preview_images = [{'url':'/static/img/product_preview.jpg', 'name':'Preview Image'}]
-                    for(var i=0; i < _res.preview_images.length; i++){
-                        var el = _res.preview_images[i];
+
+                    for(var i=0; i < _res.preview_image.length; i++){
+                        var el = _res.preview_image[i];
                         function onLoad(id){
                             $(".loader" + id).hide()
                             $('#prev_'+id).show()

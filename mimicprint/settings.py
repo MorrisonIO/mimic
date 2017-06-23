@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'uploads.apps.UploadsConfig',
     'vardata.apps.VardataConfig',
     'helpers.apps.HelpersConfig',
-    'brochures.apps.BrochuresConfig'
+    'brochures.apps.BrochuresConfig',
+    'daterange_filter'
 ]
 
 if DEBUG: INSTALLED_APPS.append('debug_toolbar')
@@ -94,6 +95,8 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'\
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 FONT_DIR = os.path.join(BASE_DIR, 'fonts/')
+
+PATH_TO_CONVERT_TOOLS = '/usr/bin/'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"

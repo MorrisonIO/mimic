@@ -1,5 +1,7 @@
 import random
 import re
+import json
+import os
 
 from django.conf import settings
 from django.shortcuts import render
@@ -26,6 +28,7 @@ def collect_menu_data(products):
     elems = {}
     elems['min_quantity'] = {'title': 'Min Order Quanity'}
     elems['price'] = {'title': 'Price'}
+
     try:
         for product in products:
             if product.price:
@@ -39,15 +42,16 @@ def collect_menu_data(products):
                     elems['min_quantity'][str(product.min_order_qty)] += 1
                 else:
                     elems['min_quantity'][str(product.min_order_qty)] = 1
+
     except Exception as ex:
-        print('EX:', ex)
+        pass
     finally:
         return elems
 
 
 @login_required
 @current_org_required
-def index(request):
+def index(request, group_list=None):
     """
     Shows the list of Products:
     each Category followed by a table of all the Products in that category.
@@ -64,13 +68,14 @@ def index(request):
     user_is_manager = user.has_perm('orders.change_order')
     categories = Category.objects.filter(org=org).order_by('sort', 'name')
     products_by_category = []
-    product_list  = []
+    product_list = []
     for category in categories:
-        products = Product.objects.filter(categories__in=[category], status__exact='av').distinct().order_by('sort', 'name') 
+        products = Product.objects.filter(categories__in=[category], status__exact='av').distinct()\
+                                                                        .order_by('sort', 'name')
         product_list += products
         products_by_category.append(dict(name=category.name, products=products))
     menu_data = collect_menu_data(product_list)
-    if settings.SHOW_NEW_LAYOUTS:
+    if group_list:
         template_to_render = 'products/product_list_new.html'
     else:
         template_to_render = 'products/product_list.html'
@@ -84,8 +89,11 @@ def index(request):
         'menu_data': menu_data
     })
 
-
+@current_org_required
 def search(request):
+    """
+    Search @query_string within products fields
+    """
     query_string, found_products = '', ''
     user = request.user
     org = request.session['current_org']
@@ -94,7 +102,8 @@ def search(request):
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
         product_query = get_query(query_string, ['name', 'part_number'])
-        found_products = Product.objects.filter(product_query).filter(categories__org=request.session['current_org']).order_by('-name')
+        found_products = Product.objects.filter(product_query) \
+                        .filter(categories__org=request.session['current_org']).order_by('-name')
 
     return render(request, 'products/product_list.html', {
         'profile': profile,
@@ -123,7 +132,8 @@ def get_category(request):
     unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
     category_id = request.GET.get('id', None)
     cat = Category.objects.filter(id=category_id)
-    products = Product.objects.filter(categories__in=cat, status__exact='av').distinct().order_by('sort', 'name')
+    products = Product.objects.filter(categories__in=cat, status__exact='av') \
+                                                            .distinct().order_by('sort', 'name')
     rendered = render_to_string('products/product_list_item.html', {
         'products': products,
         'cat': cat[0],
@@ -133,9 +143,16 @@ def get_category(request):
     return HttpResponse(rendered)
 
 def get_product_modal_data(request):
-    import json
+    """
+    Find product by ID and return preview image for it
+    """
     product_id = request.GET.get('id')
     product = Product.objects.get(pk=product_id)
     description = product.description if product else ''
-    preview_images = [{'url': product.preview, 'name': 'Preview Image'}] if product.preview else []
-    return HttpResponse(json.dumps({'description': description, 'preview_images': preview_images}))
+    if os.path.isfile(settings.MEDIA_ROOT + product.preview.name):
+        image_path = '/media/{}'.format(product.preview.name)
+    else:
+        image_path = '/static/img/product_preview.jpg'
+
+    preview_image = [{'url': image_path, 'name': 'Preview Image'}] if product.preview else []
+    return HttpResponse(json.dumps({'description': description, 'preview_image': preview_image}))

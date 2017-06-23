@@ -69,7 +69,6 @@ def create_pdf(request, template_name, template_id):
     """
     messages.warning(request, '')
     if request.method == 'POST':
-        # print('request', request.__dict__)
         form = BrochuresPDFForm(request.POST, request.FILES)
         preview = {}
         if form.is_valid():
@@ -87,7 +86,6 @@ def create_pdf(request, template_name, template_id):
                 preview['report_name'] = 'Report_{}'.format(formated_date)
             return create_preview_from_files(request, preview, template_name)
         else:
-            print('form.errors', form.errors)
             warning_msg = "e|There was a problem with your submission. Fields:{} required" \
                           .format(', '.join(list(key for key, value in form.errors.iteritems())))
             messages.warning(request, warning_msg)

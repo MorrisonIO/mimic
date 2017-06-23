@@ -1,6 +1,7 @@
 # coding: utf8
 
 from cStringIO import StringIO
+from subprocess import Popen, PIPE
 import reportlab
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, elevenSeventeen
@@ -160,8 +161,8 @@ def mimic_stylesheet():
 def MimicBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*1.75) # 252 x 126
@@ -202,7 +203,8 @@ def MimicBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x126 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -337,8 +339,8 @@ def tla_stylesheet():
 def TlaBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -384,7 +386,8 @@ def TlaBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -507,8 +510,8 @@ def harris_stylesheet():
 def HarrisCertificate_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*11, inch*8.5) # width, height. Measured at 72dpi, so this is 792x612
@@ -580,7 +583,8 @@ def HarrisCertificate_1up(request):
 
     # Create a preview image
     command = 'convert -page 792x612 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -754,8 +758,8 @@ def digitalrapids_stylesheet():
 def DrAsiaPacificBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -810,7 +814,8 @@ def DrAsiaPacificBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -972,8 +977,8 @@ def DrAsiaPacificBc_print(request, ordereditem_id):
 def DrMarkhamBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -1032,7 +1037,8 @@ def DrMarkhamBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1183,8 +1189,8 @@ def DrMarkhamBc_print(request, ordereditem_id):
 def DrUkBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -1239,7 +1245,8 @@ def DrUkBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1386,8 +1393,8 @@ def DrUkBc_print(request, ordereditem_id):
 def DrRemoteBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -1451,7 +1458,8 @@ def DrRemoteBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1674,8 +1682,8 @@ def catech_stylesheet():
 def CaTechTorontoBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -1739,7 +1747,8 @@ def CaTechTorontoBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -1993,8 +2002,8 @@ def CaTechTorontoBc_print(request, ordereditem_id):
 def CaTechMontrealBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -2059,7 +2068,8 @@ def CaTechMontrealBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2314,8 +2324,8 @@ def CaTechMontrealBc_print(request, ordereditem_id):
 def CaTechOttawaBc_1up(request):
     # Create output filenames
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     # Set some document specifics
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
@@ -2380,7 +2390,8 @@ def CaTechOttawaBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2684,8 +2695,8 @@ def RossBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/RossBc_bg_1up.tif" % settings.MEDIA_ROOT
     fonts = ross_stylesheet()
@@ -2717,7 +2728,8 @@ def RossBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -2963,8 +2975,8 @@ def TrilliumBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/TrilliumBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -2981,7 +2993,8 @@ def TrilliumBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3166,8 +3179,8 @@ def KafkoEnglishCanadaBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/KafkoEnglishCanadaBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -3184,7 +3197,8 @@ def KafkoEnglishCanadaBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3282,8 +3296,8 @@ def KafkoFrenchCanadaBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/KafkoFrenchCanadaBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -3300,7 +3314,8 @@ def KafkoFrenchCanadaBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3438,8 +3453,8 @@ def KafkoUsBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/KafkoEnglishCanadaBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -3456,7 +3471,8 @@ def KafkoUsBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3607,11 +3623,10 @@ def AlgonquinBc_render(canvas, data, left_coord, bottom_coord, location):
 def AlgonquinMississaugaBc_1up(request):
     # Get the info that the user entered. These fields should match what's in the model.
     form_data = escape(request.session.get('form_data', None))
-
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/AlgonquinBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -3628,7 +3643,8 @@ def AlgonquinMississaugaBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3678,8 +3694,8 @@ def AlgonquinOttawaBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/AlgonquinBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -3696,7 +3712,8 @@ def AlgonquinOttawaBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -3850,8 +3867,8 @@ def SuperiorEnergyBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/SuperiorEnergyBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -3868,7 +3885,8 @@ def SuperiorEnergyBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -4047,8 +4065,8 @@ def SuperiorEnergyAgentBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
     pagesize = (inch*3.5, inch*2) # width, height. Measured at 72dpi, so this is 252x144
     bg_image = "%s/vardata_images/SuperiorAgentBc_bg_1up.tif" % settings.MEDIA_ROOT
 
@@ -4065,7 +4083,8 @@ def SuperiorEnergyAgentBc_1up(request):
 
     # Create a preview image
     command = 'convert -page 252x144 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp
@@ -4866,14 +4885,15 @@ def CaTechBc_1up(request):
 
     # Set some document specifics
     timestamp = str(time()).replace('.','')
-    pdf_file = "%s/previews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
-    img_file = "%s/previews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
+    pdf_file = "%spreviews/%s.pdf" % (settings.MEDIA_ROOT, timestamp)
+    img_file = "%spreviews/%s.gif" % (settings.MEDIA_ROOT, timestamp)
 
     _catech_bc_1up(pdf_file, data)
 
     # Create a preview image
     command = 'convert -page 270x162 %s %s' % (pdf_file, img_file)
-    os.system(command)
+    # execute command in shell
+    Popen([command], stdout=PIPE, shell=True, env={"PATH": settings.PATH_TO_CONVERT_TOOLS}, stderr=PIPE).communicate()
 
     # Set session variable so we can pass filename back to preview
     request.session['filename_prefix'] = timestamp

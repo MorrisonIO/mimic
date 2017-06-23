@@ -497,3 +497,7 @@ form .related-widget-wrapper ul {
 .clearable-file-input input {
     margin-top: 0;
 }
+
+.model-worknote.change-form input#id_order {
+    display: none;
+}

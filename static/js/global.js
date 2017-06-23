@@ -192,12 +192,13 @@ $(document).ready(function(){
                             '</div>'
                 table.find('tbody').html(loader)
                 $.get({
-                    url: 'category',
+                    url: 'category/',
                     data: {
                         id: self.attr('data-id')
                     }
                 }).done(function(res){
                     self.addClass('loaded')
+                    console.log('res', res)
                     table.find('tbody').html(res)
                 })
             }

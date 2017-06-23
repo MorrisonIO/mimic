@@ -103,6 +103,8 @@ def create_packingslip(request, order_id):
     if request.POST.get('submit'):
         printable = True
         date = request.POST.get('date')
+        order.shipping_date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        order.save()
         if request.POST.get('address'):
             ship_to = Address.objects.get(pk=request.POST.get('address'))
         else:
@@ -161,13 +163,15 @@ def create_comm_inv(request, order_id):
     if request.POST.get('submit'):
         printable = True
         date = request.POST.get('date')
+        order.shipping_date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        order.save()
         if request.POST.get('address'):
             ship_to = Address.objects.get(pk=request.POST.get('address'))
         else:
             ship_to = order.ship_to
         for item in ordered_items:
             product = item.inventory_history.product
-            exclude = "exclude_%s" % p.id
+            exclude = "exclude_%s" % product.id
             if not request.POST.get(exclude):
                 qty = "qty_%s" % product.id
                 desc = "desc_%s" % product.id
@@ -183,7 +187,7 @@ def create_comm_inv(request, order_id):
                               'desc': request.POST.get(desc),
                               'hs_num': request.POST.get(hs),
                               'value': request.POST.get(val)}
-                item_dict[p.id] = field_dict
+                item_dict[product.id] = field_dict
     return render(request, 'admin/orders/shipping/comm_inv.html', {
         'date': date,
         'order': order,

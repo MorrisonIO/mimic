@@ -11,9 +11,9 @@
 
     <div id="vardata_preview">
         <a href="{{ pdf_file }}" target="_blank" title="Click to download a PDF of this preview">
-            {#<img src="{{ img_file }}" alt="Preview image" />#}
             <img style="border: none;" src="{% static 'img/page_white_acrobat.png' %}" alt="Preview image" />
             Preview
+            <img class="vardata-preview-image" src="{{ img_file }}" alt="Preview image" />
         </a>
     </div>
 

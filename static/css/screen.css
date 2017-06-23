@@ -89,6 +89,9 @@ a {
     font-style: normal;
     outline: none;
 }
+a .fa {
+    color: #333;
+}
 a:hover {
     color: #222;
     text-decoration: none;
@@ -365,6 +368,15 @@ body#products li#n_products a {
     float: right;
     padding: 12px 20px 0 0;  
 }
+.toogle-product-view {
+    clear: both;
+    float: right;
+    margin-right: 27px;
+    margin-top: 20px;
+}
+.active-product-view{
+    border-bottom: 2px solid #333;
+}
 #page_header form {
     padding: 7px;
     line-height: 16px;
@@ -454,6 +466,10 @@ div#vardata_preview {
     padding: 15px;
 }
 div#vardata_preview a img { border: 1px solid #aaa; }
+div#vardata_preview .vardata-preview-image { 
+    display: block;
+    margin: 0 auto;
+}
 div#vardata_preview a:hover img { border: 1px solid #777; }
 
 p.order_options { margin-bottom: 20px; } /* add/cancel buttons on cart summary */

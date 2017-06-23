@@ -7,6 +7,7 @@ from django.core.mail import send_mail, mail_managers
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from products.models import Product
 from orgs.models import Org
@@ -116,6 +117,7 @@ class Order(models.Model):
     org = models.ForeignKey(Org) 
     status = models.CharField(max_length=2, choices=STATUS_CHOICES)
     date = models.DateTimeField('Placed on', blank=True)
+    shipping_date = models.DateField('Shipping date', help_text="Set on shipping pages", blank=True, null=True)
     due_date = models.DateField(help_text="yyyy-mm-dd")
     po_number = models.CharField("P.O. number", max_length=50, blank=True)
     approved_by = models.ForeignKey(User, blank=True, null=True, related_name="orders_approved_by_set")
@@ -131,7 +133,7 @@ class Order(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
-    @permalink 
+    @permalink
     def get_absolute_url(self):
         return ('orders:order_detail', None, { 'order_id': self.id })
 
@@ -145,7 +147,7 @@ class Order(models.Model):
         txt = ''
         num = str(time()).split('.')[0] # num of seconds since epoch
         # 4 random consonants. No vowels so we don't get any, uh, 4 letter words. :-p
-        chars = random.sample(['B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X','Z'], 4) 
+        chars = random.sample(['B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X','Z'], 4)
         for c in chars: txt += c
         return u'%s-%s' % (txt, num)
 
@@ -187,7 +189,7 @@ class Order(models.Model):
             worknote = WorkNote.objects.get(order=self)
             return '<a href="/admin/orders/worknote_view/%s/" title="%s">View</a>\
              / <a href="/admin/orders/worknote/%s/">Edit</a>' % (worknote.id, worknote.status, worknote.id)
-        except: 
+        except:
             return '<a href="/admin/orders/worknote/add/">Add</a>'
     worknotes_links.allow_tags = True  # allow HTML tags
     worknotes_links.short_description = 'Work notes'
@@ -225,13 +227,13 @@ class Order(models.Model):
 
     def printed_button(self):
         """
-        Add a button to checking 'printed' field, or display field if value equals True 
+        Add a button to checking 'printed' field, or display field if value equals True
         """
         if self.printed == True:
             return 'Printed'
         else:
             printed = self.printed
-            template  = '<input type="hidden" size="10" name="order_id" value="%s">\
+            template = '<input type="hidden" size="10" name="order_id" value="%s">\
                         <input type="button" class="" value="Confirm">' % self.id
             return format_html(template)
 
@@ -302,7 +304,9 @@ class InventoryHistory(models.Model):
 
     def get_line_item(self):
         """
-        Returns a dictionary of quantity, product name, any variable data, and additional details (part number, revision, link) of an ordered product. Called by get_text_line_item() and get_html_line_item() below.
+        Returns a dictionary of quantity, product name, any variable data,
+        and additional details (part number, revision, link) of an ordered product.
+        Called by get_text_line_item() and get_html_line_item() below.
         """
         var_data = {}
         href_path = ''
@@ -323,6 +327,10 @@ class InventoryHistory(models.Model):
         }
 
 
+    def link_to_order(self):
+        order = Order.objects.get(pk=self.order_id)
+        return mark_safe('<a href="/admin/orders/order/{}/change">{}</a>'.format(self.order_id, order.name or 'Order'))
+
 class OrderedItem(models.Model):
     """
     An ordered item is one product on an order.
@@ -339,7 +347,8 @@ class WorkNote(models.Model):
     Used to keep track of current progress of work on an order -- who's done what,
     current status, etc -- basically a freeform area to jot notes in.
     """
-    order = models.ForeignKey(Order, unique=True)
+    order = models.ForeignKey(Order, unique=True, help_text="Please click on the magnifying glass \
+                                            and then select the name of the order from the popup")
     staff = models.ManyToManyField(User,
                                    help_text="Select the Mimic employees involved in this order.",
                                    verbose_name="Mimic staff",
