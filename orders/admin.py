@@ -34,7 +34,7 @@ class OrderAdmin(admin.ModelAdmin):
             name_filter = Q(user_name=username) 
             form.base_fields['additional_file'].queryset = form.base_fields['additional_file'] \
                                                                     .queryset \
-                                                                    .filterid_filter | name_filter)
+                                                                    .filter(id_filter | name_filter)
 
         return form
 
