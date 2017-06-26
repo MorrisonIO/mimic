@@ -233,9 +233,18 @@ def fastorder_add(request):
     We need this to avoid having to deal with OrderedItems and InventoryHistory,
     adding Products on the fly, and entering fields we know already to present an easier UI.
     """
-# Does not work: putting choices for dropdowns in FastOrderForm (as choices= in the field definition). We can the show the dropdown in the template with {{ form.job1_product }}, but if you add a new product via the + javascript, it fails validation because it's not part of the originally specified choices ("Select a valid choice. That choice is not one of the available choices.")
-# Does not work: specify choices here in the view, pass them into the template, and construct the <select>s manually. Same error as above.
-# Too complicated for me: creating a Field subclass in the form and manually doing Field.clean(). New items created with the + are displayed ok and then pass validation, but if some other validation fails and the page reloads, the new item we created is not in the dropdown.
+    # Does not work: putting choices for dropdowns in FastOrderForm (as choices= in the field definition). 
+    # We can the show the dropdown in the template with {{ form.job1_product }}, 
+    # but if you add a new product via the + javascript, it fails validation because 
+    # it's not part of the originally specified choices ("Select a valid choice. 
+    # That choice is not one of the available choices.")
+    #
+    # Does not work: specify choices here in the view, pass them into the template, 
+    # and construct the <select>s manually. Same error as above.
+    #
+    # Too complicated for me: creating a Field subclass in the form and manually doing Field.clean().
+    # New items created with the + are displayed ok and then pass validation,
+    # but if some other validation fails and the page reloads, the new item we created is not in the dropdown.
     errors = ''
     if request.method == "POST":  # validate and save
         form = FastOrderForm(request.POST)

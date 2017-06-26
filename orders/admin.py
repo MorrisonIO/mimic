@@ -1,11 +1,27 @@
-from django.contrib import admin
+from django import forms
+from django.contrib import admin, messages
 from django.db.models import Q, CharField
 from django.core import urlresolvers
+from django.shortcuts import redirect
 from daterange_filter.filter import DateRangeFilter
+from .views import subtract_inventory
 
 from .models import Order, InventoryHistory, OrderedItem, WorkNote
 from products.models import Product
 from uploads.models import Upload
+from orgs.models import Org
+from products.models import Product
+
+class FastOrderForm(forms.ModelForm):
+    org_choices = [('', '---------'),]
+    product_choices = [('', '---------'),]
+    try:
+        org_choices += [(org.id, org.name) for org in Org.objects.all()]
+        product_choices += [(prod.id, prod.name) for prod in Product.objects.all()]
+    except Exception as ex:
+        print "Error FastOrderForm: {}".format(ex)
+    job_product = forms.ChoiceField(required=True, choices=product_choices, widget=forms.Select(attrs={'class':'required'}))
+    job_qty = forms.IntegerField(required=True, widget=forms.TextInput(attrs={'size':'5', 'class':'required'}))
 
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', ('due_date', DateRangeFilter), ('date', DateRangeFilter), 'org')
@@ -14,12 +30,20 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('name', 'invoice_number', 'status', 'org__name', 'po_number')
     raw_id_fields = ('ship_to',)
     date_hierarchy = ('date')
+    form = FastOrderForm
+
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super(OrderAdmin, self).get_fieldsets(request, obj)
+        self.exclude += ('job_product', 'job_qty',)
+        return fieldsets
 
     def get_form(self, request, obj=None, **kwargs):
         additional_file = obj.additional_file if obj else None
         username = request.user.username
         self.exclude = ()
-        
+
+        self.raw_id_fields = ()
         if not (request.user.is_superuser or request.user.is_staff):
             self.exclude = ('shipping_date',)
         self.exclude += ('saved',)
@@ -38,7 +62,6 @@ class OrderAdmin(admin.ModelAdmin):
 
         return form
 
-
     def po(self, obj):
         """
         Display po_number like 'PO'
@@ -54,7 +77,6 @@ class OrderAdmin(admin.ModelAdmin):
 
     notes.allow_tags=True
 
-
     def descriptions(self, obj):
         """
         Display all products descriptions included in this order
@@ -65,7 +87,6 @@ class OrderAdmin(admin.ModelAdmin):
             products_descriptions = ',\n'.join(Product.objects.get(id=el.product_id).description for el in ih_objs \
                                             if Product.objects.get(id=el.product_id).description)
         return products_descriptions
-
 
     def part_numbers(self, obj):
         """
@@ -78,7 +99,6 @@ class OrderAdmin(admin.ModelAdmin):
                                             if Product.objects.get(id=el.product_id).part_number)
         return products_pns
 
-
     def quantity(self, obj):
         """
         Display total products amount in this order
@@ -87,6 +107,29 @@ class OrderAdmin(admin.ModelAdmin):
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         products_descriptions = sum(el.amount for el in ih_objs if el.amount)
         return products_descriptions
+
+    def save_model(self, request, obj, form, change):
+        """
+        Saving order object and creation InventoryHistory and OrderItem records in DB
+        """
+        super(OrderAdmin, self).save_model(request, obj, form, change)
+
+        obj.user = request.user
+        amount  = request.POST.get('job_qty', [])
+
+        if not change and amount:
+            try:
+                product_id = request.POST.get('job_product', [])
+                product = Product.objects.get(pk=product_id)
+                subtract_inventory(product, obj, amount, obj.placed_by, 'Admin order', obj.date)
+            except Exception as ex:
+                messages.warning(request, 'Order has no been saved. \
+                                        Please check data on fields and try again.')
+                redirect('/admin/orders/order')
+        else:
+            messages.warning(request, 'Order has no been saved. \
+                                        Please check data on fields and try again.')
+            redirect('/admin/orders/order')
 
 
 class InventoryHistoryAdmin(admin.ModelAdmin):

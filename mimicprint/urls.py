@@ -69,7 +69,7 @@ urlpatterns = [
     url(r'^upload/', include('uploads.urls')),
 
     # Admin
-    url(r'^admin/orders/fastorder/add/$', o_views.fastorder_add),
+    url(r'^admin/orders/fastorder/add/$', o_views.fastorder_add, name='fastorder'),
     url(r'^admin/orders/products_ordered/(?P<order_id>\d+)/$', o_views.products_ordered),
     url(r'^admin/orders/worknote_view/(?P<worknote_id>\d+)/$', o_views.worknote_view),
     url(r'^admin/orders/dockets/(?P<order_id>\d+)/$', o_views.create_docket),
