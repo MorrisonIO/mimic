@@ -151,6 +151,10 @@ class WorkNoteAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ('order',)
 
+    class Media:
+        js = ('admin/js/worknote.js',)
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(InventoryHistory, InventoryHistoryAdmin)
 admin.site.register(OrderedItem, OrderedItemAdmin)

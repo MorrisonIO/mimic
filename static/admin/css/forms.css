@@ -499,5 +499,5 @@ form .related-widget-wrapper ul {
 }
 
 .model-worknote.change-form input#id_order {
-    display: none;
+    cursor: no-drop;
 }
