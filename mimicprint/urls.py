@@ -18,6 +18,7 @@ import debug_toolbar
 
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import views as django_auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
@@ -32,21 +33,21 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^page/', views.page),
     # Authentication
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'mimicprint.views.logout_user', name='logout'),
+    url(r'^accounts/login/$', django_auth_views.login, name='login'),
+    url(r'^accounts/logout/$', views.logout_user, name='logout'),
     url(r'^accounts/profile/$', views.profile, name='profile'),
     url(r'^accounts/password_change/$',
-        view = 'django.contrib.auth.views.password_change',
+        django_auth_views.password_change,
         name = 'password_change'
     ),
-    url(r'^accounts/password_change/done/$', 'django.contrib.auth.views.password_change_done', name = 'password_change_done'),
+    url(r'^accounts/password_change/done/$', django_auth_views.password_change_done, name = 'password_change_done'),
     url(r'^accounts/password_reset/$',
-        'django.contrib.auth.views.password_reset',
+        django_auth_views.password_reset,
         name = 'password_reset'
     ),
-    url(r'^accounts/password_reset/done/$', 'django.contrib.auth.views.password_reset_done', name='password_reset_done'),
-    url(r'^accounts/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', name='password_reset_confirm'),
-    url(r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete', name='password_reset_complete'),
+    url(r'^accounts/password_reset/done/$', django_auth_views.password_reset_done, name='password_reset_done'),
+    url(r'^accounts/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', django_auth_views.password_reset_confirm, name='password_reset_confirm'),
+    url(r'^reset/done/$', django_auth_views.password_reset_complete, name='password_reset_complete'),
 
 
     url(r'^oos/$',

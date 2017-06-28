@@ -250,7 +250,7 @@ class InventoryHistory(models.Model):
     product = models.ForeignKey(Product)
     order = models.ForeignKey(Order, blank=True, null=True, help_text="<strong>Leave this blank</strong>\
      if you are making a manual adjustment to inventory levels.")
-    amount = models.IntegerField(max_length=15, help_text="Enter the amount the inventory is changing by,\
+    amount = models.IntegerField(help_text="Enter the amount the inventory is changing by,\
          <em>not</em> the new inventory level. \
          You may enter negative numbers. \
          For example, if you are adding 100 pieces of stock,\
