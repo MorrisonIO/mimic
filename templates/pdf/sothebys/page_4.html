@@ -1,0 +1,483 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>FRAME</title>
+    <style>
+        @page {
+            size: portrait;
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
+        }
+        input, textarea {
+            border: none;
+        }
+        .flip-vertical {
+            -moz-transform: scale(1, -1);
+            -webkit-transform: scale(1, -1);
+            -o-transform: scale(1, -1);
+            transform: scale(1, -1);
+            filter: FlipV;
+            -ms-filter: "FlipV";
+        }
+        
+        .flip-horizontal {
+            -moz-transform: scale(-1, 1);
+            -webkit-transform: scale(-1, 1);
+            -o-transform: scale(-1, 1);
+            transform: scale(-1, 1);
+            filter: FlipH;
+            -ms-filter: "FlipH";
+        }
+        
+        .template-page {
+            /*background: #117f46;*/
+            border: 1px solid #333;
+            height: 297mm;
+            width: 210mm;
+            position: relative;
+            page-break-after: always;
+        }
+        
+        @media print {
+            html,
+            body {
+                size: portrait;
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+            }
+            * {
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+            .template-page {
+                size: landscape;
+                page-break-after: always;
+            }
+        }
+        
+        .template-main-photo {
+            width: 100%;
+            height: 250mm;
+            line-height: 250mm;
+            text-align: center;
+            display: block;
+        }
+        
+        .header {
+            position: abslute;
+            top: 0;
+            width: 100%;
+            height: 2.5cm;
+            background: #00295c;
+        }
+        .txt-15 {
+            font-size: 15px !important;
+        }
+        .txt-18 {
+            font-size: 18px !important;
+        }
+        .txt-bold {
+            font-weight: bold;
+        }
+        .txt-upper {
+            text-transform: uppercase;
+        }
+        .template-footer {
+            height: 2.5cm;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            background: #00295c;
+        }
+        
+        .template-creds {
+            /*float: right;*/
+            position: relative;
+            height: 100%;
+        }
+        
+        .template-footer-text {
+            height: 100%;
+            vertical-align: top;
+            margin-top: 25px;
+            margin-right: 20px;
+        }
+        
+        .template-creds>* {
+            position: absolute;
+        }
+        
+        .template-textos {
+            top: 25px;
+            right: 220px;
+            position: absolute;
+        }
+        
+        .template-logo {
+            height: 1.5cm;
+            right: 20px;
+            top: 20px;
+        }
+        
+        .template-first-text,
+        .template-second-text {
+            color: #fff;
+            font-size: 15px;
+            letter-spacing: 1px;
+            font-family: arial;
+            position: absolute;
+            left: 20px;
+        }
+        
+        .template-first-text {
+            top: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .template-second-text {
+            top: 40px;
+            font-size: 14px;
+            font-family: "Times New Roman";
+            color: "#b6b7bb"
+        }
+        
+        .template-content {
+            height: 247mm;
+            position: relative;
+            /*             background-color: #54e4ff; */
+        }
+        
+        /*.template-content img,*/
+        .template-content p {
+            /*position: absolute;*/
+        }
+        .image-box-1 {
+            float: right;
+            width: 60%;
+            height: 50%;
+        }
+        .image-box-1 > div {
+            height: 50%;
+            padding-top: 5px;
+        }
+        .image-box-1::after{
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .img-main {
+            float: left;
+            width: 100%;
+            height: 50%;
+            text-align: center;
+            line-height: 100mm;
+            /* should be the same as height value */
+        }
+        .img-main img {
+            width: 100%;
+            height: 100%;
+        }
+        .img1 {
+            /*right: 0;
+            top: 50%;*/
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 100mm;
+            /* should be the same as height value */
+        }
+        
+        .img2 {
+            /*right: 0;
+            top: 75%;*/
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 100mm;
+            /* should be the same as height value */
+        }
+        
+        .textField1 {
+            left: 100mm;
+            top: 6mm;
+        }
+        
+        .textField2 {
+            left: 100mm;
+            top: 116mm;
+        }
+        
+        .text-block {
+            float: left;
+            width: 32%;
+            margin-left: 40px;
+            height: 50%;
+        }
+        
+        .text-block .usertext1 {
+            width: 100%;
+            min-height: 140px;
+            margin-top: 25px;
+            font-size: 8px !important;
+            line-height: 11px;
+            text-align: justify;
+            max-height: 160px;
+        }
+        
+        .line {
+            border-top: 2px solid #000;
+            height: 2px;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .fill {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+        }
+        
+        .text-block p {
+            position: relative;
+            margin: 0;
+        }
+        
+        .float-left {
+            float: left;
+        }
+        
+        .float-right {
+            float: right;
+        }
+        
+        .usertext2 {
+            height: 45px;
+        }
+        .usertext2 ul {
+            padding-left: 13px;
+            margin: 0px;
+        }
+        .usertext2 p {
+            font-size: 13px;
+        }
+        .usertext2 li{
+            font-size: 9px;
+        }
+        .sothebysrealty-creds {
+            width: 99%;
+            position: relative !important;
+            margin-top: 0px;
+            left: 0;
+            border: 1px solid black;
+        }
+        
+        .footer-ads-text {
+            width: 350px;
+            text-align: justify;
+            left: 45px;
+            top: 15px;
+            color: #fff;
+            font-size: 7px;
+            line-height: 8px;
+            font-family: Arial;
+        }
+        
+        .small-text {
+            font-size: 10px;
+        }
+
+        .images-block {
+            height: 50%;
+        }
+        /*.small-block {
+            position: relative;
+            text-align: center;
+        }*/
+        /*.images-block img{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .small-block div {
+            display: inline-block;
+            padding: 4px 2px;
+        }*/
+
+        .grid > div {
+            height: 100%;
+        }
+        .col-1-2 {
+            width: 50%;
+        }
+        .col-100 {
+            width: 100%;
+        }
+        .grid:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        [class*='col-'] {
+            float: left;
+        }
+        *, *:after, *:before {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        [class*='col-'] {
+            padding-right: 5px;
+            padding-top: 5px;
+        }
+        [class*='col-']:last-of-type {
+            padding-right: 0;
+        }
+        .small-block {
+            padding-top: 35px;
+        }
+        .small-block > div {
+            margin: 0 auto;
+        }
+
+        .small-block img,
+        .big-block img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .big-block {
+            padding: 10px;
+        }
+        .big-block > img{
+            height: 50%;
+            width: 50%;
+        }
+        .placeholder:empty::before {
+            content: attr(data-placeholder);
+        }
+        .sales-image img {
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="template-pages">
+        <div class="template-page">
+
+            <div class="header flip-vertical flip-horizontal">
+                <div class="template-creds flip-vertical">
+                    <p class="template-first-text placeholder" data-placeholder="Text 1">{{context.text1}}</p>
+                    <p class="template-second-text placeholder" data-placeholder="Text 2">{{context.text2}}</p>
+                    <img class='template-logo' src='/static/img/sothebysrealty-logo.png' />
+
+                </div>
+            </div>
+
+            <div class="template-content">
+                {% if context.main_photo and context.main_photo|length > 0 %}
+                    <div class="img-main flip-vertical flip-horizontal">
+                        <img class="flip-vertical temp-img" alt="Main image. Size: 1582x932" src="{{context.main_photo}}" />
+                    </div>
+                {% else %}
+                    <div class="img-main">
+                        <img class="temp-img" alt="Main image. Size: 1582x932" src="{{context.main_photo}}" />
+                    </div>
+                {% endif %}
+                <div class="image-box-1">
+                    <div>
+                        <img class="img1 temp-img" alt="Photo 1. Size: 950x456" src="{{context.image1}}" />
+                    </div>
+                    <div>
+                        <img class="img1 temp-img" alt="Photo 2. Size: 950x456" src="{{context.image2}}" />
+                    </div>
+                </div>
+                <div class="text-block">
+                    <div class="fill">
+                        <div>
+                            <p class="usertext1 placeholder" data-placeholder="Text 3">{{context.text3}}</p>
+                        </div>
+                        <p class="placeholder txt-upper" style="margin-top: 15px; font-size: 11px;" data-placeholder="Text 4 (City)" >{{context.text4}}</p>
+                        <p class="placeholder txt-upper" style="margin-top: 4px; font-size: 11px;" data-placeholder="Text 5 (Address)" >{{context.text5}}</p>
+                        <p class="placeholder txt-15 txt-bold" style="margin-top: 8px;" data-placeholder="Text 6 (Price)" >{{context.text6}}</p>
+                        <div class="line"></div>
+                        <div class="usertext2">
+                            <ul class="float-left">
+                                <li class="placeholder" data-placeholder="Text 7" >{{context.text7}}</li>
+                                <li class="placeholder" data-placeholder="Text 8" >{{context.text8}}</li>
+                                <li class="placeholder" data-placeholder="Text 9" >{{context.text9}}</li>
+                                <li class="placeholder" data-placeholder="Text 10" >{{context.text10}}</li>
+                            </ul>
+                        </div>
+                        <div class="line"></div>
+                        <div class="sales-image">
+                            <img alt='sales' src="/static/img/sothebys_sales.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="template-footer ">
+                <div class="template-creds ">
+                    <p class="footer-ads-text">
+                        This material is based upon information that we consider reliable, but because it has been supplied by third parties, we
+                        cannot represent that it is accurate or complete, and it should not be relied upon as such. This
+                        offering is subject to errors, omissions, changes, including price, or withdrawal without notice.
+                        © MMVI Sotheby’s International Realty Affiliates LLC. All Rights Reserved. Sotheby’s International
+                        Realty ® is a licensed trademark to Sotheby’s International Realty Affiliates LLC. An Equal Opportunity
+                        Company. Equal Housing Opportunity. Each Office Is Independently Owned And Operated. SIR40
+                    </p>
+                    <img class='template-logo' src='/static/img/sothebysrealty-logo.png' />
+                </div>
+            </div>
+        </div>
+
+
+        <div class="template-page">
+            <div class="images-block small-block">
+                <div style="width: 90%; height: 45%;">
+                    <img class="temp-img" src="{{context.image3}}" alt="Photo 3. Size: 1424x472" />
+                </div>
+                <div style="width: 90%; height: 45%;" class='grid'>
+                    <div class='col-1-2'>
+                        <img class="temp-img" src="{{context.image4}}" alt="Photo 4. Size: 702x462" />
+                    </div>
+                    <div class='col-1-2'>
+                        <img class="temp-img" src="{{context.image5}}" alt="Photo 5. Size: 702x462" />
+                    </div>
+                </div>
+            </div>
+            <div class="images-block big-block">
+                <div class='grid' style="margin: 0 auto; height: 50%;">
+                    <div class="col-1-2">
+                        <img class="temp-img" src="{{context.image6}}" alt="Photo 6. Size: 760x530" />
+                    </div>
+                    <div class="col-1-2">
+                        <img class="temp-img" src="{{context.image7}}" alt="Photo 7. Size: 760x530" />
+                    </div>
+                </div>
+                <div class='grid' style="margin: 0 auto; height: 50%;">
+                    <div class="col-1-2">
+                        <img class="temp-img" src="{{context.image8}}" alt="Photo 8. Size: 760x530" />
+                    </div>
+                    <div class="col-1-2">
+                        <img class="temp-img" src="{{context.image9}}" alt="Photo 9. Size: 760x530" />
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>
