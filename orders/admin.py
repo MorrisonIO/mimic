@@ -127,8 +127,8 @@ class OrderAdmin(admin.ModelAdmin):
                                         Please check data on fields and try again.')
                 redirect('/admin/orders/order')
         else:
-            messages.warning(request, 'Order has no been saved. \
-                                        Please check data on fields and try again.')
+            # messages.warning(request, 'Order has no been saved. \
+            #                             Please check data on fields and try again.')
             redirect('/admin/orders/order')
 
 
