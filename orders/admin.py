@@ -20,8 +20,8 @@ class FastOrderForm(forms.ModelForm):
         product_choices += [(prod.id, prod.name) for prod in Product.objects.all()]
     except Exception as ex:
         print "Error FastOrderForm: {}".format(ex)
-    job_product = forms.ChoiceField(required=True, choices=product_choices, widget=forms.Select(attrs={'class':'required'}))
-    job_qty = forms.IntegerField(required=True, widget=forms.TextInput(attrs={'size':'5', 'class':'required'}))
+    job_product = forms.ChoiceField(required=False, choices=product_choices, widget=forms.Select(attrs={'class':'required'}))
+    job_qty = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'size':'5', 'class':'required'}))
 
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', ('due_date', DateRangeFilter), ('date', DateRangeFilter), 'org')
