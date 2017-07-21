@@ -40,7 +40,7 @@
             <h3>ADDITIONAL INFO</h3>
             Comments: {% if order.additional_info %}{{ order.additional_info }}{% else %}None.{% endif %}<br>
             <b>P.O. Number:</b> {% if order.po_number %}{{ order.po_number }}{% else %}None.{% endif %}<br>
-            File: {% if order.additional_file %}<a href="{{host}}">Download</a>{% else %}None{% endif %}
+            File: {% if order.additional_file %}<a href="http://{{host}}">Download</a>{% else %}None{% endif %}<br>
             Print Ready: {% if preview %} <a href="http://{{preview}}" target="_blank" title="Click to download a PDF of this preview">Download</a>{% else %} None {% endif %}
         </p>
 
