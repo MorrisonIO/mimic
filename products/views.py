@@ -120,16 +120,22 @@ def get_category(request):
     """
     Return category object
     """
-    org = request.session['current_org']
+
+    org = request.session.get('current_org', None)
     user = request.user
     user_is_manager = user.has_perm('orders.change_order')
     try:
         profile = UserProfile.objects.get(user=user, org=org)
     except MultipleObjectsReturned as mor_ex:
         profile = UserProfile.objects.filter(user=user, org=org)[0]
-    except ObjectDoesNotExist as odne_ex:
+    except Exception as ex:
         profile = None
-    unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
+
+    try:
+        unrestricted_qtys = user_is_manager or profile.unrestricted_qtys
+    except Exception as ex:
+        unrestricted_qtys = False
+
     category_id = request.GET.get('id', None)
     cat = Category.objects.filter(id=category_id)
     products = Product.objects.filter(categories__in=cat, status__exact='av') \
