@@ -11,7 +11,7 @@ def current_org_required(f):
         This allows the user to select an org and remain on the same page.
     """
     def wrap(request, *args, **kwargs):
-        if 'current_org' not in request.session.keys() or not request.session['current_org']:
+        if not request.session.get('current_org', None):
             messages.error(request, "e|An active organization must be set to view this page.")
             return render(request, 'no_current_org.html', {})
         return f(request, *args, **kwargs)

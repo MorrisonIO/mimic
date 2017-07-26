@@ -97,10 +97,22 @@ def put_in_cart(request, product, unique_id, quantity, overwrite=False):
     the amount ordered is incremented. Overwrite allows the user
     to directly set the ordered amount from the cart summary.
     """
+
     user = request.user
-    org = request.session['current_org']
-    profile = UserProfile.objects.get(user=user, org=org)
-    unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
+    user_is_manager = user.has_perm('orders.change_order')
+    current_org = request.session.get('current_org', None)
+
+    try:
+        profile = UserProfile.objects.get(user=user, org=current_org)
+    except MultipleObjectsReturned as mor_ex:
+        profile = UserProfile.objects.filter(user=user, org=current_org)[0]
+    except Exception as ex:
+        profile = None
+
+    try:
+        unrestricted_qtys = user_is_manager or profile.unrestricted_qtys
+    except Exception as ex:
+        unrestricted_qtys = False
 
     # make sure amount ordered was not lower than any min set
     if product.min_order_qty and quantity < product.min_order_qty and not unrestricted_qtys:
@@ -239,10 +251,23 @@ def cart_summary(request):
     """
     Shows the contents of an order so far (ie the 'cart').
     """
+
     user = request.user
-    org = request.session['current_org']
-    profile = UserProfile.objects.get(user=user, org=org)
-    unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
+    user_is_manager = user.has_perm('orders.change_order')
+    current_org = request.session.get('current_org', None)
+
+    try:
+        profile = UserProfile.objects.get(user=user, org=current_org)
+    except MultipleObjectsReturned as mor_ex:
+        profile = UserProfile.objects.filter(user=user, org=current_org)[0]
+    except Exception as ex:
+        profile = None
+
+    try:
+        unrestricted_qtys = user_is_manager or profile.unrestricted_qtys
+    except Exception as ex:
+        unrestricted_qtys = False
+
     cart = request.session.get('cart', None) or Cart()
     return render(request, 'orders/cart_index.html', {
         'cart': cart,

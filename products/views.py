@@ -56,17 +56,24 @@ def index(request, group_list=None):
     Shows the list of Products:
     each Category followed by a table of all the Products in that category.
     """
+
     user = request.user
-    org = request.session['current_org']
-    try:
-        profile = UserProfile.objects.get(user=user, org=org)
-    except MultipleObjectsReturned as mor_ex:
-        profile = UserProfile.objects.filter(user=user, org=org)[0]
-    except ObjectDoesNotExist as odne_ex:
-        profile = None
-    unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
     user_is_manager = user.has_perm('orders.change_order')
-    categories = Category.objects.filter(org=org).order_by('sort', 'name')
+    current_org = request.session.get('current_org', None)
+
+    try:
+        profile = UserProfile.objects.get(user=user, org=current_org)
+    except MultipleObjectsReturned as mor_ex:
+        profile = UserProfile.objects.filter(user=user, org=current_org)[0]
+    except Exception as ex:
+        profile = None
+
+    try:
+        unrestricted_qtys = user_is_manager or profile.unrestricted_qtys
+    except Exception as ex:
+        unrestricted_qtys = False
+
+    categories = Category.objects.filter(org=current_org).order_by('sort', 'name')
     products_by_category = []
     product_list = []
     for category in categories:
@@ -96,14 +103,26 @@ def search(request):
     """
     query_string, found_products = '', ''
     user = request.user
-    org = request.session['current_org']
-    profile = UserProfile.objects.get(user=user, org=org)
-    unrestricted_qtys = user.has_perm('orders.change_order') or profile.unrestricted_qtys
+    user_is_manager = user.has_perm('orders.change_order')
+    current_org = request.session.get('current_org', None)
+
+    try:
+        profile = UserProfile.objects.get(user=user, org=current_org)
+    except MultipleObjectsReturned as mor_ex:
+        profile = UserProfile.objects.filter(user=user, org=current_org)[0]
+    except Exception as ex:
+        profile = None
+
+    try:
+        unrestricted_qtys = user_is_manager or profile.unrestricted_qtys
+    except Exception as ex:
+        unrestricted_qtys = False
+
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
         product_query = get_query(query_string, ['name', 'part_number'])
         found_products = Product.objects.filter(product_query) \
-                        .filter(categories__org=request.session['current_org']).order_by('-name')
+                        .filter(categories__org=current_org).order_by('-name')
 
     return render(request, 'products/product_list.html', {
         'profile': profile,
@@ -121,13 +140,14 @@ def get_category(request):
     Return category object
     """
 
-    org = request.session.get('current_org', None)
     user = request.user
     user_is_manager = user.has_perm('orders.change_order')
+    current_org = request.session.get('current_org', None)
+
     try:
-        profile = UserProfile.objects.get(user=user, org=org)
+        profile = UserProfile.objects.get(user=user, org=current_org)
     except MultipleObjectsReturned as mor_ex:
-        profile = UserProfile.objects.filter(user=user, org=org)[0]
+        profile = UserProfile.objects.filter(user=user, org=current_org)[0]
     except Exception as ex:
         profile = None
 
