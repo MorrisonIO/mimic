@@ -176,7 +176,8 @@ def personal_info(request):
     else:
         form = PersonalInfoForm()
 
-    brochure_info = request.session['brochure_info']
+    brochure_info = request.session.get('brochure_info', None)
+
     if not brochure_info or 'template_id' not in brochure_info:
         return HttpResponseRedirect(reverse('brochures:brochures'))
 

@@ -84,7 +84,7 @@
         });
         function showDesc(id){
             $.ajax({
-                url: 'get_product_modal_data',
+                url: 'get_product_modal_data/',
                 data: {'id': id},
                 success: function(response){
                     var modal = $("#theModal")
