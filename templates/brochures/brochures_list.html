@@ -20,6 +20,9 @@
     $(document).ready(function(e){
         function closeModal(){
            $(".modal").removeClass("active");
+           
+           // fix jquery.blueimp-gallery.js bug with overflow
+           $('body').css('overflow', '')
         }
 
         $(".modal-content .close, .modal").on("click", function(){
