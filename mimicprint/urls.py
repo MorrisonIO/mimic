@@ -32,6 +32,7 @@ from products import admin_views as p_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^page/', views.page),
+    url(r'^page_name/(?P<page_name>.+)/$', views.page_name),
     # Authentication
     url(r'^accounts/login/$', django_auth_views.login, name='login'),
     url(r'^accounts/logout/$', views.logout_user, name='logout'),

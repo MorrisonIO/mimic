@@ -28,6 +28,15 @@ def page(request):
     return render(request, 'page.html', {})
 
 
+def page_name(request, page_name=None):
+    """  Render page by name  """
+    try:
+        page = render(request, '{}.html'.format(page_name), {})
+        return page
+    except Exception as ex:
+        return HttpResponse('Ooops... Smth was wrong...')
+
+
 @login_required
 def dashboard(request):
     """
