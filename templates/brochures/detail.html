@@ -32,7 +32,7 @@
             </p>
         {% for text_n in template.num_of_textfields|times %}
             <p>
-                <label for="secondTextBox" style="display: inline; padding-right: 1em;">Some text {{text_n}}</label>
+                <label for="secondTextBox" style="display: inline; padding-right: 1em;">Text field {{text_n}}</label>
                 <textarea type="text" id="text{{text_n}}" name="text{{text_n}}"></textarea>
             </p>
         {% endfor %}

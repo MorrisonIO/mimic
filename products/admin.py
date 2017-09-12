@@ -1,6 +1,6 @@
 import os
 
-from django.db.models import FileField
+from django.db.models import FileField, ImageField
 from django.contrib import admin
 from models import Product, Category, ComponentRatio
 
@@ -41,21 +41,6 @@ class ProductAdmin(admin.ModelAdmin):
     def save_form(self, request, form, change):
         """Deletes the file from fields FileField/ImageField if
         their values have changed"""
-
-        obj = form.instance
-        if obj:
-            for field in obj._meta.fields:
-                if not isinstance(field, FileField):
-                    continue
-
-                path = getattr(obj, field.name, None)
-                if path:
-                    if field.name in form.changed_data or form.data.get('clear_image_'+field.name, ''):
-                        try:
-                            os.unlink(path.path)
-                        except OSError:
-                            pass
-                        setattr(obj, field.name, None)
 
         return super(ProductAdmin, self).save_form(request, form, change)
 

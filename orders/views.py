@@ -7,6 +7,7 @@ import os
 from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import MultipleObjectsReturned
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.files import File

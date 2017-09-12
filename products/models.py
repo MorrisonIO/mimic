@@ -1,11 +1,16 @@
+from __future__ import unicode_literals
+
+import random
+import os
 import simplejson as json
+
+from django.db.models.signals import pre_save
 from django.db import models
 from django.db.models import permalink
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.dispatch.dispatcher import receiver
 from orgs.models import Org
-import string
-import random
 
 #
 # NOTE: Many Mimic internal-specific things in this file
@@ -96,6 +101,9 @@ class Product(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
+    def __str__(self):
+        return u'%s' % self.name
+
     class Meta:
         ordering = ['name']
 
@@ -116,6 +124,18 @@ class Product(models.Model):
         nums = random.sample(range(0,9), 7)
         for n in nums: uid += str(n)
         return uid
+
+@receiver(pre_save, sender=Product)
+def update_product_image(sender, instance, *args, **kwargs):
+    if instance.pk:
+        old_preview = Product.objects.get(pk=instance.pk).preview
+        if instance.preview != old_preview:
+            try:
+                os.remove(settings.MEDIA_ROOT + str(old_preview))
+            except Exception as e:
+                print '%s (%s): %s' % (e.message, type(e), settings.MEDIA_ROOT
+                                    + str(old_preview))
+
 
 class ProductSelection(models.Model):
     product = models.ForeignKey(Product)
