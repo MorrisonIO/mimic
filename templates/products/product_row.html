@@ -1,5 +1,7 @@
 <td><strong>{{ product.name }}</strong>{% if product.description %}: <i>{{ product.description }}</i>{% endif %}</td>
-{% if cat.name_altname == "Document Title" %}<td>{% if product.preview %}<a href="{{ product.preview.url }}" rel="dialog" title="Pop open a preview">Preview</a>{% endif %}</td>{% endif %}
+{#% if cat.name_altname == "Document Title" %#}
+<td>{% if product.preview %}<a href="{{ product.preview.url }}" rel="dialog" target="_blank" title="Pop open a preview">Preview</a>{% endif %}</td>
+{#% endif %#}
 {% if cat.show_revision %}<td>{{ product.revision }}</td>{% endif %}
 {% if cat.show_part_number %}<td>{{ product.part_number }}</td>{% endif %}
 {% if cat.show_price %}
