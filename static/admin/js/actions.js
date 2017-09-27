@@ -150,11 +150,24 @@
 
             var URL_CONFIRM_PRINT = '/admin/orders/save_printed/';
 
+            var loader = '<div id="floatingCirclesG">' +
+                                '<div class="f_circleG" id="frotateG_01"></div>' +
+                                '<div class="f_circleG" id="frotateG_02"></div>' +
+                                '<div class="f_circleG" id="frotateG_03"></div>' +
+                                '<div class="f_circleG" id="frotateG_04"></div>' +
+                                '<div class="f_circleG" id="frotateG_05"></div>' +
+                                '<div class="f_circleG" id="frotateG_06"></div>' +
+                                '<div class="f_circleG" id="frotateG_07"></div>' +
+                                '<div class="f_circleG" id="frotateG_08"></div>' +
+                            '</div>'
+            el.hide()
+            parent.append(loader)
             var data = { 'order_id': orderId }
-
             $.post(URL_CONFIRM_PRINT, data, function(data, status){
                 if (status == 'success') {
                     window.location.reload();
+                } else {
+                    $('#floatingCirclesG').remove()
                 }
             });
 

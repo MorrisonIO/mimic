@@ -6,6 +6,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.template import loader, Context
 
 from orgs.models import Org
 from addresses.models import Address
@@ -84,6 +86,13 @@ def save_printed(request):
         order = Order.objects.get(pk=order_id)
         order.printed = True
         order.save()
+
+        orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
+        user_list = [orderer]
+
+        subject = '[Mimic OOS] Info About Order: %s' % order.name
+        body = "Your oder has been printed and is ready for pickup"
+        send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
         messages.success(request, "The printed status was saved successfully.")
     
     return HttpResponseRedirect('/admin/orders/order/')
