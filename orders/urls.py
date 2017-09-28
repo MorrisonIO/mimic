@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^your_order/additional/$', views.provide_addinfo, name='provide_addinfo'),
     url(r'^your_order/confirm/$', views.confirm_order, name='confirm_order'),
     url(r'^your_order/submitted/$', views.process_order, name='process_order'),
+    url(r'^collect_daily_jobs/$', views.collect_daily_jobs, name='collect_daily_jobs'),
 ]

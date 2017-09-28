@@ -841,3 +841,26 @@ def sanitize_filename(name):
     r = re.compile('[^a-zA-Z0-9_.]')
     filename = r.sub('_', name)
     return '%s-%s' % (rstr, filename)
+
+
+def collect_daily_jobs(request):
+    """
+    Collect jobs for today and tomorrow and send them to client
+    """
+    try:
+        today_orders = Order.objects.filter(due_date=datetime.date.today())
+        tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
+
+        context = {
+            'today_orders': today_orders,
+            'tomorrow_orders': tomorrow_orders,
+        }
+        template_html = loader.get_template('emails/mimic_every_day_report.html')
+        subject = 'Current jobs:'.format()
+        body = template_html.render(context)
+        body_html = template_html.render(context)
+        send_mail(subject, body, 'orders@mimicprint.com', ['i.malakhov@dunice.net', 'kyle@morrison.digital'], fail_silently=False, html_message=body_html)
+
+        return HttpResponse('ok')
+    except Exception as ex:
+        return HttpResponse('Ooops... \n.{}'.format(ex))

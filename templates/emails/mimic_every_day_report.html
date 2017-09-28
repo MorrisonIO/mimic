@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <p>
+            <h3>LIST OF JOBJ THAT NEED TO BE COMPLETED TODAY</h3>
+            <ul>
+                {% if today_orders|length %}
+                    {% for order in today_orders %}
+                        <li>{{ order }}</li>
+                    {% endfor %}
+                {% else %}
+                    <p>There are no jobs for today</p>
+                {% endif %}
+            </ul>
+        </p>
+
+        <p>
+            <h3>LIST OF JOBJ THAT NEED TO BE COMPLETED TOMORROW</h3>
+            <ul>
+                {% if tomorrow_orders|length %}
+                    {% for order in tomorrow_orders %}
+                        <li>{{ order }}</li>
+                    {% endfor %}
+                {% else %}
+                    <p>There are no jobs for tomorrow</p>
+                {% endif %}
+            </ul>
+        </p>
+
+
+        <p>
+            <b>Thank you,</b><br>
+            --<br>
+            Mimic Print & Media Services<br>
+            Tel: 905.415.2772<br>
+            Fax: 905.415.2005<br>
+            Web: https://{{ site.domain }}/<br>
+        </p>
+    </body>
+</html>
