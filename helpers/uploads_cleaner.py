@@ -23,7 +23,7 @@ def creation_date(path_to_file):
             # so we'll settle for when its content was last modified.
             return stat.st_mtime
 
-for filename in os.listdir(os.path.join(BASE_DIR, 'in')):
+for filename in os.listdir(TARGET_DIR):
     # print(creation_date('in/'+ filename))
     fileTime = datetime.datetime.fromtimestamp(int(creation_date(TARGET_DIR + filename)))
     expaerTime = datetime.datetime.today() - datetime.timedelta(weeks=12)
