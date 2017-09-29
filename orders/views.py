@@ -569,7 +569,14 @@ def save_ordered_items(request, order):
     Saves the OrderedItems and InventoryHistory events belonging to an order.
     """
     cart = request.session['cart']
-    profile = UserProfile.objects.get(user=request.user, org=request.session['current_org'])
+
+    try:
+        profile = UserProfile.objects.get(user=request.user, org=request.session['current_org'])
+    except MultipleObjectsReturned as mor_ex:
+        profile = UserProfile.objects.get(user=request.user, org=request.session['current_org'])[0]
+    except Exception as ex:
+        profile = None
+
     for item in cart.all_items():
         product = Product.objects.get(pk=item.product.id)
         if product.approval_required and not profile.ignore_pa:
@@ -664,7 +671,14 @@ def send_order_emails(request, order):
           and the mimic account reps
     """
     site = Site.objects.get_current()
-    user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)
+
+    try:
+        user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)
+    except MultipleObjectsReturned as mor_ex:
+        user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)[0]
+    except Exception as ex:
+        user_profile = None
+
     line_items = order.get_line_items()
     
     mimic_list = create_mimic_list(request, order)
