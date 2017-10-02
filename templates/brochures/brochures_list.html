@@ -181,24 +181,28 @@
 
 {% endblock %}
 {% block content %}
-    {% for brochure in brochures %}
-        <div class="template-item photos-{{brochure.num_of_images}} feature-{{brochure.feature_prop | to_one_word}} filterable">
-            <div class="tmp-item-wrapper">
-                {# need to check is this file media or not #}
-                {% if brochure.preview_image.url|slice:'7:11' == 'img/' %}
-                <img src="{% static ''%}{{brochure.preview_image}}" alt="" />
-                {% else %}
-                <img src="{{brochure.preview_image.url}}" alt="" />
-                {% endif %}
-                <div class="tmp-item-box">  
-                    <h2>{{ brochure.title }}</h2>
-                    <p>{{ brochure.description }}</p>  
-                    
-                    <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{brochure.id}})" class="info">Order brochure</a>
-                    <a href="#" class="info showModalBtn1" onclick="showDesc({{brochure.id}})">Show description</a>  
-                </div>  
+    {% if brochures|length %}
+        {% for brochure in brochures %}
+            <div class="template-item photos-{{brochure.num_of_images}} feature-{{brochure.feature_prop | to_one_word}} filterable">
+                <div class="tmp-item-wrapper">
+                    {# need to check is this file media or not #}
+                    {% if brochure.preview_image.url|slice:'7:11' == 'img/' %}
+                    <img src="{% static ''%}{{brochure.preview_image}}" alt="" />
+                    {% else %}
+                    <img src="{{brochure.preview_image.url}}" alt="" />
+                    {% endif %}
+                    <div class="tmp-item-box">
+                        <h2>{{ brochure.title }}</h2>
+                        <p>{{ brochure.description }}</p>
+
+                        <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{brochure.id}})" class="info">Order brochure</a>
+                        <a href="#" class="info showModalBtn1" onclick="showDesc({{brochure.id}})">Show description</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>There are no templates for this organization</p>
+    {% endif %}
        
 {% endblock %}

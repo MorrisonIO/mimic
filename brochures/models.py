@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from orgs.models import Org
 
 
 class BrochureTemplate(models.Model):
@@ -29,6 +30,7 @@ class Brochure(models.Model):
     """
     This is a model for all existing brochures
     """
+    org = models.ForeignKey(Org, null=True)
     name = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=1000)

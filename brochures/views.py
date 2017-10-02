@@ -19,14 +19,15 @@ from orders.models import Cart
 from models import Brochure, BrochureTemplate
 from itertools import repeat
 from forms import PersonalInfoForm, PropertyInfoForm
+from decorators import current_org_required
 
 
-def collect_menu_data():
+def collect_menu_data(brochures):
     """
     Collect data for menu information
     E.g.: number of images or number of brochures types
     """
-    brochures = Brochure.objects.all()
+    brochures = brochures or []
     elems = {}
     elems['feature_prop'] = {'title': 'Feature Properties'}
     elems['num_of_images'] = {'title': 'Number of photos'}
@@ -46,13 +47,15 @@ def collect_menu_data():
         return elems
 
 
+@current_org_required
 @login_required
 def index(request):
     """
     Shows the list of Brochures:
     """
-    brochures = Brochure.objects.all()
-    elems = collect_menu_data()
+    org = request.session.get('current_org', None)
+    brochures = Brochure.objects.filter(org=org)
+    elems = collect_menu_data(brochures)
     return render(request, 'brochures/brochures_list.html', {
         'brochures': brochures,
         'menu_data': elems
