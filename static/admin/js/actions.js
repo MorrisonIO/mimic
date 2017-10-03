@@ -173,8 +173,6 @@
 
         });
         $('form#changelist-form .field-email_client input[type="button"]').click(function(event){
-            console.log("Run save printed client");
-
             var el = $(this);
             var parent = el.parent();
             var inputOrderId = parent.find('input[name="order_id"]');
@@ -197,10 +195,12 @@
             parent.append(loader);
             var data = { 'order_id': orderId };
             $.post(URL_CONFIRM_PRINT, data, function(data, status){
+                $('#floatingCirclesG').remove();
                 if (status == 'success') {
-                    window.location.reload();
+                    // window.location.reload();
+                    parent.html('Sent');
                 } else {
-                    $('#floatingCirclesG').remove()
+                    el.show();
                 }
             });
         });

@@ -243,7 +243,7 @@ class Order(models.Model):
         Add a button to checking 'printed' field, or display field if value equals True
         """
         if self.printed_email_client == True:
-            return 'Printed'
+            return 'Sent'
         else:
             printed_email_client = self.printed_email_client
             template = '<input type="hidden" size="10" name="order_id" value="%s">\

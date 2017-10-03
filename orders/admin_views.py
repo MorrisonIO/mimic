@@ -87,14 +87,6 @@ def save_printed(request):
         order.printed = True
         order.save()
 
-        orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
-        user_list = [orderer]
-
-        subject = '[Mimic OOS] Info About Order: %s' % order.name
-        body = "Your oder has been printed and is ready for pickup"
-        send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
-        messages.success(request, "The printed status was saved successfully.")
-    
     return HttpResponseRedirect('/admin/orders/order/')\
 
 
@@ -103,6 +95,12 @@ def save_printed(request):
 def save_printed_client(request):
     """
     Saves a print confirmation status to an order
+    Sends an email to the customer.
+    Note:
+        The first one is the email specified when ordering the product.
+        If it is not, then the email from the Addresses table is taken.
+        If the email address is not specified in the table, the user's email address is taken.
+
     Redirects to admin's orders list
     """
     if request.method == 'POST' and 'order_id' in request.POST:
@@ -111,13 +109,20 @@ def save_printed_client(request):
         order.printed_email_client = True
         order.save()
 
-        orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
-        user_list = [orderer]
+        if order.ship_to.email:
+            used_email = order.ship_to.email
+        else:
+            used_email = order.placed_by.email
 
-        subject = '[Mimic OOS] Info About Order: %s' % order.name
-        body = "Your oder has been printed and is ready for pickup"
-        send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
-        messages.success(request, "The printed status was saved successfully.")
+        if used_email:
+            orderer = '%s <%s>' % (order.placed_by.get_full_name(), used_email)
+            user_list = [orderer]
+
+            subject = '[Mimic OOS] Info About Order: %s' % order.name
+            body = "Your oder has been printed and is ready for pickup"
+            send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
+            messages.success(request, "The printed status was saved successfully.")
+        messages.warning(request, "Cannot send email: user has no email.")
 
     return HttpResponseRedirect('/admin/orders/order/')
 
