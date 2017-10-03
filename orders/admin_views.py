@@ -95,7 +95,32 @@ def save_printed(request):
         send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
         messages.success(request, "The printed status was saved successfully.")
     
+    return HttpResponseRedirect('/admin/orders/order/')\
+
+
+@csrf_exempt
+@staff_member_required
+def save_printed_client(request):
+    """
+    Saves a print confirmation status to an order
+    Redirects to admin's orders list
+    """
+    if request.method == 'POST' and 'order_id' in request.POST:
+        order_id = request.POST['order_id']
+        order = Order.objects.get(pk=order_id)
+        order.printed_email_client = True
+        order.save()
+
+        orderer = '%s <%s>' % (order.placed_by.get_full_name(), order.placed_by.email)
+        user_list = [orderer]
+
+        subject = '[Mimic OOS] Info About Order: %s' % order.name
+        body = "Your oder has been printed and is ready for pickup"
+        send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
+        messages.success(request, "The printed status was saved successfully.")
+
     return HttpResponseRedirect('/admin/orders/order/')
+
 
 @staff_member_required
 def create_packingslip(request, order_id):

@@ -128,6 +128,7 @@ class Order(models.Model):
     user_notes = models.TextField("Your notes", blank=True, help_text="Any information you wish to save with this order for your own records.", null=True)
     saved = models.BooleanField(blank=True, default=False) # field might be DEPRECATED
     printed = models.BooleanField(default=False)
+    printed_email_client = models.BooleanField(default=False)
     additional_file = models.ForeignKey(Upload, null=True, blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -235,6 +236,18 @@ class Order(models.Model):
             printed = self.printed
             template = '<input type="hidden" size="10" name="order_id" value="%s">\
                         <input type="button" class="" value="Confirm">' % self.id
+            return format_html(template)
+
+    def email_client(self):
+        """
+        Add a button to checking 'printed' field, or display field if value equals True
+        """
+        if self.printed_email_client == True:
+            return 'Printed'
+        else:
+            printed_email_client = self.printed_email_client
+            template = '<input type="hidden" size="10" name="order_id" value="%s">\
+                        <input type="button" class="" value="Email Client">' % self.id
             return format_html(template)
 
 class InventoryHistory(models.Model):

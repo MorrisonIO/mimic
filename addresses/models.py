@@ -23,7 +23,7 @@ class Address(models.Model):
     phone = models.CharField(max_length=50)
     cell = models.CharField(max_length=50, blank=True)
     fax = models.CharField(max_length=50, blank=True)
-    email = models.EmailField(max_length=50, blank=True)
+    email = models.EmailField(max_length=50)
     is_residential = models.BooleanField(
         "Is this a residential address?",
         blank=True, help_text="Yes"

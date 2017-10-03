@@ -77,6 +77,7 @@ urlpatterns = [
     url(r'^admin/orders/dockets/(?P<order_id>\d+)/$', o_views.create_docket),
     url(r'^admin/orders/save_invnum/$', o_views.save_invnum, name=''),
     url(r'^admin/orders/save_printed/$', o_views.save_printed, name=''),
+    url(r'^admin/orders/save_printed_client/$', o_views.save_printed_client, name=''),
     url(r'^admin/orders/shipping/packing_slip/(?P<order_id>\d+)/$', o_views.create_packingslip),
     url(r'^admin/orders/shipping/label/(?P<order_id>\d+)/$', o_views.create_label),
     url(r'^admin/orders/shipping/comm_inv/(?P<order_id>\d+)/$', o_views.create_comm_inv),
