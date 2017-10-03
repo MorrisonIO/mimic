@@ -873,7 +873,14 @@ def collect_daily_jobs(request):
         subject = 'Current jobs:'.format()
         body = template_html.render(context)
         body_html = template_html.render(context)
-        send_mail(subject, body, 'orders@mimicprint.com', ['i.malakhov@dunice.net', 'kyle@morrison.digital'], fail_silently=False, html_message=body_html)
+        mail_list = [
+            'Shelby Flores <Shelby.Flores@MimicPrint.com>',
+            'Tyler <Tyler@MimicPrint.com>',
+            'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
+            'Prepress <Prepress@MimicPrint.com>',
+            'Daniel <Daniel@MimicPrint.com>',
+        ]
+        send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
         return HttpResponse('ok')
     except Exception as ex:
