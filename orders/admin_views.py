@@ -119,7 +119,7 @@ def save_printed_client(request):
             user_list = [orderer]
 
             subject = '[Mimic OOS] Info About Order: %s' % order.name
-            body = "Your oder has been printed and is ready for pickup"
+            body = "Your order has been printed and is ready for pickup"
             send_mail(subject, body, 'orders@mimicprint.com', user_list, fail_silently=False)  # notify user
             messages.success(request, "The printed status was saved successfully.")
         messages.warning(request, "Cannot send email: user has no email.")

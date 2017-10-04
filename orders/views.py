@@ -864,22 +864,27 @@ def collect_daily_jobs(request):
     try:
         today_orders = Order.objects.filter(due_date=datetime.date.today())
         tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
+        late_orders = Order.objects.filter(due_date__gte=datetime.date.today() + datetime.timedelta(days=2))
 
         context = {
             'today_orders': today_orders,
             'tomorrow_orders': tomorrow_orders,
+            'late_orders': late_orders,
         }
         template_html = loader.get_template('emails/mimic_every_day_report.html')
         subject = 'Current jobs:'.format()
         body = template_html.render(context)
         body_html = template_html.render(context)
         mail_list = [
-            'Shelby Flores <Shelby.Flores@MimicPrint.com>',
-            'Tyler <Tyler@MimicPrint.com>',
-            'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
-            'Prepress <Prepress@MimicPrint.com>',
-            'Daniel <Daniel@MimicPrint.com>',
+            'ivanov <a.ivanov@dunice.net>',
         ]
+        # mail_list = [
+        #     'Shelby Flores <Shelby.Flores@MimicPrint.com>',
+        #     'Tyler <Tyler@MimicPrint.com>',
+        #     'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
+        #     'Prepress <Prepress@MimicPrint.com>',
+        #     'Daniel <Daniel@MimicPrint.com>',
+        # ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
         return HttpResponse('ok')
