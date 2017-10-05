@@ -7,25 +7,37 @@
     <div class="form_row{% if form.errors.title %} error_field{% endif %}{% if form.title.field.required %} required{% endif %}"><label for="id_title">{{ form.title.label }}</label>{{ form.title }}{% if form.errors.title %}{{ form.errors.title }}{% endif %}</div>
 
     <div class="form_row{% if form.errors.company %} error_field{% endif %}{% if form.company.field.required %} required{% endif %}"><label for="id_company">{{ form.company.label }}</label>{{ form.company }}{% if form.errors.company %}{{ form.errors.company }}{% endif %} <span class="field_hint">Required if this address is not residential.</span></div>
+
+    <div class="form_row{% if form.errors.pickup_in_address %} error_field{% endif %}{% if form.pickup_in_address.field.required %} required{% endif %}">
+        <label for="id_pickup_in_address">
+            {{ form.pickup_in_address }}
+        </label>
+        Pickup instead of shipping
+        {% if form.errors.pickup_in_address %}
+            {{ form.errors.pickup_in_address }}
+        {% endif %}
+    </div>
 </fieldset>
 
 <h4>Address</h4>
 <fieldset>
-    <div class="form_row{% if form.errors.address1 %} error_field{% endif %}{% if form.address1.field.required %} required{% endif %}"><label for="id_address1">Address 1</label>{{ form.address1 }}{% if form.errors.address1 %}{{ form.errors.address1 }}{% endif %}</div>
-    
-    <div class="form_row{% if form.errors.address2 %} error_field{% endif %}{% if form.address2.field.required %} required{% endif %}"><label for="id_address2">Address 2</label>{{ form.address2 }}{% if form.errors.address2 %}{{ form.errors.address2 }}{% endif %}</div>
-    
-    <div class="form_row{% if form.errors.address3 %} error_field{% endif %}{% if form.address3.field.required %} required{% endif %}"><label for="id_address3">Address 3</label>{{ form.address3 }}{% if form.errors.address3 %}{{ form.errors.address3 }}{% endif %}</div>
-    
-    <div class="form_row{% if form.errors.city %} error_field{% endif %}{% if form.city.field.required %} required{% endif %}"><label for="id_city">{{ form.city.label }}</label>{{ form.city }}{% if form.errors.city %}{{ form.errors.city }}{% endif %}</div>
+    <div class="address_form-address">
+        <div class="form_row{% if form.errors.address1 %} error_field{% endif %}{% if form.address1.field.required %} required{% endif %}"><label for="id_address1">Address 1</label>{{ form.address1 }}{% if form.errors.address1 %}{{ form.errors.address1 }}{% endif %}</div>
 
-    <div class="form_row{% if form.errors.province %} error_field{% endif %}{% if form.province.field.required %} required{% endif %}"><label for="id_province">{{ form.province.label }}</label>{{ form.province }}{% if form.errors.province %}{{ form.errors.province }}{% endif %}</div>
-    
-    <div class="form_row{% if form.errors.postal_code %} error_field{% endif %}{% if form.postal_code.field.required %} required{% endif %}"><label for="id_postal_code">{{ form.postal_code.label }}</label>{{ form.postal_code }}{% if form.errors.postal_code %}{{ form.errors.postal_code }}{% endif %}</div>
-    
-    <div class="form_row{% if form.errors.country %} error_field{% endif %}{% if form.country.field.required %} required{% endif %}"><label for="id_country">{{ form.country.label }}</label>{{ form.country }}{% if form.errors.country %}{{ form.errors.country }}{% endif %}</div>
+        <div class="form_row{% if form.errors.address2 %} error_field{% endif %}{% if form.address2.field.required %} required{% endif %}"><label for="id_address2">Address 2</label>{{ form.address2 }}{% if form.errors.address2 %}{{ form.errors.address2 }}{% endif %}</div>
 
-    <div class="form_row{% if form.errors.is_residential %} error_field{% endif %}{% if form.is_residential.field.required %} required{% endif %}"><label for="id_is_residential">{{ form.is_residential.label }}</label>{{ form.is_residential }} Yes {% if form.errors.is_residential %}{{ form.errors.is_residential }}{% endif %}</div>
+        <div class="form_row{% if form.errors.address3 %} error_field{% endif %}{% if form.address3.field.required %} required{% endif %}"><label for="id_address3">Address 3</label>{{ form.address3 }}{% if form.errors.address3 %}{{ form.errors.address3 }}{% endif %}</div>
+
+        <div class="form_row{% if form.errors.city %} error_field{% endif %}{% if form.city.field.required %} required{% endif %}"><label for="id_city">{{ form.city.label }}</label>{{ form.city }}{% if form.errors.city %}{{ form.errors.city }}{% endif %}</div>
+
+        <div class="form_row{% if form.errors.province %} error_field{% endif %}{% if form.province.field.required %} required{% endif %}"><label for="id_province">{{ form.province.label }}</label>{{ form.province }}{% if form.errors.province %}{{ form.errors.province }}{% endif %}</div>
+
+        <div class="form_row{% if form.errors.postal_code %} error_field{% endif %}{% if form.postal_code.field.required %} required{% endif %}"><label for="id_postal_code">{{ form.postal_code.label }}</label>{{ form.postal_code }}{% if form.errors.postal_code %}{{ form.errors.postal_code }}{% endif %}</div>
+
+        <div class="form_row{% if form.errors.country %} error_field{% endif %}{% if form.country.field.required %} required{% endif %}"><label for="id_country">{{ form.country.label }}</label>{{ form.country }}{% if form.errors.country %}{{ form.errors.country }}{% endif %}</div>
+
+        <div class="form_row{% if form.errors.is_residential %} error_field{% endif %}{% if form.is_residential.field.required %} required{% endif %}"><label for="id_is_residential">{{ form.is_residential.label }}</label>{{ form.is_residential }} Yes {% if form.errors.is_residential %}{{ form.errors.is_residential }}{% endif %}</div>
+    </div>
 </fieldset>
 
 <h4>Contact info</h4>

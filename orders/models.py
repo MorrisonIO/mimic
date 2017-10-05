@@ -130,6 +130,7 @@ class Order(models.Model):
     printed = models.BooleanField(default=False)
     printed_email_client = models.BooleanField(default=False)
     additional_file = models.ForeignKey(Upload, null=True, blank=True, on_delete=models.CASCADE)
+    pickup = models.BooleanField(default=False, help_text='Will order be picked up')
 
     def __unicode__(self):
         return u'%s' % self.name

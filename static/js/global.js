@@ -235,6 +235,13 @@ $(document).ready(function(){
         $("form#shipto_form").submit();
     });
 
+    $("#id_pickup_in_address").click(function(){
+        $("div.address_form-address").slideToggle();
+        // $("div#continue").hide();
+        // return false;
+    });
+
+
 	// REPORTING
 	$("#report_form fieldset").hide();
 	$("#narrow_default").show();

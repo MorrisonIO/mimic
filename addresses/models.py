@@ -29,6 +29,8 @@ class Address(models.Model):
         blank=True, help_text="Yes"
         )
     owners = models.ManyToManyField(User, blank=True)
+    pickup_in_address = models.BooleanField(default=False, help_text='It is used for the correct work of "pickup" in the model "orders"')
+
 
     def __unicode__(self):
         if self.company:

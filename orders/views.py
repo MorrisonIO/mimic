@@ -352,8 +352,18 @@ def provide_shipto(request):
         # addr from AB not selected, validate new address form
         if not request.POST.get('shipto_address', None):
             form = AddressForm(request.POST)
+
             if form.is_valid():
                 new_addr = form.save()
+
+                # if new_addr.pickup_in_address:
+                #     new_addr.address1 = ''
+                #     new_addr.address2 = ''
+                #     new_addr.address3 = ''
+                #     new_addr.city = ''
+                #     new_addr.country = ''
+                #     new_addr.postal_code = ''
+                #     new_addr.province = ''
                 if request.POST.get('add_to_ab', None):
                     new_addr.owners.add(request.user)
                     messages.success(request, "s|The address was added to your Address Book.")

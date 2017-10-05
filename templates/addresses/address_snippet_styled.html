@@ -5,12 +5,17 @@
     </p>
 
     <p>
-    {{ address.address1 }}<br>
-    {% if address.address2 %}{{ address.address2 }}<br>{% endif %}
-    {% if address.address3 %}{{ address.address3 }}<br>{% endif %}
-    {{ address.city }}, {{ address.province }}<br>
-    {{ address.country }} {{ address.postal_code }}<br>
-    <span class="addr_res">This is a {% if address.is_residential %}residential{% else %}business{% endif %} address.</span>
+    {% if not address.pickup_in_address %}
+        {{ address.address1 }}<br>
+        {% if address.address2 %}{{ address.address2 }}<br>{% endif %}
+        {% if address.address3 %}{{ address.address3 }}<br>{% endif %}
+        {{ address.city }}, {{ address.province }}<br>
+        {{ address.country }} {{ address.postal_code }}<br>
+        <span class="addr_res">This is a {% if address.is_residential %}residential{% else %}business{% endif %} address.</span>
+    {% else %}
+        The order will be picked up.
+    {% endif %}
+
     </p>
 
     <p>
