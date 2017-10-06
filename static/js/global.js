@@ -235,12 +235,20 @@ $(document).ready(function(){
         $("form#shipto_form").submit();
     });
 
-    $("#id_pickup_in_address").click(function(){
-        $("div.address_form-address").slideToggle();
-        // $("div#continue").hide();
-        // return false;
+    $("#id_pickup_in_address").change(function() {
+        slideADDRESS()
     });
 
+    function slideADDRESS(){
+        $("div.address_form-address").slideToggle();
+    }
+
+    function controlPickup() {
+        if ($("#id_pickup_in_address").prop('checked')) {
+            slideADDRESS();
+        }
+    }
+    controlPickup();
 
 	// REPORTING
 	$("#report_form fieldset").hide();
