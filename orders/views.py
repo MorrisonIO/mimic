@@ -861,7 +861,7 @@ def sanitize_filename(name):
 
 def collect_daily_jobs(request):
     """
-    Collect jobs for today and tomorrow and send them to client
+    Collect jobs for today, tomorrow and late and send them to client
     """
     try:
         today_orders = Order.objects.filter(due_date=datetime.date.today())
@@ -884,6 +884,36 @@ def collect_daily_jobs(request):
             'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
             'Prepress <Prepress@MimicPrint.com>',
             'Daniel <Daniel@MimicPrint.com>',
+        ]
+        send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
+
+        return HttpResponse('ok')
+    except Exception as ex:
+        return HttpResponse('Ooops... \n.{}'.format(ex))
+
+
+def collect_daily_jobs_test_email(request):
+    """
+    TEST version. To check the content of daily letters.
+    Collect jobs for today, tomorrow and late and send them to client
+    """
+    try:
+        today_orders = Order.objects.filter(due_date=datetime.date.today())
+        tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
+        late_orders = Order.objects.filter(due_date__gte=datetime.date.today() + datetime.timedelta(days=2))
+
+        context = {
+            'today_orders': today_orders,
+            'tomorrow_orders': tomorrow_orders,
+            'late_orders': late_orders,
+        }
+        template_html = loader.get_template('emails/mimic_every_day_report.html')
+        subject = 'Current jobs:'.format()
+        body = template_html.render(context)
+        body_html = template_html.render(context)
+
+        mail_list = [
+            'Kyle Ivanov <kyle@morrison.digital>',
         ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 

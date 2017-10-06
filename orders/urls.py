@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^your_order/confirm/$', views.confirm_order, name='confirm_order'),
     url(r'^your_order/submitted/$', views.process_order, name='process_order'),
     url(r'^collect_daily_jobs/$', views.collect_daily_jobs, name='collect_daily_jobs'),
+
+    url(r'^collect_daily_jobs_test_email/$', views.collect_daily_jobs_test_email),
 ]
