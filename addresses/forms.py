@@ -18,20 +18,26 @@ class AddressForm(ModelForm):
         company = cleaned_data['company']
         pickup = cleaned_data['pickup_in_address']
 
+        def delItems(name):
+            try:
+                del cleaned_data[name]
+            except:
+                pass
+
         if pickup and not company:
             msg = u"If this is not a pickup with a residence address, a company field is required."
             self._errors['company'] = ErrorList([msg])
 
-            # both fields no longer valid
-            del cleaned_data['company']
-            del cleaned_data['pickup_in_address']
-            del cleaned_data['address1']
-            del cleaned_data['address2']
-            del cleaned_data['address3']
-            del cleaned_data['city']
-            del cleaned_data['country']
-            del cleaned_data['postal_code']
-            del cleaned_data['province']
+            # fields no longer valid
+            delItems('company')
+            delItems('pickup_in_address')
+            delItems('address1')
+            delItems('address2')
+            delItems('address3')
+            delItems('city')
+            delItems('country')
+            delItems('postal_code')
+            delItems('province')
         else:
             if not is_residential and not company:
                 msg = u"If this is not a residential address, the company field is required."
@@ -39,9 +45,9 @@ class AddressForm(ModelForm):
                 self._errors['company'] = ErrorList([msg])
 
                 # three fields no longer valid
-                del cleaned_data['is_residential']
-                del cleaned_data['company']
-                del cleaned_data['pickup_in_address']
+                delItems('is_residential')
+                delItems('company')
+                delItems('pickup_in_address')
 
         # return all cleaned data
         return cleaned_data
