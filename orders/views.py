@@ -884,6 +884,7 @@ def collect_daily_jobs(request):
             'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
             'Prepress <Prepress@MimicPrint.com>',
             'Daniel <Daniel@MimicPrint.com>',
+            'Ali Mohammed <Ali.Mohammed@MimicPrint.com>'
         ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
@@ -913,7 +914,7 @@ def collect_daily_jobs_test_email(request):
         body_html = template_html.render(context)
 
         mail_list = [
-            'Kyle Ivanov <kyle@morrison.digital>',
+            'Kyle <kyle@morrison.digital>',
         ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
