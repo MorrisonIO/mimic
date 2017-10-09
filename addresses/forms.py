@@ -9,6 +9,11 @@ class AddressForm(ModelForm):
         exclude = ('owners',)
 
     def is_valid(self):
+        # here need validation for pickup - true, pickup - false
+        if self:
+            pass
+        else:
+            pass
         pass
 
     def clean(self):
