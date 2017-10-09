@@ -353,6 +353,13 @@ def provide_shipto(request):
         if not request.POST.get('shipto_address', None):
             form = AddressForm(request.POST)
 
+            # reset errors if 'pick up' is checked
+            if request.POST.get('pickup_in_address', False):
+                removeErrorList = ['address1', 'city', 'country', 'postal_code', 'province']
+                for err in removeErrorList:
+                    if err in form.errors:
+                        del form.errors[err]
+
             if form.is_valid():
                 new_addr = form.save()
 

@@ -8,6 +8,9 @@ class AddressForm(ModelForm):
         model = Address
         exclude = ('owners',)
 
+    def is_valid(self):
+        pass
+
     def clean(self):
         # If this is not a residential address, a company name is
         # required. See the Django docs about custom validation and
@@ -20,7 +23,8 @@ class AddressForm(ModelForm):
 
         def delItems(name):
             try:
-                del cleaned_data[name]
+                if name in cleaned_data:
+                    del cleaned_data[name]
             except:
                 pass
 
