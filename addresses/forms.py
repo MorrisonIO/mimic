@@ -9,12 +9,35 @@ class AddressForm(ModelForm):
         exclude = ('owners',)
 
     def is_valid(self):
-        # here need validation for pickup - true, pickup - false
-        if self:
-            pass
-        else:
-            pass
-        pass
+
+        # if there is no value in the list - return: False
+        def noEmpty(noEmptyList):
+            for fild in noEmptyList:
+                if not self.data[fild]:
+                    return False
+            return True
+
+        noEmptyList1 = ['first_name', 'last_name', 'phone', 'email']
+        if not noEmpty(noEmptyList1):
+            return False
+
+        # validation for pickup
+        try:
+            if self.data['pickup_in_address']:
+                pass
+        except:
+            noEmptyList2 = ['address1', 'city', 'country', 'postal_code', 'province']
+            if not noEmpty(noEmptyList2):
+                return False
+
+        try:
+            if self.data['residential']:
+                pass
+        except:
+            if not noEmpty(['company']):
+                return False
+
+        return True
 
     def clean(self):
         # If this is not a residential address, a company name is
