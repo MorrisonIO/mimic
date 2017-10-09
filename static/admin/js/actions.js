@@ -2,7 +2,7 @@
 (function($) {
     'use strict';
     var lastChecked;
-
+    console.log('new actions loaded')
     $.fn.actions = function(opts) {
         var options = $.extend({}, $.fn.actions.defaults, opts);
         var actionCheckboxes = $(this);
@@ -165,7 +165,7 @@
             var data = { 'order_id': orderId }
             $.post(URL_CONFIRM_PRINT, data, function(data, status){
                 if (status == 'success') {
-                    window.location.reload();
+                    parent.html('Printed');
                 } else {
                     $('#floatingCirclesG').remove()
                 }
