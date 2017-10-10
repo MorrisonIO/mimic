@@ -1,0 +1,51 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Detail{% endblock %}
+{% block page_title %}Detail{% endblock %}
+
+{% block content %}
+{% load order_progress %}{% show_creation_progress request "detail" %}
+
+<div class="included-template">
+    <iframe id="encoder_iframe" height=500px width="100%" src="{% url 'cards:render_including_template' template.template_id %}"></iframe>
+</div>
+<form id="dataForm" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <fieldset>
+        {% load tag_helper %}
+
+        {% for img_n in template.num_of_images|times %}
+            {% if img_n == 1 %}
+            <p>
+                <label for="main_photo" class="required" style="display: inline; padding-right: 1em;">Main photo</label>
+                <input id="main_photo" name="main_photo" type="file" accept="image/gif, image/jpeg, image/jpg, image/png">
+            </p>
+            {% endif %}
+            <p>
+                <label for="file{{img_n}}" class="required" style="display: inline; padding-right: 1em;">Image {{img_n}}</label>
+                <input id="file{{img_n}}" name="image{{img_n}}" type="file" accept="image/gif, image/jpeg, image/jpg, image/png">
+            </p>
+        {% endfor %}
+            <p>
+                <label for="report_name" style="display: inline; padding-right: 1em;">Report name</label>
+                <textarea type="text" id="report_name" name="report_name"></textarea>
+            </p>
+        {% for text_n in template.num_of_textfields|times %}
+            <p>
+                <label for="secondTextBox" style="display: inline; padding-right: 1em;">Text field {{text_n}}</label>
+                <textarea type="text" id="text{{text_n}}" name="text{{text_n}}"></textarea>
+            </p>
+        {% endfor %}
+    </fieldset>
+    <div class="submit" id="continue">
+        <div class="center">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button type="submit" class="">
+                <img src="{% static 'img/arrow.png' %}" alt="">
+                Continue
+            </button>
+        </div>
+    </div>   
+</form>
+{% endblock %}
+

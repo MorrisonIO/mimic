@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'vardata.apps.VardataConfig',
     'helpers.apps.HelpersConfig',
     'brochures.apps.BrochuresConfig',
+    'cards.apps.CardsConfig',
     'daterange_filter'
 ]
 

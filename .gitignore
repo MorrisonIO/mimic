@@ -2,6 +2,7 @@ env_django19/
 venv/
 addresses/migrations/*
 brochures/migrations/*
+cards/migrations/*
 downloads/migrations/*
 downloads/files/*
 !downloads/files/.gitkeep

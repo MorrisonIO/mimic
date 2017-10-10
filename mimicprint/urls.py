@@ -62,6 +62,7 @@ urlpatterns = [
     url(r'^oos/addresses/', include('addresses.urls')),
     url(r'^oos/products/', include('products.urls')),
     url(r'^oos/brochures/', include('brochures.urls')),
+    url(r'^oos/cards/', include('cards.urls')),
     url(r'^oos/orders/', include('orders.urls')),
     url(r'^oos/vardata/', include('vardata.urls')),
     url(r'^oos/reports/', include('reports.urls')),

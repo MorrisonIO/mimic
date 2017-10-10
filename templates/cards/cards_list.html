@@ -1,0 +1,208 @@
+{% extends "cards/base_card.html" %}
+{% load staticfiles %}
+
+{% block body_class %}twocol-context-right{% endblock %}
+{% block active_card_state %}active{% endblock %}
+{% block custom_head %}
+<link rel="stylesheet" href="{% static 'css/pdf.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/side-menu.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/blueimp-gallery-indicator.css' %}" type="text/css">
+<script type="text/javascript" src="{% static 'js/side-menu.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-helper.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-fullscreen.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/blueimp-gallery-indicator.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.blueimp-gallery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.lazyload.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(e){
+        function closeModal(){
+           $(".modal").removeClass("active");
+           
+           // fix jquery.blueimp-gallery.js bug with overflow
+           $('body').css('overflow', '')
+        }
+
+        $(".modal-content .close, .modal").on("click", function(){
+            closeModal();
+        });
+
+        // pressing escape
+        if (e.keyCode == 27) {
+            closeModal();
+        }
+        buildmenu();
+        initLinks();
+        $(document).on('change input paste', '#search_input', function(ev){
+            if(ev.target.value.length > 1){
+                $(".template-item").hide()
+                var toShow = []
+                var h2_arr = $('.tmp-item-wrapper h2')
+                var p_arr = $('.tmp-item-wrapper p')
+                $.each(h2_arr, function(id, value){
+                    if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
+                        toShow.push($(this).parent().parent().parent())
+                    }
+                })
+                $.each(p_arr, function(id, value){
+                    if($(this).text().toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1){
+                        toShow.push($(this).parent().parent().parent())
+                    }
+                })
+                window.toShow = toShow
+                toShow.forEach(function(el){
+                    el.show()
+                })
+            } else {
+                $(".template-item").show()
+            }
+       }) 
+    });
+    function initLinks(){
+        document.getElementById('links').onclick = function (event) {
+            event = event || window.event;
+            var target = event.target || event.srcElement,
+                link = target.src ? target.parentNode : target,
+                options = {index: link, event: event, fullscreen: true},
+                links = this.getElementsByTagName('a');
+            blueimp.Gallery(links, options);
+        };
+    }
+    function showDesc(id){
+        $.ajax({
+            url: 'get_card_modal_data',
+            data: {'id': id},
+            success: function(response){
+                var modal = $("#theModal")
+                var _res  = JSON.parse(response)
+                $(".modal-content p").text(_res.description)
+                var linksContainer = $('#links').empty()
+                
+                for(var i=0; i < _res.preview_images.length; i++){
+                    var el = _res.preview_images[i];
+                    function onLoad(id){
+                        $(".loader" + id).hide()
+                        $('#prev_'+id).show()
+                    }
+                    
+                    var loader = '<div class="loader'+i+' floatingCirclesG">' +
+                                '<div class="f_circleG" id="frotateG_01"></div>' + 
+                                '<div class="f_circleG" id="frotateG_02"></div>' + 
+                                '<div class="f_circleG" id="frotateG_03"></div>' + 
+                                '<div class="f_circleG" id="frotateG_04"></div>' + 
+                                '<div class="f_circleG" id="frotateG_05"></div>' + 
+                                '<div class="f_circleG" id="frotateG_06"></div>' + 
+                                '<div class="f_circleG" id="frotateG_07"></div>' + 
+                                '<div class="f_circleG" id="frotateG_08"></div>' +
+                            '</div>'
+                    var $box = $('<img id="prev_'+i+'">')
+                    
+                    $box.on('load', function(ev){
+                        var id = ev.currentTarget.id.substring(5)
+                        onLoad(id);
+                    })
+                    $('<a/>')
+                        .append(loader)
+                        .append($box.prop('src', el.url))
+                        .prop('href', el.url)
+                        .prop('id', i)
+                        .prop('title', el.name)
+                        .attr('data-gallery', '')
+                        .appendTo(linksContainer)
+                        $box.hide()
+                }
+                $(".modal").addClass("active");
+                
+            },
+            error: function(err){
+                console.log('err',err)
+            }
+        })
+    }
+    function startOrdering(url, template_id){
+        // need to save card id in session
+        $.ajax({
+            url: url,
+            data: {'template_id': template_id},
+            success: function(response){
+                console.log("startOrdering:", response)
+            },
+            error: function(err){
+                console.log('err',err)
+            }
+        })
+    }
+</script>
+{% endblock %}
+{% block title %}Choose template{% endblock %}
+{% block page_title %}Choose template{% endblock %}
+{% block sidebar %}
+{% load tag_helper %}
+<div id="accordian">
+	<ul>
+        {% for category in menu_data %}
+            <li>
+                <h3>{{menu_data|get_value_by_key:category|get_value_by_key:'title'}}</h3>
+                <ul class="filters-category">
+                {% for row in menu_data|get_value_by_key:category %}
+                    {% if row != 'title' %}
+                        {% if category == 'num_of_images' %}
+                        <li>
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">
+                                <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                                {{row}} ({{menu_data|get_value_by_key:'num_of_images'|get_value_by_key:row}})
+                            </label>
+                        </li>
+                        {% elif category == 'feature_prop' %}
+                        <li>
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">
+                                <input class="filter" data-filter=".feature-{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                                {{row}} ({{menu_data|get_value_by_key:'feature_prop'|get_value_by_key:row}})
+                            </label>
+                        </li>
+                        {% else %}
+                        <li>
+                            <label class="checkbox-label" for="{{row|to_one_word}}{{forloop.counter}}">
+                                <input class="filter" data-filter=".{{row|to_one_word}}" type="checkbox" id="{{row|to_one_word}}{{forloop.counter}}">
+                                {{row}}
+                            </label>
+                        </li>
+                        {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </li>    
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
+{% block content %}
+    {% if cards|length %}
+        {% for card in cards %}
+            <div class="template-item photos-{{card.num_of_images}} feature-{{card.feature_prop | to_one_word}} filterable">
+                <div class="tmp-item-wrapper">
+                    {# need to check is this file media or not #}
+                    {% if card.preview_image.url|slice:'7:11' == 'img/' %}
+                    <img src="{% static ''%}{{card.preview_image}}" alt="" />
+                    {% else %}
+                    <img src="{{card.preview_image.url}}" alt="" />
+                    {% endif %}
+                    <div class="tmp-item-box">
+                        <h2>{{ card.title }}</h2>
+                        <p>{{ card.description }}</p>
+
+                        <a href="{% url 'cards:personal_info' %}" onclick="startOrdering('{% url 'card:personal_info' %}', {{card.id}})" class="info">Order card</a>
+                        <a href="#" class="info showModalBtn1" onclick="showDesc({{card.id}})">Show description</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>There are no templates for this organization</p>
+    {% endif %}
+       
+{% endblock %}

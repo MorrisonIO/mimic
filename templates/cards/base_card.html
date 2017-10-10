@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block body_id %}brochures{% endblock %}
+{% block body_id %}cards{% endblock %}
 
 {% block subheader %}
 <div class="products-categories">
@@ -15,8 +15,8 @@
 
 {% block search %}
 <div id="search">
-    <!--<form action="#" method="get">{% csrf_token %} {# {% url 'brochures:brochure_search' %} #}-->
-        <input type="text" name="q" title="Search brochure..." id="search_input">
+    <!--<form action="#" method="get">{% csrf_token %} {# {% url 'cards:card_search' %} #}-->
+        <input type="text" name="q" title="Search card..." id="search_input">
         <input type="image" src="{% static 'img/search.gif' %}" id="search_submit" alt="Search">
     <!--</form>-->
 </div>

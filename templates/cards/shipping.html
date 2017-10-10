@@ -1,0 +1,145 @@
+{% extends "orders/base_cart.html" %}
+{% load staticfiles %}
+
+{% block title %}Shipping & Mailing{% endblock %}
+{% block page_title %}Shipping & Mailing{% endblock %}
+
+{% block content %}
+{% block custom_head %}
+<script type="text/javascript">
+$(document).ready(function(e){
+});
+    function calculate(val){
+        console.log('value', val);
+        var price = 0;
+        if(val > 500){
+            price = val*0.67; 
+        } else if(val > 200){
+            price = val*0.68; 
+        } else if(val > 100){
+            price = val*0.69; 
+        } else {
+            price = val*0.74; 
+        } 
+
+        $('#product_price').text('$'+price.toFixed(1));
+    }
+</script>
+{% endblock %}
+{% load order_progress %}{% show_creation_progress request "ship_and_mail" %}
+
+<h3>Delivery Method: Ship to Me</h3>
+
+
+<form action="." method="post">{% csrf_token %}
+    <h4>Quantity & Delivery Options</h4>
+    <div>
+        <table class="quantity price">
+            <tbody>
+                <tr align="center" valign="middle" class="title">
+                    <td colspan="3">Quantity Pricing</td>
+                </tr>
+                <tr align="center" valign="middle" class="header">
+                    <td>Quantity</td>
+                    <td>Total</td>
+                    <td>Each</td>
+                </tr>
+                
+                <tr align="center" valign="middle" class="item">
+                    <td>20</td>
+                    <td>$37.00</td>
+                    <td>$0.74
+                    </td>
+                </tr>
+            
+                <tr align="center" valign="middle" class="altitem">
+                    <td>100</td>
+                    <td>$69.00</td>
+                    <td>$0.69
+                    </td>
+                </tr>
+            
+                <tr align="center" valign="middle" class="item">
+                    <td>200</td>
+                    <td>$136.00</td>
+                    <td>$0.68
+                    </td>
+                </tr>
+            
+                <tr align="center" valign="middle" class="altitem">
+                    <td>500</td>
+                    <td>$335.00</td>
+                    <td>$0.67
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="price">
+            <tr>
+                <td>Product Price</td>
+                <td id="product_price">$14.8</td>
+            </tr>
+            <tr>
+                <td>Shipping</td>
+                <td>$20</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>These prices do not include handling fees, discounts or sales tax</p>
+                    <p>*Actual shipping charges may be less. See order summary during checkout for final shipping charges.</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </br>
+
+    <label class="remove-float">Quantity</label>
+    <input type="number" name="quantity" value="20" min="20" step="1" onkeyup="calculate(this.value)" onchange="calculate(this.value)">
+    <p>	Order in increments of 1.<label class="error checkbox-label"> Minimum quantity of 20.</label> </p>
+
+    <p>Shipping Info</p>
+    <div class="ship-info">
+        {% include "cards/personal_ship_info.html" %}
+    </div>
+
+
+    <div class="shipto_field required">
+        <label for="shipto_address">Shipping address</label>
+        <select name="shipto_address" id="shipto_menu">
+            <option value="">-- Select from Address Book --</option>
+            {% for address in addresses %}
+                <option value="{{ address.id }}">{{ address }}</option>
+            {% endfor %}
+        </select>
+        <span class="or">or</span>
+        <a href="#" id="t_address_form">enter an address manually</a>
+    </div>
+    <div id="address_form" style="display: {% if form.errors %}block{% else %}none{% endif %}">
+        {% include "addresses/address_edit_form.html" %}
+        <div class="submit">
+            <div class="buttons">
+                <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+                <button type="submit" class="positive">
+                    <img src="{% static 'img/tick_circle.png' %}" alt="">
+                    Add to cart
+                </button>
+                <input type="checkbox" name="add_to_ab" value="1"> <span class="add_to_ab">Add to Address book</input></span>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="submit" id="continue">
+        <div class="center">
+            <img src="{% static 'img/spinner.gif' %}" alt="" class="spinner">
+            <button class="">
+            <!--<button type="submit" class="">-->
+                <img src="{% static 'img/arrow.png' %}" alt="">
+                Add To Cart
+            </button>
+        </div>
+    </div>   
+</form>
+{% endblock %}

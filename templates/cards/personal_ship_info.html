@@ -1,0 +1,48 @@
+{% load tag_helper %}
+{% if card_info|get_value_by_key:'first_name' %}
+<p>
+    <em>Name</em> {{card_info.first_name}}
+</p>
+{% endif %}
+{% if card_info|get_value_by_key:'last_name' %}
+<p>
+    <em>Last Name</em> {{card_info|get_value_by_key:'last_name'}}
+</p>
+{% endif %}
+{% if card_info|get_value_by_key:'title' %}
+<p>
+    <em>Title</em> {{card_info|get_value_by_key:'title'}}
+</p>
+{% endif %}
+{% if card_info|get_value_by_key:'email' %}
+<p>
+    <em>Email</em> {{card_info|get_value_by_key:'email'}}
+</p>
+{% endif %}
+{% if card_info|get_value_by_key:'website' %}
+<p>
+    <em>Website</em> {{card_info|get_value_by_key:'website'}}
+</p>
+{% endif %}
+{% if card_info|get_value_by_key:'phone1' %}
+<p>
+    <em>Phone</em> {{card_info|get_value_by_key:'phone1'}}
+</p>
+{% endif %}
+{% if card_info|get_value_by_key:'phone2' %}
+    {% if card_info|get_value_by_key:'phone1' %}
+    <p>
+        <em>Phone</em> {{card_info|get_value_by_key:'phone2'}}
+    </p>
+    {% else%}
+    <p>
+        <em>Additional Phone</em> {{card_info|get_value_by_key:'phone2'}}
+    </p>
+    {% endif %}
+{% endif %}
+{% if card_info|get_value_by_key:'coating' %}
+    <p>
+        <em>Coating</em> Yes
+    </p>
+
+{% endif %}
