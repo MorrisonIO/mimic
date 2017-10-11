@@ -195,7 +195,7 @@
                         <h2>{{ card.title }}</h2>
                         <p>{{ card.description }}</p>
 
-                        <a href="{% url 'cards:personal_info' %}" onclick="startOrdering('{% url 'cards:personal_info' %}', {{card.id}})" class="info">Order card</a>
+                        <a href="{% url 'cards:personal_info' %}" onclick="startOrdering('{% url 'cards:personal_info' %}', {{card.id}})" class="info">Place Order</a>
                         <a href="#" class="info showModalBtn1" onclick="showDesc({{card.id}})">Show description</a>
                     </div>
                 </div>
