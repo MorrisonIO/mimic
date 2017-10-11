@@ -195,7 +195,7 @@
                         <h2>{{ brochure.title }}</h2>
                         <p>{{ brochure.description }}</p>
 
-                        <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{brochure.id}})" class="info">Order brochure</a>
+                        <a href="{% url 'brochures:personal_info' %}" onclick="startOrdering('{% url 'brochures:personal_info' %}', {{brochure.id}})" class="info">Place Order</a>
                         <a href="#" class="info showModalBtn1" onclick="showDesc({{brochure.id}})">Show description</a>
                     </div>
                 </div>
