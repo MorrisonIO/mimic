@@ -891,7 +891,8 @@ def collect_daily_jobs(request):
             'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
             'Prepress <Prepress@MimicPrint.com>',
             'Daniel <Daniel@MimicPrint.com>',
-            'Ali Mohammed <Ali.Mohammed@MimicPrint.com>'
+            'Ali Mohammed <Ali.Mohammed@MimicPrint.com>',
+            '<dev@morrison.digital>'
         ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
