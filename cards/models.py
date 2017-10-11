@@ -27,6 +27,31 @@ class CardPreviewImage(models.Model):
         return self.name
 
 
+class CardSelectTextFields(models.Model):
+    """
+    Text fields for fixed names
+    """
+    # Textfields = (
+    #     "Full Name",
+    #     "Street Name",
+    #     "City",
+    #     "Position",
+    #     "Province",
+    #     "Postal Code",
+    #     "Office Phone",
+    #     "Cell Phone",
+    #     "Toll-Free Phone",
+    #     "Fax",
+    #     "E-mail"
+    # )
+
+    name = models.CharField(max_length=200, default="")
+    # preview_img = models.FileField(upload_to='card_images', default="img/card.jpg")
+
+    def __str__(self):
+        return self.name
+
+
 class Card(models.Model):
     """
     This is a model for all existing card
@@ -39,7 +64,7 @@ class Card(models.Model):
     preview_image = models.FileField(upload_to='card_images', default="img/card.jpg")
     preview_images = models.ManyToManyField(CardPreviewImage, blank=True)
     num_of_images = models.PositiveSmallIntegerField(default=0)
-    num_of_textfields = models.PositiveSmallIntegerField(default=0)
+    textfields = models.ManyToManyField(CardSelectTextFields, blank=True)
     feature_prop = models.CharField(max_length=128, default="Single Property")
 
     def __str__(self):

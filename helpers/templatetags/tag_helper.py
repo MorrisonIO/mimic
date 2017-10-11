@@ -82,7 +82,7 @@ def to_one_word(text):
     """
     import re
     text = re.sub('([^0-9a-zA-Z ]+|[ ]{2,})', '', text)
-    return '-'.join(text.split(' '))
+    return '_'.join(text.lower().split(' '))
 
 
 @register.filter

@@ -225,8 +225,6 @@ def detail_page(request):
     """
     property info
     """
-    import base64
-
     messages.warning(request, '')
     session = request.session.get('card_info', None)
 
@@ -246,8 +244,8 @@ def detail_page(request):
                 path = handle_uploaded_file(file_val)		 #base64.b64encode(file_val.read()).decode()
                 preview[file_key] = path #"data:image/jpg;charset=utf-8;base64,{}".format(path)
             for key, _ in request._post.iteritems():
-                if key.startswith('text'):
-                    preview[key] = request.POST.get(key, None)
+                preview[key] = request.POST.get(key, None)
+
             if request.POST.get('report_name', None):
                 preview['report_name'] = request.POST.get('report_name', None)
             else:

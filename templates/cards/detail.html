@@ -18,22 +18,18 @@
             {% if img_n == 1 %}
             <p>
                 <label for="main_photo" class="required" style="display: inline; padding-right: 1em;">Main photo</label>
-                <input id="main_photo" name="main_photo" type="file" accept="image/gif, image/jpeg, image/jpg, image/png">
+                <input id="main_photo" name="main_photo" type="file">
             </p>
             {% endif %}
             <p>
                 <label for="file{{img_n}}" class="required" style="display: inline; padding-right: 1em;">Image {{img_n}}</label>
-                <input id="file{{img_n}}" name="image{{img_n}}" type="file" accept="image/gif, image/jpeg, image/jpg, image/png">
+                <input id="file{{img_n}}" name="file{{img_n}}" type="file">
             </p>
         {% endfor %}
+        {% for field in template.textfields.all %}
             <p>
-                <label for="report_name" style="display: inline; padding-right: 1em;">Report name</label>
-                <textarea type="text" id="report_name" name="report_name"></textarea>
-            </p>
-        {% for text_n in template.num_of_textfields|times %}
-            <p>
-                <label for="secondTextBox" style="display: inline; padding-right: 1em;">Text field {{text_n}}</label>
-                <textarea type="text" id="text{{text_n}}" name="text{{text_n}}"></textarea>
+                <label for="{{ field.name|to_one_word }}" class="required" style="display: inline; padding-right: 1em;">{{ field.name }}</label>
+                <input id="{{ field.name|to_one_word }}" name="{{ field.name|to_one_word }}" type="text">
             </p>
         {% endfor %}
     </fieldset>
