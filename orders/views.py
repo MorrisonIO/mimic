@@ -936,14 +936,13 @@ def collect_daily_jobs(request):
         body_html = template_html.render(context)
 
         mail_list = [
-            'Alexey Ivanov <a.ivanov@dunice.net>',
-            # 'Shelby Flores <Shelby.Flores@MimicPrint.com>',
-            # 'Tyler <Tyler@MimicPrint.com>',
-            # 'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
-            # 'Prepress <Prepress@MimicPrint.com>',
-            # 'Daniel <Daniel@MimicPrint.com>',
-            # 'Ali Mohammed <Ali.Mohammed@MimicPrint.com>',
-            # '<dev@morrison.digital>'
+            'Shelby Flores <Shelby.Flores@MimicPrint.com>',
+            'Tyler <Tyler@MimicPrint.com>',
+            'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
+            'Prepress <Prepress@MimicPrint.com>',
+            'Daniel <Daniel@MimicPrint.com>',
+            'Ali Mohammed <Ali.Mohammed@MimicPrint.com>',
+            '<dev@morrison.digital>'
         ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
