@@ -7,7 +7,7 @@
             <ul>
                 {% if today_orders|length %}
                     {% for order in today_orders %}
-                        <li>{{ order.name }} - {{ order.ship_to }}.</li>
+                        <li>{{ order.name }} {% if order.part_numbers %}- {{ order.part_numbers }} {% endif %}- {{ order.ship_to }}.</li>
                     {% endfor %}
                 {% else %}
                     <p>There are no jobs for today</p>
@@ -20,7 +20,7 @@
             <ul>
                 {% if tomorrow_orders|length %}
                     {% for order in tomorrow_orders %}
-                        <li>{{ order.name }} - {{ order.ship_to }}.</li>
+                        <li>{{ order.name }} {% if order.part_numbers %}- {{ order.part_numbers }} {% endif %}- {{ order.ship_to }}.</li>
                     {% endfor %}
                 {% else %}
                     <p>There are no jobs for tomorrow</p>
@@ -33,7 +33,7 @@
             <ul>
                 {% if late_orders|length %}
                     {% for order in late_orders %}
-                        <li>{{ order.name }} - {{ order.ship_to }}.</li>
+                        <li>{{ order.name }} {% if order.part_numbers %}- {{ order.part_numbers }} {% endif %}- {{ order.ship_to }}.</li>
                     {% endfor %}
                 {% else %}
                     <p>There are no jobs for late</p>

@@ -866,6 +866,13 @@ def sanitize_filename(name):
     return '%s-%s' % (rstr, filename)
 
 
+def rebuild(x, parts_numbers):
+    result = dict(name=x.name, ship_to=x.ship_to)
+    if parts_numbers:
+        result['parts_numbers'] = parts_numbers
+    return result
+
+
 def collect_daily_jobs(request):
     """
     Collect jobs for today, tomorrow and late and send them to client
@@ -875,10 +882,53 @@ def collect_daily_jobs(request):
         tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
         late_orders = Order.objects.filter(due_date__gte=datetime.date.today() + datetime.timedelta(days=2))
 
+        today_orders_result = []
+        tomorrow_orders_result = []
+        late_orders_result = []
+
+        for order in today_orders:
+            ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            if len(ih_objs):
+                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                        if Product.objects.get(id=el.product_id).part_number)
+                if products_pns:
+                    today_orders_result.append(dict(name=order.name,
+                                                    part_numbers=products_pns,
+                                                    ship_to=order.ship_to)
+                                               )
+                else:
+                    today_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+
+        for order in tomorrow_orders:
+            ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            if len(ih_objs):
+                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                        if Product.objects.get(id=el.product_id).part_number)
+                if products_pns:
+                    tomorrow_orders_result.append(dict(name=order.name,
+                                                    part_numbers=products_pns,
+                                                    ship_to=order.ship_to)
+                                               )
+                else:
+                    tomorrow_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+
+        for order in late_orders:
+            ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            if len(ih_objs):
+                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                        if Product.objects.get(id=el.product_id).part_number)
+                if products_pns:
+                    late_orders_result.append(dict(name=order.name,
+                                                    part_numbers=products_pns,
+                                                    ship_to=order.ship_to)
+                                               )
+                else:
+                    late_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+
         context = {
-            'today_orders': today_orders,
-            'tomorrow_orders': tomorrow_orders,
-            'late_orders': late_orders,
+            'today_orders': today_orders_result,
+            'tomorrow_orders': tomorrow_orders_result,
+            'late_orders': late_orders_result,
         }
         template_html = loader.get_template('emails/mimic_every_day_report.html')
         subject = 'Current jobs:'.format()
@@ -886,13 +936,14 @@ def collect_daily_jobs(request):
         body_html = template_html.render(context)
 
         mail_list = [
-            'Shelby Flores <Shelby.Flores@MimicPrint.com>',
-            'Tyler <Tyler@MimicPrint.com>',
-            'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
-            'Prepress <Prepress@MimicPrint.com>',
-            'Daniel <Daniel@MimicPrint.com>',
-            'Ali Mohammed <Ali.Mohammed@MimicPrint.com>',
-            '<dev@morrison.digital>'
+            'Alexey Ivanov <a.ivanov@dunice.net>',
+            # 'Shelby Flores <Shelby.Flores@MimicPrint.com>',
+            # 'Tyler <Tyler@MimicPrint.com>',
+            # 'Laura Ambrozic <Laura.Ambrozic@MimicPrint.com>',
+            # 'Prepress <Prepress@MimicPrint.com>',
+            # 'Daniel <Daniel@MimicPrint.com>',
+            # 'Ali Mohammed <Ali.Mohammed@MimicPrint.com>',
+            # '<dev@morrison.digital>'
         ]
         send_mail(subject, body, 'orders@mimicprint.com', mail_list, fail_silently=False, html_message=body_html)
 
