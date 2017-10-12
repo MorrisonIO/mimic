@@ -31,7 +31,7 @@ class AddressForm(ModelForm):
                 return False
 
         try:
-            if self.data['residential']:
+            if self.data['is_residential']:
                 pass
         except:
             if not noEmpty(['company']):
