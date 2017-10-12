@@ -961,10 +961,53 @@ def collect_daily_jobs_test_email(request):
         tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
         late_orders = Order.objects.filter(due_date__gte=datetime.date.today() + datetime.timedelta(days=2))
 
+        today_orders_result = []
+        tomorrow_orders_result = []
+        late_orders_result = []
+
+        for order in today_orders:
+            ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            if len(ih_objs):
+                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                        if Product.objects.get(id=el.product_id).part_number)
+                if products_pns:
+                    today_orders_result.append(dict(name=order.name,
+                                                    part_numbers=products_pns,
+                                                    ship_to=order.ship_to)
+                                               )
+                else:
+                    today_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+
+        for order in tomorrow_orders:
+            ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            if len(ih_objs):
+                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                        if Product.objects.get(id=el.product_id).part_number)
+                if products_pns:
+                    tomorrow_orders_result.append(dict(name=order.name,
+                                                    part_numbers=products_pns,
+                                                    ship_to=order.ship_to)
+                                               )
+                else:
+                    tomorrow_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+
+        for order in late_orders:
+            ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            if len(ih_objs):
+                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                        if Product.objects.get(id=el.product_id).part_number)
+                if products_pns:
+                    late_orders_result.append(dict(name=order.name,
+                                                    part_numbers=products_pns,
+                                                    ship_to=order.ship_to)
+                                               )
+                else:
+                    late_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+
         context = {
-            'today_orders': today_orders,
-            'tomorrow_orders': tomorrow_orders,
-            'late_orders': late_orders,
+            'today_orders': today_orders_result,
+            'tomorrow_orders': tomorrow_orders_result,
+            'late_orders': late_orders_result,
         }
         template_html = loader.get_template('emails/mimic_every_day_report.html')
         subject = 'Current jobs:'.format()
