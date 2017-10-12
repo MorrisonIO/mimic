@@ -12,8 +12,8 @@ class AddressForm(ModelForm):
 
         # if there is no value in the list - return: False
         def noEmpty(noEmptyList):
-            for fild in noEmptyList:
-                if not self.data[fild]:
+            for field in noEmptyList:
+                if not self.data[field]:
                     return False
             return True
 
@@ -28,13 +28,6 @@ class AddressForm(ModelForm):
         except:
             noEmptyList2 = ['address1', 'city', 'country', 'postal_code', 'province']
             if not noEmpty(noEmptyList2):
-                return False
-
-        try:
-            if self.data['is_residential']:
-                pass
-        except:
-            if not noEmpty(['company']):
                 return False
 
         return True
@@ -56,30 +49,18 @@ class AddressForm(ModelForm):
             except:
                 pass
 
-        if pickup and not company:
+        if pickup:
             msg = u"If this is not a pickup with a residence address, a company field is required."
-            self._errors['company'] = ErrorList([msg])
 
             # fields no longer valid
-            delItems('company')
             delItems('pickup_in_address')
             delItems('address1')
             delItems('address2')
             delItems('address3')
-            delItems('city')
+            delItems('city') 
             delItems('country')
             delItems('postal_code')
             delItems('province')
-        else:
-            if not is_residential and not company:
-                msg = u"If this is not a residential address, the company field is required."
-                self._errors['is_residential'] = ErrorList([msg])
-                self._errors['company'] = ErrorList([msg])
-
-                # three fields no longer valid
-                delItems('is_residential')
-                delItems('company')
-                delItems('pickup_in_address')
 
         # return all cleaned data
         return cleaned_data
