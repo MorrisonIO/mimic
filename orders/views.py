@@ -873,6 +873,17 @@ def rebuild(x, parts_numbers):
     return result
 
 
+def getProducts_pns(order):
+    """
+    Returns the product number on the order
+    """
+    ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+    if len(ih_objs):
+        products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
+                                  if Product.objects.get(id=el.product_id).part_number)
+        return products_pns
+
+
 def collect_daily_jobs(request):
     """
     Collect jobs for today, tomorrow and late and send them to client
@@ -888,42 +899,36 @@ def collect_daily_jobs(request):
 
         for order in today_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
-            if len(ih_objs):
-                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
-                        if Product.objects.get(id=el.product_id).part_number)
-                if products_pns:
-                    today_orders_result.append(dict(name=order.name,
-                                                    part_numbers=products_pns,
-                                                    ship_to=order.ship_to)
-                                               )
-                else:
-                    today_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+            quantity = sum(el.amount for el in ih_objs if el.amount)
+            products_pns = getProducts_pns(order)
+            if products_pns:
+                today_orders_result.append(
+                    dict(name=order.name, part_numbers=products_pns, ship_to=order.ship_to, quantity=quantity)
+                )
+            else:
+                today_orders_result.append(dict(name=order.name, ship_to=order.ship_to, quantity=quantity))
 
         for order in tomorrow_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
-            if len(ih_objs):
-                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
-                        if Product.objects.get(id=el.product_id).part_number)
-                if products_pns:
-                    tomorrow_orders_result.append(dict(name=order.name,
-                                                    part_numbers=products_pns,
-                                                    ship_to=order.ship_to)
-                                               )
-                else:
-                    tomorrow_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+            quantity = sum(el.amount for el in ih_objs if el.amount)
+            products_pns = getProducts_pns(order)
+            if products_pns:
+                tomorrow_orders_result.append(
+                    dict(name=order.name, part_numbers=products_pns, ship_to=order.ship_to, quantity=quantity)
+                )
+            else:
+                tomorrow_orders_result.append(dict(name=order.name, ship_to=order.ship_to, quantity=quantity))
 
         for order in late_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
-            if len(ih_objs):
-                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
-                        if Product.objects.get(id=el.product_id).part_number)
-                if products_pns:
-                    late_orders_result.append(dict(name=order.name,
-                                                    part_numbers=products_pns,
-                                                    ship_to=order.ship_to)
-                                               )
-                else:
-                    late_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+            quantity = sum(el.amount for el in ih_objs if el.amount)
+            products_pns = getProducts_pns(order)
+            if products_pns:
+                late_orders_result.append(
+                    dict(name=order.name, part_numbers=products_pns, ship_to=order.ship_to, quantity=quantity)
+                )
+            else:
+                late_orders_result.append(dict(name=order.name, ship_to=order.ship_to, quantity=quantity))
 
         context = {
             'today_orders': today_orders_result,
@@ -967,42 +972,36 @@ def collect_daily_jobs_test_email(request):
 
         for order in today_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
-            if len(ih_objs):
-                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
-                        if Product.objects.get(id=el.product_id).part_number)
-                if products_pns:
-                    today_orders_result.append(dict(name=order.name,
-                                                    part_numbers=products_pns,
-                                                    ship_to=order.ship_to)
-                                               )
-                else:
-                    today_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+            quantity = sum(el.amount for el in ih_objs if el.amount)
+            products_pns = getProducts_pns(order)
+            if products_pns:
+                today_orders_result.append(
+                    dict(name=order.name, part_numbers=products_pns, ship_to=order.ship_to, quantity=quantity)
+                )
+            else:
+                today_orders_result.append(dict(name=order.name, ship_to=order.ship_to, quantity=quantity))
 
         for order in tomorrow_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
-            if len(ih_objs):
-                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
-                        if Product.objects.get(id=el.product_id).part_number)
-                if products_pns:
-                    tomorrow_orders_result.append(dict(name=order.name,
-                                                    part_numbers=products_pns,
-                                                    ship_to=order.ship_to)
-                                               )
-                else:
-                    tomorrow_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+            quantity = sum(el.amount for el in ih_objs if el.amount)
+            products_pns = getProducts_pns(order)
+            if products_pns:
+                tomorrow_orders_result.append(
+                    dict(name=order.name, part_numbers=products_pns, ship_to=order.ship_to, quantity=quantity)
+                )
+            else:
+                tomorrow_orders_result.append(dict(name=order.name, ship_to=order.ship_to, quantity=quantity))
 
         for order in late_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
-            if len(ih_objs):
-                products_pns = ',\n'.join(Product.objects.get(id=el.product_id).part_number for el in ih_objs \
-                        if Product.objects.get(id=el.product_id).part_number)
-                if products_pns:
-                    late_orders_result.append(dict(name=order.name,
-                                                    part_numbers=products_pns,
-                                                    ship_to=order.ship_to)
-                                               )
-                else:
-                    late_orders_result.append(dict(name=order.name, ship_to=order.ship_to))
+            quantity = sum(el.amount for el in ih_objs if el.amount)
+            products_pns = getProducts_pns(order)
+            if products_pns:
+                late_orders_result.append(
+                    dict(name=order.name, part_numbers=products_pns, ship_to=order.ship_to, quantity=quantity)
+                )
+            else:
+                late_orders_result.append(dict(name=order.name, ship_to=order.ship_to, quantity=quantity))
 
         context = {
             'today_orders': today_orders_result,
