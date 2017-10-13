@@ -25,8 +25,8 @@ class FastOrderForm(forms.ModelForm):
 
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', ('due_date', DateRangeFilter), ('date', DateRangeFilter), 'org')
-    list_display = ('name', 'org', 'date', 'due_date', 'status', 'descriptions', 'part_numbers', 'quantity', 'notes', 'po',
-                    'docket_link', 'printed_button', 'email_client', 'shipping_links', 'invnum_form')
+    list_display = ('name', 'org', 'date', 'due_date', 'status', 'products_name', 'descriptions', 'part_numbers', 'quantity',
+                    'notes', 'po', 'docket_link', 'printed_button', 'email_client', 'shipping_links', 'invnum_form')
     search_fields = ('name', 'invoice_number', 'status', 'org__name', 'po_number')
     raw_id_fields = ('ship_to',)
     date_hierarchy = ('date')
@@ -107,6 +107,17 @@ class OrderAdmin(admin.ModelAdmin):
         ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
         products_descriptions = sum(el.amount for el in ih_objs if el.amount)
         return products_descriptions
+
+    def products_name(self, obj):
+        """
+        Display product name this order
+        """
+        product_name = ''
+        ih_objs = InventoryHistory.objects.filter(order_id=obj.id)
+        if len(ih_objs):
+            product_name = ',\n'.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
+                                            if Product.objects.get(id=el.product_id).name)
+        return product_name
 
     def save_model(self, request, obj, form, change):
         """
