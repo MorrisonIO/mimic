@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.exceptions import MultipleObjectsReturned
+
 
 class Org(models.Model):
     """
@@ -46,10 +48,30 @@ class Org(models.Model):
     def get_id(self):
         return self.id
 
+    # def save(self, *args, **kwargs):
+    #     """
+    #     unfinished protection against the preservation of identical names of organizations
+    #     String error: user_profile = UserProfile.objects.get(user=order.placed_by, org=order.org)
+    #     """
+    #     try:
+    #         found = Org.objects.get(name=self.name)
+    #         if not found:
+    #             print('here')
+    #             super(Org, self).save()
+    #         else:
+    #             print('here2')
+    #             # return
+    #             raise ValueError('AAA!!!!')
+    #     except MultipleObjectsReturned:
+    #         raise ValueError('AAA!!!!')
+    #         # return
+
+
     class Meta:
         verbose_name = "Organization"
         verbose_name_plural = "Organizations"
         ordering = ['name']
+
 
 class UserProfile(models.Model):
     """
