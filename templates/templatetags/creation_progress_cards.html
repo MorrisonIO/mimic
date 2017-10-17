@@ -1,0 +1,31 @@
+<div id="order_progress">
+
+    <a class="step active-on-{% ifequal page "detail" %}inactive{% else %}active{% endifequal %}" href="{% url 'cards:cards' %}" title="Ordering">
+        <span class="number">1</span>
+        <span class="desc">Product Detail</span>
+    </a>
+
+
+    <{% if request.session.due_date %}a{% else %}div{% endif %}
+    class="step 
+    {% ifequal page "preview" %}active-on-inactive{% endifequal %}
+    {% ifequal page "ship_and_mail" %}active-on-active{% endifequal %}
+    "
+    {% if request.session.due_date %} href="{% url 'brochures:preview' %}" title="Provide additional info"{% endif %} 
+    >
+        <span class="number">2</span>
+        <span class="desc">Product Preview</span>
+    </{% if request.session.due_date %}a{% else %}div{% endif %}>
+
+
+    <{% if request.session.due_date %}a{% else %}div{% endif %} 
+    class="step end {% ifequal page "ship_and_mail" %}end-active{% endifequal %}"
+    {% if request.session.due_date %} href="{% url 'brochures:ship_and_mail' %}" title="Finalize this order"{% endif %} 
+    >
+        <span class="number">3</span>
+        <span class="desc">Shipping & Mailing</span>
+    </{% if request.session.due_date %}a{% else %}div{% endif %}>
+</div>
+<br class="clear"></br>
+
+    
