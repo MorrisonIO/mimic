@@ -225,6 +225,10 @@ def detail_page(request):
     """
     property info
     """
+    if request.is_ajax() and request.method == "GET":
+        request.session['card_info'] = dict(template_id=int(request.GET['template_id']))
+        return HttpResponse('200')
+
     messages.warning(request, '')
     session = request.session.get('card_info', None)
 

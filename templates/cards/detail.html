@@ -5,7 +5,7 @@
 {% block page_title %}Detail{% endblock %}
 
 {% block content %}
-{% load order_progress %}{% show_creation_progress request "detail" %}
+{% load order_progress %}{% show_creation_progress_cards request "detail" %}
 
 <div class="included-template">
     <iframe id="encoder_iframe" height=500px width="100%" src="{% url 'cards:render_including_template' template.template_id %}"></iframe>

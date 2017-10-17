@@ -25,7 +25,7 @@ $(document).ready(function(e){
 </script>
 {% endblock %}
 {% block content %}
-{% load order_progress %}{% show_creation_progress request "preview" %}
+{% load order_progress %}{% show_creation_progress_brochures request "preview" %}
 <form id="dataForm" method="post" enctype="multipart/form-data">{% csrf_token %}
     <h4>Step 1: Product Preview</h4>
     <p>Preview the product you created to ensure that spelling, grammar, images, and layout appear the way you want.</p>
