@@ -100,3 +100,21 @@ class PropertyInfo(models.Model):
     property_state = models.CharField(max_length=100, blank=True)
     property_code = models.CharField(max_length=50, blank=True)
     property_price = models.CharField(max_length=50, blank=True)
+
+
+class AssetsUpload(models.Model):
+    """
+    Model declaration for use with styling the cards
+    """
+    name = models.CharField(max_length=200, default="template")
+    file = models.FileField(upload_to='templates/Assets')
+
+    def __str__(self):
+        return self.file.url
+
+    def getName(self):
+        return self.file.file.name
+
+    @property
+    def url(self):
+        return 'media/' + self.file.url
