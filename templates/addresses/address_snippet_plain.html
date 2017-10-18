@@ -1,6 +1,7 @@
 <p>
     {{ address.first_name }} {{ address.last_name }}<br>
     {% if address.title %}{{ address.title }}{% if address.company %}, {% endif %}{% endif %}{% if address.company %}{{ address.company }}{% endif %}<br>
+    {% if address.pickup_in_address %}The order will be picked up.{% endif %}<br>
     {{ address.address1 }}<br>
     {% if address.address2 %}{{ address.address2 }}<br>{% endif %}
     {% if address.address3 %}{{ address.address3 }}<br>{% endif %}

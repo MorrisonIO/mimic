@@ -557,6 +557,7 @@ def save_new_order(request):
     order.ship_to = request.session['shipto_address']
     order.po_number = request.session['po_number']
     order.additional_info = request.session['additional_info']
+    order.pickup = request.session['shipto_address']
 
     if 'upload_file' in request.session:
         path = request.session['upload_file']

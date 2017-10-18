@@ -53,7 +53,6 @@ class AddressForm(ModelForm):
             msg = u"If this is not a pickup with a residence address, a company field is required."
 
             # fields no longer valid
-            delItems('pickup_in_address')
             delItems('address1')
             delItems('address2')
             delItems('address3')
