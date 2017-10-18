@@ -119,7 +119,7 @@ def save_printed_client(request):
             user_list = [orderer]
 
             subject = '[Mimic OOS] Info About Order: %s' % order.name
-            if order.ship_to.pickup_in_address:
+            if order.pickup:
                 body = "Your order has been printed and is ready for pickup"
             else:
                 body = "Your order has been shipped and will arrive shortly."
