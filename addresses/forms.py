@@ -13,7 +13,7 @@ class AddressForm(ModelForm):
         # if there is no value in the list - return: False
         def noEmpty(noEmptyList):
             for field in noEmptyList:
-                if not self.data[field]:
+                if not self.data[field].strip():
                     return False
             return True
 
