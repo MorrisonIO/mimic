@@ -14,8 +14,32 @@ class AddressForm(ModelForm):
         def noEmpty(noEmptyList):
             for field in noEmptyList:
                 if not self.data[field].strip():
-                    return False
+                    return errorsList()
             return True
+
+        def errorsList():
+            """
+            Create a list with fields with errors
+            """
+            AllRequiredFields = ['first_name',
+                                 'last_name',
+                                 'address1',
+                                 'city',
+                                 'country',
+                                 'postal_code',
+                                 'province',
+                                 'phone',
+                                 'email']
+            for field in AllRequiredFields:
+                if not self.data[field].strip():
+                    try:
+                        if self.errors[field]:
+                            pass
+                    except:
+                        msg = u"This field is required."
+                        self.errors[field] = ErrorList([msg])
+
+            return False
 
         noEmptyList1 = ['first_name', 'last_name', 'phone', 'email']
         if not noEmpty(noEmptyList1):
@@ -60,6 +84,8 @@ class AddressForm(ModelForm):
             delItems('country')
             delItems('postal_code')
             delItems('province')
+        else:
+            pass
 
         # return all cleaned data
         return cleaned_data
