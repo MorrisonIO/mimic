@@ -900,6 +900,7 @@ def collect_daily_jobs(request):
 
         for order in today_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            name=order.name[:4]
             product_name = ''
             if len(ih_objs):
                 product_name = ', '.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
@@ -907,12 +908,13 @@ def collect_daily_jobs(request):
             quantity = sum(el.amount for el in ih_objs if el.amount)
 
             if product_name:
-                today_orders_result.append(dict(name=order.name, product_name=product_name, quantity=quantity))
+                today_orders_result.append(dict(name=name, product_name=product_name, org=order.org.name, quantity=quantity))
             else:
-                today_orders_result.append(dict(name=order.name, quantity=quantity))
+                today_orders_result.append(dict(name=name, org=order.org.name, quantity=quantity))
 
         for order in tomorrow_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            name=order.name[:4]
             product_name = ''
             if len(ih_objs):
                 product_name = ','.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
@@ -920,12 +922,13 @@ def collect_daily_jobs(request):
             quantity = sum(el.amount for el in ih_objs if el.amount)
 
             if product_name:
-                tomorrow_orders_result.append(dict(name=order.name, product_name=product_name, quantity=quantity))
+                tomorrow_orders_result.append(dict(name=name, product_name=product_name, org=order.org.name, quantity=quantity))
             else:
-                tomorrow_orders_result.append(dict(name=order.name, quantity=quantity))
+                tomorrow_orders_result.append(dict(name=name, org=order.org.name, quantity=quantity))
 
         for order in late_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            name=order.name[:4]
             product_name = ''
             if len(ih_objs):
                 product_name = ', '.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
@@ -933,9 +936,9 @@ def collect_daily_jobs(request):
             quantity = sum(el.amount for el in ih_objs if el.amount)
 
             if product_name:
-                late_orders_result.append(dict(name=order.name, product_name=product_name, quantity=quantity))
+                late_orders_result.append(dict(name=name, product_name=product_name, org=order.org.name, quantity=quantity))
             else:
-                late_orders_result.append(dict(name=order.name, quantity=quantity))
+                late_orders_result.append(dict(name=name, org=order.org.name, quantity=quantity))
 
         context = {
             'today_orders': today_orders_result,
@@ -979,6 +982,7 @@ def collect_daily_jobs_test_email(request):
 
         for order in today_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            name=order.name[:4]
             product_name = ''
             if len(ih_objs):
                 product_name = ', '.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
@@ -986,12 +990,13 @@ def collect_daily_jobs_test_email(request):
             quantity = sum(el.amount for el in ih_objs if el.amount)
 
             if product_name:
-                today_orders_result.append(dict(name=order.name, product_name=product_name, quantity=quantity))
+                today_orders_result.append(dict(name=name, product_name=product_name, org=order.org.name, quantity=quantity))
             else:
-                today_orders_result.append(dict(name=order.name, quantity=quantity))
+                today_orders_result.append(dict(name=name, org=order.org.name, quantity=quantity))
 
         for order in tomorrow_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            name=order.name[:4]
             product_name = ''
             if len(ih_objs):
                 product_name = ','.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
@@ -999,12 +1004,13 @@ def collect_daily_jobs_test_email(request):
             quantity = sum(el.amount for el in ih_objs if el.amount)
 
             if product_name:
-                tomorrow_orders_result.append(dict(name=order.name, product_name=product_name, quantity=quantity))
+                tomorrow_orders_result.append(dict(name=name, product_name=product_name, org=order.org.name, quantity=quantity))
             else:
-                tomorrow_orders_result.append(dict(name=order.name, quantity=quantity))
+                tomorrow_orders_result.append(dict(name=name, org=order.org.name, quantity=quantity))
 
         for order in late_orders:
             ih_objs = InventoryHistory.objects.filter(order_id=order.id)
+            name=order.name[:4]
             product_name = ''
             if len(ih_objs):
                 product_name = ', '.join(Product.objects.get(id=el.product_id).name for el in ih_objs \
@@ -1012,9 +1018,9 @@ def collect_daily_jobs_test_email(request):
             quantity = sum(el.amount for el in ih_objs if el.amount)
 
             if product_name:
-                late_orders_result.append(dict(name=order.name, product_name=product_name, quantity=quantity))
+                late_orders_result.append(dict(name=name, product_name=product_name, org=order.org.name, quantity=quantity))
             else:
-                late_orders_result.append(dict(name=order.name, quantity=quantity))
+                late_orders_result.append(dict(name=name, org=order.org.name, quantity=quantity))
 
         context = {
             'today_orders': today_orders_result,
