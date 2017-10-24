@@ -197,7 +197,6 @@
             $.post(URL_CONFIRM_PRINT, data, function(data, status){
                 $('#floatingCirclesG').remove();
                 if (status == 'success') {
-                    // window.location.reload();
                     parent.html('Sent');
                 } else {
                     el.show();
