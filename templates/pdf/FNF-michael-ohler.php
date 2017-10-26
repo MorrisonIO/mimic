@@ -250,12 +250,12 @@
                 </div>
                 <div class="text-block">
                         {% if not context %}
-                            <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name">Text 1 (Full Name)</p>
-                            <p class="absolute size-1 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position">Text 2 (Position)</p>
-                            <p class="absolute size-1 font-2 left-align color-2 placeholder txt-upper position2" data-placeholder="Department">Text 3 (Department)</p>
-                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 office" data-placeholder="Cell Phone"><span class="kind color-1">t</span>Text 4 (Cell Phone)</p>
-                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 email" data-placeholder="E-mail"><span class="kind color-1">e</span>Text 5 (E-mail)</p>
-                            <p class="absolute size-2 font-2 left-align color-1 placeholder txt-15 web" data-placeholder="Web Address">Text 6 (Web Address)</p>
+                            <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name">Full Name</p>
+                            <p class="absolute size-1 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position">Position</p>
+                            <p class="absolute size-1 font-2 left-align color-2 placeholder txt-upper position2" data-placeholder="Department">Department</p>
+                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 office" data-placeholder="Cell Phone"><span class="kind color-1">t</span>Cell Phone</p>
+                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 email" data-placeholder="E-mail"><span class="kind color-1">e</span>E-mail</p>
+                            <p class="absolute size-2 font-2 left-align color-1 placeholder txt-15 web" data-placeholder="Web Address">Web Address</p>
                       {% else %}
                             <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name">{{context.full_name}}</p>
                             <p class="absolute size-1 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position">{{context.position}}</p>

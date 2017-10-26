@@ -126,7 +126,7 @@
         }
         .claudine-bg {
             /* background-image: url('/media/brochure_staff/Claudine-Rousse-FNF-assests/images/Claudine-Rousse-FNF--bg.jpg'); */
-             /*background-image: url('./Claudine-Rousse-FNF-assests/images/Claudine-Rousse-FNF--bg.jpg'); */
+//             /*background-image: url('./Claudine-Rousse-FNF-assests/images/Claudine-Rousse-FNF--bg.jpg'); */
             background-size: cover;
             background-repeat: no-repeat;
         }
@@ -277,7 +277,7 @@
                             <p class="absolute size-2 font-2 left-align color-1 placeholder txt-15 web" data-placeholder="Web Address">Web</p>
                         {% else %}
                             <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name">{{context.full_name}}</p>
-                            <p class="absolute size-2 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position">{{context.text2}} <span class="font-1" data-placeholder="Department">- {{context.department}}</span></p>
+                            <p class="absolute size-2 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position">{{context.position}} <span class="font-1" data-placeholder="Department">- {{context.department}}</span></p>
                             <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 office" data-placeholder="Office Phone"><span class="kind color-1">o</span> {{context.office_phone}}</p>
                             <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 cell" data-placeholder="Cell"><span class="kind color-1">c</span> {{context.cell}} </p>
                             <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 fax" data-placeholder="Fax"><span class="kind color-1">f</span> {{context.fax}}</p>
@@ -301,7 +301,7 @@
                     <!-- <img class="temp-img" alt="logo" src="./logos/fnf-canada.svg"> -->
                 </div>
                 <div class="text-block">
-<!--                         <p class="usertext1 placeholder" data-placeholder="Department-French">{{context.department_french}}</p> -->
+<!--                         <p class="usertext1 placeholder" data-placeholder="Department-French">{{context.departmentfrench}}</p> -->
                         {% if not context %}
                             <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name-French">Full Name-French</p>
                             <p class="absolute size-2 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position-French">Position-French <span class="font-1" data-placeholder="Department-French">- Department-French</span></p>
@@ -311,13 +311,13 @@
                             <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 email" data-placeholder="Email-French"><span class="kind color-1">e</span>Email-French</p>
                             <p class="absolute size-2 font-2 left-align color-1 placeholder txt-15 web" data-placeholder="Web-French">Web-French</p>
                         {% else %}
-                            <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name-French">{{context.full_name_french}}</p>
-                            <p class="absolute size-2 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position-French">{{context.position_french}} <span class="font-1" data-placeholder="Department-French">- {{context.department_french}}</span></p>
-                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 office" data-placeholder="Office Phone-French"><span class="kind color-1">o</span> {{context.office_phone_french}}</p>
-                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 cell" data-placeholder="Cell-French"><span class="kind color-1">c </span> {{context.cell_french}}</p>
-                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 fax" data-placeholder="Fax-French"><span class="kind color-1">f</span> {{context.fax_french}}</p>
-                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 email" data-placeholder="Email-French"><span class="kind color-1">e</span> {{context.email_french}}</p>
-                            <p class="absolute size-2 font-2 left-align color-1 placeholder txt-15 web" data-placeholder="Web-French">{{context.web_french}}</p>
+                            <p class="absolute size-0 font-2 left-align color-1 placeholder name" data-placeholder="Full Name-French">{{context.full_namefrench}}</p>
+                            <p class="absolute size-2 font-2 left-align color-2 placeholder txt-upper position" data-placeholder="Position-French">{{context.positionfrench}} <span class="font-1" data-placeholder="Department-French">- {{context.departmentfrench}}</span></p>
+                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 office" data-placeholder="Office Phone-French"><span class="kind color-1">o</span> {{context.office_phonefrench}}</p>
+                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 cell" data-placeholder="Cell-French"><span class="kind color-1">c </span> {{context.cellfrench}}</p>
+                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 fax" data-placeholder="Fax-French"><span class="kind color-1">f</span> {{context.faxfrench}}</p>
+                            <p class="absolute size-2 font-1 left-align color-3 placeholder txt-15 email" data-placeholder="Email-French"><span class="kind color-1">e</span> {{context.emailfrench}}</p>
+                            <p class="absolute size-2 font-2 left-align color-1 placeholder txt-15 web" data-placeholder="Web-French">{{context.webfrench}}</p>
                         {% endif %}
                 </div>
                 <div class=" logo-2">
