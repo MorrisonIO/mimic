@@ -127,12 +127,14 @@
             url: url,
             data: {'template_id': template_id},
             success: function(response){
-                console.log("startOrdering:", response)
+                console.log("startOrdering:", response);
+                window.location = url;
             },
             error: function(err){
                 console.log('err',err)
             }
         })
+        return;
     }
 </script>
 {% endblock %}
