@@ -122,7 +122,7 @@
             page-break-after: always;
         }
         .fnf-bg {
-            background-image: url('./Maria-Mercado-FNF-assests/images/Maria-Mercado-FNF--bg.jpg');
+//            background-image: url('./Maria-Mercado-FNF-assests/images/Maria-Mercado-FNF--bg.jpg');
 /*            background-image: url('/media/brochure_staff/Maria-Mercado-FNF-assests/images/Maria-Mercado-FNF--bg.jpg');*/
             background-size: cover;
             background-repeat: no-repeat;
