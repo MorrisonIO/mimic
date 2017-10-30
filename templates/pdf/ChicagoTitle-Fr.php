@@ -238,7 +238,7 @@
                 <div class="text-block">
                         {% if not context %}
 
-                            <p class="absolute size-2 font-2 left-align color-1 placeholder name" data-placeholder="Full Name">Full Name</p>
+                            <p class="absolute size-1 font-1 left-align color-1 placeholder name" data-placeholder="Full Name">Full Name</p>
                             <p class="absolute size-1 font-1 left-align color-2 placeholder txt-upper position" data-placeholder="Position">Position</p>
 
                             <p class="absolute size-1 font-1 right-align color-3 placeholder txt-upper Address1" data-placeholder="Address">Address</p>
@@ -256,7 +256,7 @@
 
                         {% else %}
 
-                            <p class="absolute size-2 font-2 left-align color-1 placeholder name" data-placeholder="Full Name">{{context.full_name}}</p>
+                            <p class="absolute size-1 font-1 left-align color-1 placeholder name" data-placeholder="Full Name">{{context.full_name}}</p>
                             <p class="absolute size-1 font-1 left-align color-2 placeholder txt-upper position" data-placeholder="Position">{{context.position}}</p>
 
                             <p class="absolute size-1 font-1 right-align color-3 placeholder txt-upper Address1" data-placeholder="Address">{{context.address}}</p>
