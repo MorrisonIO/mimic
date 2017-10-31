@@ -892,7 +892,10 @@ def collect_daily_jobs(request):
     try:
         today_orders = Order.objects.filter(due_date=datetime.date.today())
         tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
-        late_orders = Order.objects.filter(due_date__gte=datetime.date.today() + datetime.timedelta(days=2))
+        late_orders = Order.objects.filter(
+            due_date__gte=datetime.date.today() + datetime.timedelta(days=2),
+            printed=False
+        )
 
         today_orders_result = []
         tomorrow_orders_result = []
@@ -974,7 +977,10 @@ def collect_daily_jobs_test_email(request):
     try:
         today_orders = Order.objects.filter(due_date=datetime.date.today())
         tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
-        late_orders = Order.objects.filter(due_date__gte=datetime.date.today() + datetime.timedelta(days=2))
+        late_orders = Order.objects.filter(
+            due_date__gte=datetime.date.today() + datetime.timedelta(days=2),
+            printed=False
+        )
 
         today_orders_result = []
         tomorrow_orders_result = []
