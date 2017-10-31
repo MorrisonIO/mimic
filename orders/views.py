@@ -890,8 +890,11 @@ def collect_daily_jobs(request):
     Collect jobs for today, tomorrow and late and send them to client
     """
     try:
-        today_orders = Order.objects.filter(due_date=datetime.date.today())
-        tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
+        today_orders = Order.objects.filter(due_date=datetime.date.today(), printed=False)
+        tomorrow_orders = Order.objects.filter(
+            due_date=datetime.date.today() + datetime.timedelta(days=1),
+            printed=False
+        )
         late_orders = Order.objects.filter(
             due_date__gte=datetime.date.today() + datetime.timedelta(days=2),
             printed=False
@@ -975,8 +978,11 @@ def collect_daily_jobs_test_email(request):
     Collect jobs for today, tomorrow and late and send them to client
     """
     try:
-        today_orders = Order.objects.filter(due_date=datetime.date.today())
-        tomorrow_orders = Order.objects.filter(due_date=datetime.date.today() + datetime.timedelta(days=1))
+        today_orders = Order.objects.filter(due_date=datetime.date.today(), printed=False)
+        tomorrow_orders = Order.objects.filter(
+            due_date=datetime.date.today() + datetime.timedelta(days=1),
+            printed=False
+        )
         late_orders = Order.objects.filter(
             due_date__gte=datetime.date.today() + datetime.timedelta(days=2),
             printed=False
